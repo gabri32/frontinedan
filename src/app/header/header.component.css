@@ -1,0 +1,19 @@
+.header {
+  background: linear-gradient(20deg, #09729f 40%, #ceb62e 60%);
+  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+  .header ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+  }
+  .header a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+  }
+  

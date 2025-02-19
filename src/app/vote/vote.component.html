@@ -1,0 +1,78 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+    <mat-tab label="Candidatos">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+            <mat-tab label="Personero">
+             
+            </mat-tab>
+            <mat-tab label="Contralora">
+                <!-- Puedes agregar otra tabla aquí si es necesario -->
+            </mat-tab>
+        </mat-tab-group>
+    </mat-tab>
+    <mat-tab label="Ingreso de candidatos">
+        <mat-divider>
+
+
+        </mat-divider>
+        <button mat-flat-button
+        style="border-radius: 20px;" 
+        (click)="createCantidates()" 
+        [disabled]="selectedStudents.length === 0">
+  Guardar candidatos
+</button>
+
+
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                <!-- Selecciona Checkbox -->
+                <ng-container matColumnDef="selecciona">
+                    <th mat-header-cell *matHeaderCellDef> Selecciona </th>
+                    <td mat-cell *matCellDef="let student">
+                        <mat-checkbox 
+                            (change)="toggleSelection(student)"
+                            [checked]="selectedStudents.includes(student)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+            
+                <!-- ID -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let student"> {{ student.id }} </td>
+                </ng-container>
+            
+                <!-- Nombre -->
+                <ng-container matColumnDef="nombre">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                    <td mat-cell *matCellDef="let student"> {{ student.nombre }} </td>
+                </ng-container>
+            
+                <!-- Edad -->
+                <ng-container matColumnDef="edad">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad </th>
+                    <td mat-cell *matCellDef="let student"> {{ student.edad }} </td>
+                </ng-container>
+            
+                <!-- Grado -->
+                <ng-container matColumnDef="grado">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Grado </th>
+                    <td mat-cell *matCellDef="let student"> {{ student.grado }} </td>
+                </ng-container>
+            
+                <!-- Número de Identificación -->
+                <ng-container matColumnDef="num_identificacion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID Número </th>
+                    <td mat-cell *matCellDef="let student"> {{ student.num_identificacion }} </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            
+            <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+            
+
+        
+        </div>
+    </mat-tab>
+</mat-tab-group>

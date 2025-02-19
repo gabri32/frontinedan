@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    height: 100vh;
+  }
+
+  .sidebar a:hover {
+    background: #0056b3;
+  }
+  
+
+  /* Cuando el sidebar está abierto */
+.w3-container.open {
+  margin-left: 250px; /* Ajusta el margen para empujar el contenido */
+  transition: margin-left 0.3s ease;
+}
+
+/* Cuando el sidebar está cerrado */
+.w3-container {
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
+}
+#mySidebar {
+  background-color: #09729f !important;
+}
+
+.content {
+  padding: 20px;
+  margin-left: 2%;
+  margin-right: 2%;
+  width: 98%;
+  background: white; /* Para que el contenido tenga fondo blanco */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra gris alrededor */
+  background-color: #efefef;
+}
+
+/* Estilos del sidebar */
+.w3-sidebar {
+  width: 18%; /* Ancho fijo del sidebar */
+}
+.w3-sidebar {
+  border: 2px solid rgba(133, 129, 129, 0.692);
+}
