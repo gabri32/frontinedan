@@ -1,16 +1,30 @@
-import { TestBed } from '@angular/core/testing';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { environment } from './enviroments';
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
+  private apiUrl = environment.apiAuthUrl; // URL del backend
 
-import { AuthService } from './auth.service';
+  constructor(private http: HttpClient) {}
 
-describe('AuthService', () => {
-  let service: AuthService;
+  login(correo: string, contraseña: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { correo, contraseña }).pipe(
+      tap(response => {
+        if (response.success && response.token) {
+          localStorage.setItem('token', response.token); // Guardamos el token
+        }
+      })
+    );
+  }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(AuthService);
-  });
+  logout(): void {
+    localStorage.removeItem('token'); // Eliminamos el token al cerrar sesión
+  }
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token'); // Devuelve true si hay token
+  }
+}

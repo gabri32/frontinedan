@@ -1,12 +1,29 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component,OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterModule],
+  imports: [],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+
+  nombre='';
+  constructor(private router: Router) {}
+  logout() {
+    localStorage.clear(); // ✅ Elimina todos los datos almacenados
+    sessionStorage.clear(); // (Opcional) Elimina datos de la sesión actual
+    this.router.navigate(['/login']); // ✅ Redirige al login
+  }
+  ngOnInit(): void {
+    const token = localStorage.getItem('usuario');
+    const usuario = token ? JSON.parse(token) : null; 
+  
+    this.nombre = usuario ? usuario.nombre.split(' ')[0] : ''; 
+  
+    
+  }
+  
 
 }

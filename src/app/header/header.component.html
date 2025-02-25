@@ -3,8 +3,10 @@
   <h4>I.E.M Antonio Nariño</h4>
   <nav>
     <ul>
-      <li><a routerLink="/layout" routerLinkActive="active">Inicio</a></li>
-      <li><a routerLink="/login" routerLinkActive="active">Salir</a></li>
+     
+      <li>Bienvenido, <strong>{{ nombre }}</strong></li> 
+      <li><a href="#" routerLinkActive="active">Inicio</a></li>
+      <li><a href="#" (click)="logout()">Salir</a></li>
     </ul>
   </nav>
 </header>

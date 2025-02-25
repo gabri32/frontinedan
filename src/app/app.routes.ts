@@ -9,13 +9,14 @@ import { LayoutComponent } from './layout/layout.component';
 import{VoteComponent} from './vote/vote.component'
 //import { HomeComponent } from './home/home.component';
 
+import { AuthGuard } from './auth.guard'; 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'layout', component: LayoutComponent, 
+  { path: 'layout', component: LayoutComponent, canActivate: [AuthGuard] ,
     children:[  {path:'vote',component:VoteComponent}]
-  },
-
+  }, // ✅ Protegemos la ruta
+  { path: '**', redirectTo: 'login' } // Redirigir cualquier otra ruta al login
 ];
 
 export const appRoutingProviders = [provideRouter(routes)];

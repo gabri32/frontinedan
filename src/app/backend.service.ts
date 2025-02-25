@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from './auth/enviroments'; 
+import { environment } from '../app/auth/enviroments';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,36 +12,48 @@ export class BackendService {
   constructor(private http: HttpClient) {}
 
   // 🟢 Autenticación
-  login(correo: string, contraseña: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { correo, contraseña });
+  async login(correo: string, contraseña: string): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/login`, { correo, contraseña }));
   }
 
   // 🟢 Crear un estudiante
-  createStudent(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/students`, data);
+  async createStudent(data: any): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/students`, data));
   }
 
-  // 🟢 Buscar estudiantes por identificación
-  searchStudent(num_identificacion: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/searchStudent`, { params: { num_identificacion } });
-  }
+
 
   // 🟢 Obtener todos los estudiantes
-  getAllStudents(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/searchStudent`);
+  async getAllStudents(): Promise<any> {
+    return firstValueFrom(this.http.get(`${this.apiUrl}/searchStudent`));
   }
 
   // 🟢 Editar estudiante
-  updateStudent(id: number, data: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/students/${id}`, data);
+  async updateStudent(id: number, data: any): Promise<any> {
+    return firstValueFrom(this.http.put(`${this.apiUrl}/students/${id}`, data));
   }
 
   // 🟢 Eliminar estudiante
-  deleteStudent(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/students/${id}`);
+  async deleteStudent(id: number): Promise<any> {
+    return firstValueFrom(this.http.delete(`${this.apiUrl}/students/${id}`));
   }
 
-  createcandidate(params: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/createCandidate`, params);
+  // 🟢 Crear candidatos
+  async createCandidate(params: any): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/createCandidate`, params));
+  }
+
+  // 🟢 Buscar candidatos
+  async searchCandidate(): Promise<any> {
+    return firstValueFrom(this.http.get(`${this.apiUrl}/searchCandidate`));
+  }
+  async createVote(params: any): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/createvotes`, params));
+  }
+  async searchVotes(): Promise<any> {
+    return firstValueFrom(this.http.get(`${this.apiUrl}/getVotes`));
+  }
+  async grafVotes(): Promise<any> {
+    return firstValueFrom(this.http.get(`${this.apiUrl}/grafVotes`));
   }
 }

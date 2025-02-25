@@ -3,3 +3,36 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.global-filter{
+    background-color: #4c586411;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.button-save {
+    margin: 5px;
+    padding: 8px;
+    background: #69ba00f3;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .warning {
+        background-color: #ffcc0083;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        text-align: center;
+        width: auto; /* Se ajusta automáticamente al contenido */
+        display: inline-block; /* Para que no ocupe todo el ancho */
+    }
+    .success {
+        background-color: #69ba00f3;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        text-align: center;
+        width: auto; /* Se ajusta automáticamente al contenido */
+        display: inline-block; /* Para que no ocupe todo el ancho */
+    }
+    

@@ -3,16 +3,40 @@
     padding: 20px;
   }
   
-  button {
+  .button-save {
     margin: 5px;
-    padding: 10px 20px;
-    background: #008CBA;
+    padding: 8px;
+    background: #69ba00f3;
     color: white;
     border: none;
     cursor: pointer;
   }
   
   button:hover {
-    background: #005F73;
+    background: #517300;
   }
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50vw;
+    height: 50vh;
+    background: rgba(0, 0, 0, 0.6); /* Fondo oscuro semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Asegura que esté sobre todo */
+  }
+  .candidates-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.candidate-card {
+    width: 250px;
+    text-align: center;
+}
+
   
