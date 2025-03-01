@@ -4,7 +4,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatCheckboxModule } from '@angular/material/checkbox';  // ✅ Agregar módulo de checkbox
+import { MatCheckboxModule } from '@angular/material/checkbox';  
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../backend.service';
 import { MatDividerModule } from '@angular/material/divider';

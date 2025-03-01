@@ -1,23 +1,39 @@
 .login-container {
-    background: linear-gradient(to bottom, #87CEFA, #FFD700); /* Azul claro y amarillo */
-    padding: 20px;
-    border-radius: 10px;
-    width: 350px;
-    margin: 50px auto;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    text-align: center;
+  background: linear-gradient(to bottom, #1da6fcb6, #ffd900a8);
+  padding: 20px;
+  height: 100vh;
+  margin: auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px; /* Espacio entre el formulario y el carrusel */
+}
+  .icono{
+    width: 100px;
+    height: 100px;
+    margin: auto;
   }
-  
   h2 {
     color: #fff;
     font-size: 24px;
     margin-bottom: 20px;
   }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-  }
+  .carrusel {
+    width: 50%;
+}
+
+form {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 80%;
+  align-items: center;
+  background-color: #1da6fc;
+  border-radius: 20px;
+}
   
   label {
     font-size: 16px;

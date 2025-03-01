@@ -1,13 +1,14 @@
 
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100%; font-family: Helvetica; }
+body { margin: 0; font-family: Helvetica; }
 .global-filter{
     background-color: #4c586411;
     padding: 5px;
     border-radius: 5px;
     margin-bottom: 10px;
+    font-family: Helvetica; 
 }
 .button-save {
     margin: 5px;

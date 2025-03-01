@@ -8,13 +8,13 @@ import { LoginComponent } from './auth/login/login.component';
 import { LayoutComponent } from './layout/layout.component';
 import{VoteComponent} from './vote/vote.component'
 //import { HomeComponent } from './home/home.component';
-
+import{InventarioComponent}from'./inventario/inventario.component'
 import { AuthGuard } from './auth.guard'; 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'layout', component: LayoutComponent, canActivate: [AuthGuard] ,
-    children:[  {path:'vote',component:VoteComponent}]
+    children:[  {path:'vote',component:VoteComponent},{path:'inventario',component:InventarioComponent}]
   }, // ✅ Protegemos la ruta
   { path: '**', redirectTo: 'login' } // Redirigir cualquier otra ruta al login
 ];
