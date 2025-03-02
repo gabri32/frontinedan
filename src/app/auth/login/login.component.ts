@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service.spec';
 import { Router } from '@angular/router';
+import swal from 'sweetalert2'; // Importación por defecto
 
 @Component({
   selector: 'app-login',
@@ -23,11 +24,12 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       num_identificacion: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       contraseña: ['', Validators.required]
+
     });
+    
   }
 
   ngOnInit(): void {
-    // 🔹 Si el usuario ya está autenticado, lo redirigimos al layout
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/layout']);
     }
@@ -38,23 +40,43 @@ export class LoginComponent implements OnInit {
       const { num_identificacion, contraseña } = this.loginForm.value;
       this.authService.login(num_identificacion, contraseña).subscribe({
         next: (response) => {
-          console.log('🚀 Login response:', response);
+       swal
           if (response.user && response.token) {
             sessionStorage.setItem('token', response.token); 
-            sessionStorage.setItem('usuario', JSON.stringify(response.user)); // Convertimos el objeto a string
-             // Guardar token y usuario
-            console.log('✅ Login exitoso. Redirigiendo a /layout...');
-            this.router.navigate(['/layout']); // Redirigir
+            sessionStorage.setItem('usuario', JSON.stringify(response.user)); 
+         
+
+            swal.fire({
+              title: 'Iniciando sesión...',
+              text: 'Por favor espera...',
+              timer: 2000, // 2 segundos
+              timerProgressBar: true,
+              showConfirmButton: false,
+              allowOutsideClick: false,
+              didOpen: () => {
+                swal.showLoading();
+              }
+            }).then(()=>{this.router.navigate(['/layout']); });
+              
+      
+
           } else {
             this.errorMessage = response.message || 'Error en la autenticación.';
+            swal.fire({
+              title: "error",
+              text: "ocurrio un error",
+              icon: "error"
+            });
           }
         },
         error: () => {
-          this.errorMessage = 'Identificacion o contraseña incorrectos.';
+          this.errorMessage = 'Identificación o contraseña incorrectos.';
+      
         }
       });
     } else {
       this.errorMessage = 'Por favor, completa todos los campos correctamente.';
+    
     }
   }
-}  
+}

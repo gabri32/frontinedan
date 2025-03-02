@@ -10,6 +10,7 @@ import { BackendService } from '../backend.service';
 import { MatDividerModule } from '@angular/material/divider';
 import * as alertify from 'alertifyjs';
 import { MatCardModule } from '@angular/material/card';
+import swal from 'sweetalert2';
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 @Component({
   selector: 'app-vote',
@@ -71,9 +72,8 @@ highcharts: any;
 
   async obtenerEstudiantes() {
     try {
-      this.loading = true;
 
-      const data = await this.backendService.getAllStudents();
+   const data = await this.backendService.getAllStudents();
 
       this.dataSource.data = data.students.map((student: any) => ({ ...student, seleccionado: "No" }));
       this.loading = false;
@@ -107,27 +107,49 @@ highcharts: any;
 
 
   async createCandidates() {
-    this.loading = true;
+    
     try {
+      swal.fire({
+        title: 'Creando candidatos...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
       await this.backendService.createCandidate(this.selectedStudents);
       await this.searchCandidates();
       this.hascandidates = true;
 
-      // ✅ Mostrar alerta de éxito
+      swal.close(); 
       alertify.success('Candidatos creados con éxito 🎉');
     } catch (error) {
       console.error('❌ Error al crear candidatos:', error);
 
-      // ❌ Mostrar alerta de error
-      alertify.error('Error al crear candidatos. Inténtalo de nuevo.');
+      // ❌ Cerrar el loader y mostrar mensaje de error
+      swal.close();
+      swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al crear los candidatos.',
+        icon: 'error'
+      });
+     
     } finally {
-      this.loading = false; // Asegurar que el loader se desactiva
+       // Asegurar que el loader se desactiva
     }
   }
 
 
   async searchCandidates() {
     try {
+      swal.fire({
+        title: 'Cargando candidatos...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
       this.loading = true;
       const response = await this.backendService.searchCandidate();
 
@@ -144,13 +166,19 @@ highcharts: any;
           }
         });
         this.hascandidates = true;
-        this.loading = false;
+        swal.close();
       } else {
         console.log('⚠️ No se encontraron candidatos.');
         this.hascandidates = false;
       }
     } catch (error) {
-      console.error('❌ Error al buscar candidatos:', error);
+      swal.close();
+      console.log(error)
+      swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al crear los candidatos.',
+        icon: 'error'
+      });
     }
   }
 
@@ -160,6 +188,14 @@ highcharts: any;
 
   async vote(option: any) {
     try {
+      swal.fire({
+        title: 'Creando el voto...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
       const params = {
         estudiante_id: this.autenticacion.id,
         candidato_id: option.id,
@@ -167,6 +203,7 @@ highcharts: any;
       };
       await this.backendService.createVote(params);
       await this.searchVotes();
+      swal.close();
       alertify.success('Voto registrado con éxito 🎉');
     } catch (error) {
       alertify.error('❌Error. Inténtalo de nuevo.❌');
