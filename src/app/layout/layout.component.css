@@ -10,7 +10,7 @@
 
   /* Cuando el sidebar está abierto */
 .w3-container.open {
-  margin-left: 250px; /* Ajusta el margen para empujar el contenido */
+  margin-left: 15%; /* Ajusta el margen para empujar el contenido */
   transition: margin-left 0.3s ease;
 
 }
