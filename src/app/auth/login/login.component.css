@@ -1,5 +1,5 @@
 .login-container {
-  background: linear-gradient(to bottom, #1da6fcb6, #ffd900a8);
+  background: linear-gradient(to bottom, #1da6fc88, #ffd90077);
   padding: 20px;
   height: 100vh;
   margin: auto;
@@ -22,16 +22,33 @@
   }
   .carrusel {
     width: 50%;
-}
 
+}
+@media (max-width: 760px) {
+  .carrusel {
+ display: none;
+
+}
+form {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  height: 70%;
+  align-items: center;
+  background-color: #2a81478e;
+  border-radius: 20px;
+}
+  
+}
 form {
   padding: 10px;
   display: flex;
   flex-direction: column;
   width: 350px;
-  height: 80%;
+  height: 70%;
   align-items: center;
-  background-color: #1da6fc;
+  background-color: #2a81478e;
   border-radius: 20px;
 }
   
