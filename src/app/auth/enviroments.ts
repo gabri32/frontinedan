@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiAuthUrl: 'https://backend-inedan.onrender.com',
-    apiBaseUrl:'https://backend-inedan.onrender.com'
+    apiAuthUrl: 'https://backend-inedan.onrender.com/api',
+    apiBaseUrl:'https://backend-inedan.onrender.com/api'
   };
