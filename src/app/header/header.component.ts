@@ -12,12 +12,12 @@ export class HeaderComponent implements OnInit {
   nombre='';
   constructor(private router: Router) {}
   logout() {
-    localStorage.clear(); // ✅ Elimina todos los datos almacenados
+    sessionStorage.clear(); // ✅ Elimina todos los datos almacenados
     sessionStorage.clear(); // (Opcional) Elimina datos de la sesión actual
     this.router.navigate(['/login']); // ✅ Redirige al login
   }
   ngOnInit(): void {
-    const token = localStorage.getItem('usuario');
+    const token = sessionStorage.getItem('usuario');
     const usuario = token ? JSON.parse(token) : null; 
   
     this.nombre = usuario ? usuario.nombre.split(' ')[0] : ''; 

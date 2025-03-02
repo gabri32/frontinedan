@@ -10,21 +10,21 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(correo: string, contraseña: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, { correo, contraseña }).pipe(
+  login(num_identificacion: number, contraseña: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { num_identificacion, contraseña }).pipe(
       tap(response => {
         if (response.success && response.token) {
-          localStorage.setItem('token', response.token); // Guardamos el token
+          sessionStorage.setItem('token', response.token); // Guardamos el token
         }
       })
     );
   }
 
   logout(): void {
-    localStorage.removeItem('token'); // Eliminamos el token al cerrar sesión
+    sessionStorage.removeItem('token'); // Eliminamos el token al cerrar sesión
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token'); // Devuelve true si hay token
+    return !!sessionStorage.getItem('token'); // Devuelve true si hay token
   }
 }

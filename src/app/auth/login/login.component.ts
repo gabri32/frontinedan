@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) { 
     this.loginForm = this.fb.group({
-      correo: ['', [Validators.required, Validators.email]],
+      num_identificacion: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
       contraseña: ['', Validators.required]
     });
   }
@@ -35,14 +35,13 @@ export class LoginComponent implements OnInit {
 
   authLogin() {
     if (this.loginForm.valid) {
-      const { correo, contraseña } = this.loginForm.value;
-  
-      this.authService.login(correo, contraseña).subscribe({
+      const { num_identificacion, contraseña } = this.loginForm.value;
+      this.authService.login(num_identificacion, contraseña).subscribe({
         next: (response) => {
           console.log('🚀 Login response:', response);
           if (response.user && response.token) {
-            localStorage.setItem('token', response.token); 
-            localStorage.setItem('usuario', JSON.stringify(response.user)); // Convertimos el objeto a string
+            sessionStorage.setItem('token', response.token); 
+            sessionStorage.setItem('usuario', JSON.stringify(response.user)); // Convertimos el objeto a string
              // Guardar token y usuario
             console.log('✅ Login exitoso. Redirigiendo a /layout...');
             this.router.navigate(['/layout']); // Redirigir
@@ -51,7 +50,7 @@ export class LoginComponent implements OnInit {
           }
         },
         error: () => {
-          this.errorMessage = 'Correo o contraseña incorrectos.';
+          this.errorMessage = 'Identificacion o contraseña incorrectos.';
         }
       });
     } else {

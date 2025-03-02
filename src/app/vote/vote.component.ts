@@ -62,7 +62,7 @@ highcharts: any;
   ngOnInit(): void {
     this.obtenerEstudiantes();
     this.searchCandidates();
-    const token = localStorage.getItem('usuario');
+    const token = sessionStorage.getItem('usuario');
     this.autenticacion = token ? JSON.parse(token) : null;
     this.searchVotes();
   

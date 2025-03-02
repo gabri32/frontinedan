@@ -12,8 +12,8 @@ export class BackendService {
   constructor(private http: HttpClient) {}
 
   // 🟢 Autenticación
-  async login(correo: string, contraseña: string): Promise<any> {
-    return firstValueFrom(this.http.post(`${this.apiUrl}/login`, { correo, contraseña }));
+  async login(num_identificacion: number, contraseña: string): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/login`, { num_identificacion, contraseña }));
   }
 
   // 🟢 Crear un estudiante
