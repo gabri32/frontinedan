@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import 'dotenv/config'
+import { environment } from '../auth/enviroments'; // Importar el environment
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = process.env['API_AUTH_URL'] || 'defaultApiUrl'; // Usar la variable del environment con valor por defecto
+  private apiUrl = environment.apiAuthUrl; // Usar la variable del environment
 
   constructor(private http: HttpClient) {}
 
