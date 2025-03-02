@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../app/auth/enviroments';
 import { firstValueFrom } from 'rxjs';
+require('dotenv').config();
 
 @Injectable({
   providedIn: 'root'
 })
 export class BackendService {
-  private apiUrl = environment.apiBaseUrl;
+  private apiUrl = process.env['API_ALL'];
 
   constructor(private http: HttpClient) {}
 

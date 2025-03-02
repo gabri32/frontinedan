@@ -11,6 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import * as alertify from 'alertifyjs';
 import { MatCardModule } from '@angular/material/card';
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+
 @Component({
   selector: 'app-inventario',
   imports: [

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { environment } from './enviroments';
+require('dotenv').config();
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = environment.apiAuthUrl; // URL del backend
+  private apiUrl = process.env['API_AUTH_URL'];; // URL del backend
 
   constructor(private http: HttpClient) {}
 
