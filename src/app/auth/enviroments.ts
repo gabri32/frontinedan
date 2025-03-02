@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiAuthUrl: 'http://localhost:3525/api',
-    apiBaseUrl:'http://localhost:3525/api'
+    apiAuthUrl: 'https://backend-inedan.onrender.com',
+    apiBaseUrl:'https://backend-inedan.onrender.com'
   };
