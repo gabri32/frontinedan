@@ -38,45 +38,55 @@ export class LoginComponent implements OnInit {
   authLogin() {
     if (this.loginForm.valid) {
       const { num_identificacion, contraseña } = this.loginForm.value;
+      
+      // Mostrar SweetAlert de carga antes de la petición
+      swal.fire({
+        title: 'Iniciando sesión...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
+  
       this.authService.login(num_identificacion, contraseña).subscribe({
         next: (response) => {
-       swal
           if (response.user && response.token) {
-            sessionStorage.setItem('token', response.token); 
-            sessionStorage.setItem('usuario', JSON.stringify(response.user)); 
-         
-
+            sessionStorage.setItem('token', response.token);
+            sessionStorage.setItem('usuario', JSON.stringify(response.user));
+            
+            // Cerrar la alerta de carga y mostrar éxito
             swal.fire({
-              title: 'Iniciando sesión...',
-              text: 'Por favor espera...',
-              timer: 2000, // 2 segundos
+              title: '¡Éxito!',
+              text: 'Inicio de sesión exitoso',
+              icon: 'success',
+              timer: 500,
               timerProgressBar: true,
-              showConfirmButton: false,
-              allowOutsideClick: false,
-              didOpen: () => {
-                swal.showLoading();
-              }
-            }).then(()=>{this.router.navigate(['/layout']); });
-              
-      
-
+              showConfirmButton: false
+            }).then(() => {
+              this.router.navigate(['/layout']);
+            });
           } else {
-            this.errorMessage = response.message || 'Error en la autenticación.';
+            // Cerrar la alerta de carga y mostrar error
             swal.fire({
-              title: "error",
-              text: "ocurrio un error",
-              icon: "error"
+              title: 'Error',
+              text: response.message || 'Error en la autenticación.',
+              icon: 'error'
             });
           }
         },
         error: () => {
-          this.errorMessage = 'Identificación o contraseña incorrectos.';
-      
+          // Cerrar la alerta de carga y mostrar error
+          swal.fire({
+            title: 'Error',
+            text: 'Identificación o contraseña incorrectos.',
+            icon: 'error'
+          });
         }
       });
     } else {
       this.errorMessage = 'Por favor, completa todos los campos correctamente.';
-    
     }
   }
 }

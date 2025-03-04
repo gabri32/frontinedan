@@ -152,7 +152,7 @@ highcharts: any;
       });
       this.loading = true;
       const response = await this.backendService.searchCandidate();
-      swal.close();
+      
       if (response.candidates.length > 0) {
         
         this.dataSource.data = this.dataSource.data.map((student: any) => {
@@ -167,10 +167,11 @@ highcharts: any;
           }
         });
         this.hascandidates = true;
-  
+        swal.close();
       } else {
         console.log('⚠️ No se encontraron candidatos.');
         this.hascandidates = false;
+        swal.close();
       }
     } catch (error) {
       swal.close();
