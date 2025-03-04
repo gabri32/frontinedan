@@ -56,4 +56,14 @@ export class BackendService {
   async grafVotes(): Promise<any> {
     return firstValueFrom(this.http.get(`${this.apiUrl}/grafVotes`));
   }
+  async removeCandidate(num_identificacion:any):Promise<any>{
+    console.log({num_identificacion})
+    return firstValueFrom(this.http.post(`${this.apiUrl}/removeCandidate`,num_identificacion))
+  }
+  async gettypes():Promise<any>{
+    return firstValueFrom(this.http.get(`${this.apiUrl}/gettypes`))
+  }
+  async createproperty(properties: Array<any>): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/createproperty`,properties))
+  }
 }

@@ -4,7 +4,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatCheckboxModule } from '@angular/material/checkbox';  
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../backend.service';
 import { MatDividerModule } from '@angular/material/divider';
@@ -45,8 +45,8 @@ export class VoteComponent implements OnInit {
   showContralor = true;
   chartOptions: any;
   view: [number, number] = [400, 400]; // Tamaño del gráfico
-  data :Array<any> = [];
-  data2 :Array<any> = [];
+  data: Array<any> = [];
+  data2: Array<any> = [];
   colorScheme: Color = {
     name: 'customScheme',
     selectable: true,
@@ -56,7 +56,7 @@ export class VoteComponent implements OnInit {
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-highcharts: any;
+  highcharts: any;
   rawData: any;
   constructor(private backendService: BackendService) { }
 
@@ -66,14 +66,14 @@ highcharts: any;
     const token = sessionStorage.getItem('usuario');
     this.autenticacion = token ? JSON.parse(token) : null;
     this.searchVotes();
-  
+
 
   }
 
   async obtenerEstudiantes() {
     try {
 
-   const data = await this.backendService.getAllStudents();
+      const data = await this.backendService.getAllStudents();
 
       this.dataSource.data = data.students.map((student: any) => ({ ...student, seleccionado: "No" }));
       this.loading = false;
@@ -103,11 +103,58 @@ highcharts: any;
 
 
   }
+  async removeCandidate(student: any) {
+    try {
+      // Confirmar eliminación con SweetAlert2
+      const result = await swal.fire({
+        title: "¿Estás seguro?",
+        text: "Este candidato será eliminado.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      });
 
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      // Eliminar visualmente de la lista
+      this.selectedStudents = this.selectedStudents.filter(s => s !== student);
+      student.seleccionado = 'No';
+
+
+
+      const num_identificacion = parseInt(student.num_identificacion);
+      // Llamar al servicio para eliminar en el backend
+      const response = await this.backendService.removeCandidate({ num_identificacion });
+      this.searchCandidates();
+      // Mostrar mensaje de éxito con SweetAlert
+      swal.fire({
+        title: "Eliminado",
+        text: "El candidato ha sido eliminado con éxito.",
+        icon: "success",
+        timer: 1000,
+        showConfirmButton: false
+      });
+
+    } catch (error) {
+      console.error("Error al eliminar candidato:", error);
+
+      // Mostrar mensaje de error con SweetAlert
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al eliminar el candidato.",
+        icon: "error"
+      });
+    }
+  }
 
 
   async createCandidates() {
-    
+
     try {
       swal.fire({
         title: 'Creando candidatos...',
@@ -121,7 +168,7 @@ highcharts: any;
       await this.searchCandidates();
       this.hascandidates = true;
 
-      swal.close(); 
+      swal.close();
       alertify.success('Candidatos creados con éxito 🎉');
     } catch (error) {
       console.error('❌ Error al crear candidatos:', error);
@@ -133,9 +180,9 @@ highcharts: any;
         text: 'Hubo un problema al crear los candidatos.',
         icon: 'error'
       });
-     
+
     } finally {
-       // Asegurar que el loader se desactiva
+      // Asegurar que el loader se desactiva
     }
   }
 
@@ -150,11 +197,11 @@ highcharts: any;
           swal.showLoading();
         }
       });
-      this.loading = true;
+
       const response = await this.backendService.searchCandidate();
-      
+
       if (response.candidates.length > 0) {
-        
+
         this.dataSource.data = this.dataSource.data.map((student: any) => {
 
           this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
@@ -183,11 +230,6 @@ highcharts: any;
       });
     }
   }
-
-
-
-
-
   async vote(option: any) {
     try {
       swal.fire({
@@ -259,21 +301,17 @@ highcharts: any;
   async obtenerVotos() {
     try {
       const response = await this.backendService.grafVotes();
-console.log('votoss',response);
-     const votosPersonero= response.filter((vote:any) => vote.descripcion === "personero/a");
-     const votosContralor= response.filter((vote:any) => vote.descripcion === "contralor/a");
-     
-
-    
-  
-    this.data = votosPersonero.map((item: any) => ({
-      name: item.candidato, // El nombre del candidato
-      value: Number(item.votos) // Convertir los votos a número
-    }));
-    this.data2 = votosContralor.map((item: any) => ({
-      name: item.candidato, // El nombre del candidato
-      value: Number(item.votos) // Convertir los votos a número
-    }));
+      console.log('votoss', response);
+      const votosPersonero = response.filter((vote: any) => vote.descripcion === "personero/a");
+      const votosContralor = response.filter((vote: any) => vote.descripcion === "contralor/a");
+      this.data = votosPersonero.map((item: any) => ({
+        name: item.candidato, // El nombre del candidato
+        value: Number(item.votos) // Convertir los votos a número
+      }));
+      this.data2 = votosContralor.map((item: any) => ({
+        name: item.candidato, // El nombre del candidato
+        value: Number(item.votos) // Convertir los votos a número
+      }));
     } catch (error) {
       console.error('Error al obtener votos:', error);
     }

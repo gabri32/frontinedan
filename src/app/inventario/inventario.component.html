@@ -3,7 +3,51 @@
       <!-- <app-bienes-list></app-bienes-list> -->
     </mat-tab>
     <mat-tab label="Ingreso">
-      <!-- <app-ingreso-form></app-ingreso-form> -->
+      <div class="container">
+        <h2>Gestión de Inventario</h2>
+        <!-- Tabla de bienes -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Detalle</th>
+              <th>Costo</th> 
+              <th>Tipo</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let property of lspropierties; let i = index">
+              <td>
+                <input type="text" [(ngModel)]="property.detalle" placeholder="Ingrese detalle" required>
+              </td>
+              <td>
+                <input type="number" [(ngModel)]="property.costo" placeholder="Ingrese costo" required>
+              </td>
+              <td>
+                <select [(ngModel)]="property.tipo" required>
+                  <option value="" disabled>Seleccione un tipo</option>
+                  <option *ngFor="let type of types" [value]="type.id">
+                    {{ type.detalle }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <button type="button" (click)="removeProperty(i)" *ngIf="lspropierties.length > 1">
+                  ❌ Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      
+        <!-- Botón para agregar otro bien -->
+        <button type="button" (click)="addToList()">➕ Agregar otro bien</button>
+      
+        <!-- Botón para enviar el formulario -->
+        <button type="button" (click)="createproperty()">💾 Guardar bienes</button>
+      </div>
+      
+      
     </mat-tab>
     <mat-tab label="Salida">
       <!-- <app-salida-form></app-salida-form> -->
