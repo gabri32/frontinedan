@@ -11,7 +11,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import * as alertify from 'alertifyjs';
 import { MatCardModule } from '@angular/material/card';
 import swal from 'sweetalert2';
+import { FormsModule } from "@angular/forms";
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-vote',
   standalone: true,
@@ -24,7 +26,8 @@ import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
     MatCheckboxModule,  // ✅ Importar checkbox
     MatDividerModule,
     MatCardModule,
-    NgxChartsModule
+    NgxChartsModule,
+    FormsModule,
   ],
   templateUrl: './vote.component.html',
   styleUrls: ['./vote.component.css']
@@ -32,7 +35,7 @@ import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 export class VoteComponent implements OnInit {
 
   //variables iniciales del componente ------------------------
-  displayedColumns: string[] = ['selecciona', 'id', 'nombre', 'edad', 'grado', 'num_identificacion', 'Seleccionado'];
+  displayedColumns: string[] = ['selecciona', 'id', 'nombre', 'edad', 'grado', 'num_identificacion', 'Seleccionado','Opciones'];
   dataSource = new MatTableDataSource<any>();
   selectedStudents: Array<any> = []
   loading = false;
@@ -44,9 +47,13 @@ export class VoteComponent implements OnInit {
   showPersonero = true;
   showContralor = true;
   chartOptions: any;
+  lema:string | undefined;
   view: [number, number] = [400, 400]; // Tamaño del gráfico
   data: Array<any> = [];
   data2: Array<any> = [];
+  selectedFile: File | null = null;
+  uploadedImageUrl: string = '';
+  sortStudents:any
   colorScheme: Color = {
     name: 'customScheme',
     selectable: true,
@@ -58,7 +65,7 @@ export class VoteComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   highcharts: any;
   rawData: any;
-  constructor(private backendService: BackendService) { }
+  constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.obtenerEstudiantes();
@@ -69,6 +76,13 @@ export class VoteComponent implements OnInit {
 
 
   }
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  sanitizeImageUrl(url: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
 
   async obtenerEstudiantes() {
     try {
@@ -76,10 +90,10 @@ export class VoteComponent implements OnInit {
       const data = await this.backendService.getAllStudents();
 
       this.dataSource.data = data.students.map((student: any) => ({ ...student, seleccionado: "No" }));
-      this.loading = false;
+      this.searchCandidates()
     } catch (error) {
       console.error('Error al obtener estudiantes:', error);
-      this.loading = false;
+ 
     }
   }
 
@@ -90,19 +104,22 @@ export class VoteComponent implements OnInit {
   }
   toggleSelection(student: any) {
     const index = this.selectedStudents.findIndex(s => s.nombre === student.nombre);
-
+  
     if (index > -1) {
+      // Si ya está seleccionado, lo eliminamos
       this.selectedStudents.splice(index, 1);
     } else {
-      this.selectedStudents.push({
+      // Si no está seleccionado, lo agregamos al inicio
+      this.selectedStudents.unshift({
         nombre: student.nombre,
         descripcion: student.grado === 11 ? "personero/a" : "contralor/a",
         num_identificacion: parseInt(student.num_identificacion)
       });
     }
-
-
+  
+   
   }
+  
   async removeCandidate(student: any) {
     try {
       // Confirmar eliminación con SweetAlert2
@@ -152,6 +169,77 @@ export class VoteComponent implements OnInit {
     }
   }
 
+  onFileSelected(event: Event, student: any) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      student.selectedFile = file;
+    }
+  }
+
+  async uploadImage(student: any) {
+    if (!student.selectedFile) {
+      alert("Selecciona una imagen primero");
+      return;
+    }
+  
+    try {
+      const result = await swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta imagen será asignada al candidato.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, asignar",
+        cancelButtonText: "Cancelar"
+      });
+  
+      if (!result.isConfirmed) {
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append("image", student.selectedFile);
+  
+      const response = await this.backendService.upload(formData);
+  
+      if (!response?.imageUrl) {
+        console.error("Respuesta inesperada del servidor:", response);
+        alert("Error: No se recibió la URL de la imagen");
+        return;
+      }
+  
+      student.uploadedImageUrl = response.imageUrl;
+      const params = {
+        num_identificacion: parseInt(student.num_identificacion),
+        imageUrl: student.uploadedImageUrl,
+        lema:student.lema,
+        numero:parseInt(student.numero)
+      };
+  
+      await this.backendService.saveImage(params);
+  
+      swal.fire({
+        title: "Agregado con éxito",
+        text: "Imagen del candidato agregada con éxito.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false
+      });
+  
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al subir la imagen.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }
+  }
+  
+
+
 
   async createCandidates() {
 
@@ -186,7 +274,11 @@ export class VoteComponent implements OnInit {
     }
   }
 
-
+  voteBlank(tipo: string) {
+    console.log(`Voto en blanco para: ${tipo}`);
+   
+  }
+  
   async searchCandidates() {
     try {
       swal.fire({
@@ -197,24 +289,26 @@ export class VoteComponent implements OnInit {
           swal.showLoading();
         }
       });
-
+  
       const response = await this.backendService.searchCandidate();
-
+  console.log(response.candidates)
       if (response.candidates.length > 0) {
-
-        this.dataSource.data = this.dataSource.data.map((student: any) => {
-
-          this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
-          this.arrayPersonberos = response.candidates.filter((c: any) => c.descripcion === "personero/a");
-          const candidate = response.candidates.find((c: any) => c.num_identificacion === parseInt(student.num_identificacion));
-          if (candidate) {
-            return { ...student, seleccionado: "Sí" };
-          } else {
-            return student;
-          }
-        });
+        // Filtrar contralores y personeros solo una vez
+        this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
+        this.arrayPersonberos = response.candidates.filter((c: any) => c.descripcion === "personero/a");
+  
+        // Crear un Set para búsqueda rápida de identificaciones
+        const candidateIds = new Set(response.candidates.map((c: any) => parseInt(c.num_identificacion)));
+  
+        // Actualizar `dataSource` con `seleccionado = "Sí"` si está en los candidatos
+        this.dataSource.data = this.dataSource.data.map((student: any) => ({
+          ...student,
+          seleccionado: candidateIds.has(parseInt(student.num_identificacion)) ? "Sí" : student.seleccionado
+        }));
+  
         this.hascandidates = true;
         swal.close();
+    
       } else {
         console.log('⚠️ No se encontraron candidatos.');
         this.hascandidates = false;
@@ -222,14 +316,15 @@ export class VoteComponent implements OnInit {
       }
     } catch (error) {
       swal.close();
-      console.log(error)
+      console.error(error);
       swal.fire({
         title: 'Error',
-        text: 'Hubo un problema al crear los candidatos.',
+        text: 'Hubo un problema al buscar los candidatos.',
         icon: 'error'
       });
     }
   }
+  
   async vote(option: any) {
     try {
       swal.fire({
@@ -301,7 +396,7 @@ export class VoteComponent implements OnInit {
   async obtenerVotos() {
     try {
       const response = await this.backendService.grafVotes();
-      console.log('votoss', response);
+
       const votosPersonero = response.filter((vote: any) => vote.descripcion === "personero/a");
       const votosContralor = response.filter((vote: any) => vote.descripcion === "contralor/a");
       this.data = votosPersonero.map((item: any) => ({

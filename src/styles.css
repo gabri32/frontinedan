@@ -1,8 +1,24 @@
 
 /* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; font-family: Helvetica; }
-body { margin: 0; font-family: Helvetica; }
+html, body { 
+    height: 100%; 
+    font-family: Helvetica, sans-serif; /* Asegura compatibilidad con sans-serif */
+}
+.h-divider{
+    margin-top:5px;
+    margin-bottom:5px;
+    height:1px;
+    width:100%;
+    border-top:1px solid gray;
+   }
+   img[mat-card-image] {
+    height: 300px; /* Ajusta la altura según necesites */
+    object-fit: cover; /* Para que la imagen se ajuste sin deformarse */
+  }
+body { 
+    margin: 0; 
+    font-family: inherit; /* Hereda de html */
+}
 .global-filter{
     background-color: #4c586411;
     padding: 5px;
@@ -10,6 +26,15 @@ body { margin: 0; font-family: Helvetica; }
     margin-bottom: 10px;
     font-family: Helvetica; 
 }
+.btn-circle.btn-xl {
+    width: 70px;
+    height: 70px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
+}
+
 .button-save {
     margin: 5px;
     padding: 8px;

@@ -39,4 +39,16 @@
     text-align: center;
 }
 
-  
+.delete-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; 
+  height: 30px;
+  padding: 5px;
+  line-height: 30px; 
+}
+
+.small-icon {
+  font-size: 12px; /* Ajusta según sea necesario */
+}

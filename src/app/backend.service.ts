@@ -66,4 +66,10 @@ export class BackendService {
   async createproperty(properties: Array<any>): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/createproperty`,properties))
   }
+  async upload (formData: FormData): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/upload`, formData));
+  }
+  async saveImage(params:any): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/saveImage`, params));
+  }
 }

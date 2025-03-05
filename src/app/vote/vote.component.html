@@ -1,209 +1,246 @@
-
-  
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
-    <mat-tab label="Candidatos" >
-        <div *ngIf="hascandidates == false">
-            <h5 class="warning">aun no se registran candidatos</h5>
+  <mat-tab label="Candidatos">
+    <div *ngIf="hascandidates == false">
+      <h5 class="warning">Aún no se registran candidatos</h5>
+    </div>
+  
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" *ngIf="hascandidates == true">
+      
+      <!-- TAB PERSONERO -->
+      <mat-tab label="Personero">
+        <div *ngIf="showPersonero == false">
+          <h5 class="success">Ya has votado por personero/a</h5>
         </div>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" *ngIf="hascandidates == true">
-           
-            <mat-tab label="Personero">
-                <div *ngIf="showPersonero==false">
-                    <h5 class="success">ya has votado por personero/a</h5>
-                </div>
-                <div class="candidates-container" *ngIf="showPersonero==true">
-                  <mat-card *ngFor="let candidate of arrayPersonberos" class="candidate-card">
-                    <mat-card-header>
-                      <mat-card-title>{{ candidate.nombre }}</mat-card-title>
-                      <mat-card-subtitle>{{ candidate.descripcion }}</mat-card-subtitle>
-                    </mat-card-header>
-                    
-                    <img mat-card-image [src]="'assets/default-user.jpg'" alt="Foto del candidato">
-                    
-                    <mat-card-content>
-                      <p>Descripción</p>
-                      <!--<p><strong>Grado:</strong> {{ candidate.grado }}</p> -->
-                    </mat-card-content>
-                    
-                    <mat-card-actions>
-                      <button mat-button color="primary" (click)="vote(candidate)">Votar</button>
-                    </mat-card-actions>
-                  </mat-card>
-                </div>
-                
-                  
-            </mat-tab>
-            <mat-tab label="Contralora" >
-                <div *ngIf="showContralor==false">
-                    <h5 class="success">ya has votado por contralor/a</h5>
-                </div>
-                <div class="candidates-container" *ngIf="showContralor==true">
-                    <mat-card *ngFor="let candidate of arrayContralores" class="candidate-card">
-                      <mat-card-header>
-                        <mat-card-title>{{ candidate.nombre }}</mat-card-title>
-                        <mat-card-subtitle>{{ candidate.descripcion }}</mat-card-subtitle>
-                      </mat-card-header>
-                      
-                      <img mat-card-image  alt="Foto del candidato">
-
-                      
-                      <!-- src="../assets/default-user.jpg" -->
-                      <mat-card-content>
-                         <p>Descripcion</p>
-                        <!--<p><strong>Grado:</strong> {{ candidate.grado }}</p> -->
-                      </mat-card-content>
-                      
-                      <mat-card-actions>
-                        <button mat-button color="primary" (click)="vote(candidate)">Votar</button>
-                      </mat-card-actions>
-                    </mat-card>
-                  </div>
-            </mat-tab>
-        </mat-tab-group>
-    </mat-tab>
-
-
-
-
-    <!--segundo tab------------------------------------------------------->
-    <mat-tab label="Ingreso de candidatos">
-        
-        <mat-divider>
-        </mat-divider>
-        <div  *ngIf="hascandidates == true">
-            <div style="text-align: center;">
-                <h5 class="warning">Ya has registrado candidatos para esta elección </h5> 
-                </div>
+        <div class="candidates-container" *ngIf="showPersonero == true">
+          <mat-card *ngFor="let candidate of arrayPersonberos" class="candidate-card">
+            <mat-card-header>
+              <mat-card-title>{{ candidate.nombre }}</mat-card-title>
+            </mat-card-header>
+            <img mat-card-image [src]="candidate.foto" alt="Foto del candidato">
+            <mat-card-content>
+              <p>{{candidate.lema}}</p>
+              &nbsp;
+              <i type="button" class="btn btn-info btn-circle"> {{0}}-{{candidate.numero}}</i>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button color="primary" (click)="vote(candidate)">Votar</button>
+            </mat-card-actions>
+          </mat-card>
+  
+          <!-- Opción de Voto en Blanco -->
+          <mat-card class="candidate-card blank-vote">
+            <mat-card-header>
+              <mat-card-title>Voto en Blanco</mat-card-title>
+            </mat-card-header>
+            <img mat-card-image src="http://localhost:3525/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
+            <mat-card-content>
+              <p>Si no deseas elegir a ningún candidato, puedes votar en blanco.</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button color="accent" (click)="voteBlank('Personero')">Votar en Blanco</button>
+            </mat-card-actions>
+          </mat-card>
         </div>
-      <div  *ngIf="hascandidates == false">
-        <div style="text-align: center;" >
-            <h5>Selecciona los estudiantes que deseas registrar como candidatos</h5> 
-          </div>
-          
-    
-          <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 100px;">
-            <div class="spinner-border text-warning" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-          <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar"  class="global-filter">
-          <button 
-          class="button-save"
-          *ngIf="selectedStudents.length > 0 && hascandidates == false"
-          mat-flat-button
-          matTooltip="Guardar candidatos"
-          matTooltipPosition="above"
-          style="border-radius: 20px;" 
-          (click)="createCandidates()">
-          <i class="fa fa-save" style="color:rgb(0, 0, 0)"></i>
-        </button>
+      </mat-tab>
+  
+      <!-- TAB CONTRALORA -->
+      <mat-tab label="Contralora">
+        <div *ngIf="showContralor == false">
+          <h5 class="success">Ya has votado por contralor/a</h5>
+        </div>
+        <div class="candidates-container" *ngIf="showContralor == true">
+          <mat-card *ngFor="let candidate of arrayContralores" class="candidate-card">
+            <mat-card-header>
+              <mat-card-title>{{ candidate.nombre }}</mat-card-title>
+            </mat-card-header>
+            <img mat-card-image [src]="candidate.foto" alt="Foto del candidato">
+            <mat-card-content>
+              <p>{{candidate.lema}}</p>
+              &nbsp;
+              <i type="button" class="btn btn-info btn-circle"> {{0}}-{{candidate.numero}}</i>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button color="primary" (click)="vote(candidate)">Votar</button>
+            </mat-card-actions>
+          </mat-card>
+  
+          <!-- Opción de Voto en Blanco -->
+          <mat-card class="candidate-card blank-vote">
+            <mat-card-header>
+              <mat-card-title>Voto en Blanco</mat-card-title>
+            </mat-card-header>
+            <img mat-card-image src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
+            <mat-card-content>
+              <p>Si no deseas elegir a ningún candidato, puedes votar en blanco.</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button color="accent" (click)="voteBlank('Contralor')">Votar en Blanco</button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </mat-tab>
+  
+    </mat-tab-group>
+  </mat-tab>
+  
+
+
+
+  <!--segundo tab------------------------------------------------------->
+  <mat-tab label="Ingreso de candidatos">
+    <mat-divider></mat-divider>
+
+    <!-- Mensaje si ya hay candidatos registrados -->
+    <div *ngIf="hascandidates" class="text-center">
+      <h5 class="warning">Ya has registrado candidatos para esta elección</h5>
+    </div>
+
+    <!-- Formulario para registrar candidatos -->
+    <div >
+      <div class="text-center"*ngIf="!hascandidates">
+        <h5>Selecciona los estudiantes que deseas registrar como candidatos</h5>
       </div>
-         <!-- Tabla con lista de estudiantes -->
-<div class="table-container">
-  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
-      <!-- Selecciona Checkbox -->
-      <ng-container matColumnDef="selecciona">
-          <th mat-header-cell *matHeaderCellDef> Selecciona <i class='fa fa-check'></i></th>
-          <td mat-cell *matCellDef="let student">
-              <mat-checkbox 
-                  (change)="toggleSelection(student)" 
-                  [checked]="selectedStudents.includes(student)">
-              </mat-checkbox>
+      <!-- Indicador de carga -->
+      <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 100px;">
+        <div class="spinner-border text-warning" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+
+      <!-- Input de búsqueda -->
+      <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
+
+      <!-- Botón para guardar candidatos -->
+      <button class="button-save" *ngIf="selectedStudents.length > 0&&!hascandidates" mat-flat-button matTooltip="Guardar candidatos"
+        matTooltipPosition="above" style="border-radius: 20px;" (click)="createCandidates()">
+        <i class="fa fa-save" style="color: black;"></i>
+      </button>
+    </div>
+
+    <!-- Tabla de estudiantes -->
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+        <!-- Columna de selección -->
+        <ng-container matColumnDef="selecciona" >
+          <th mat-header-cell *matHeaderCellDef> Selecciona <i class="fa fa-check"></i></th>
+          <td mat-cell *matCellDef="let student" >
+            <mat-checkbox *ngIf="student.seleccionado=='No'" (change)="toggleSelection(student)" [checked]="selectedStudents.includes(student)">
+            </mat-checkbox>
           </td>
-      </ng-container>
+        </ng-container>
 
-      <!-- ID -->
-      <ng-container matColumnDef="id">
+        <!-- Columna ID -->
+        <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
           <td mat-cell *matCellDef="let student"> {{ student.id }} </td>
-      </ng-container>
+        </ng-container>
 
-      <!-- Nombre -->
-      <ng-container matColumnDef="nombre">
+        <!-- Columna Nombre -->
+        <ng-container matColumnDef="nombre">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
           <td mat-cell *matCellDef="let student"> {{ student.nombre }} </td>
-      </ng-container>
+        </ng-container>
 
-      <!-- Edad -->
-      <ng-container matColumnDef="edad">
+        <!-- Columna Edad -->
+        <ng-container matColumnDef="edad">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Edad </th>
           <td mat-cell *matCellDef="let student"> {{ student.edad }} </td>
-      </ng-container>
+        </ng-container>
 
-      <!-- Grado -->
-      <ng-container matColumnDef="grado">
+        <!-- Columna Grado -->
+        <ng-container matColumnDef="grado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Grado </th>
           <td mat-cell *matCellDef="let student"> {{ student.grado }} </td>
-      </ng-container>
+        </ng-container>
 
-      <!-- Número de Identificación -->
-      <ng-container matColumnDef="num_identificacion">
+        <!-- Columna Número de Identificación -->
+        <ng-container matColumnDef="num_identificacion">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Número de Identificación </th>
           <td mat-cell *matCellDef="let student"> {{ student.num_identificacion }} </td>
-      </ng-container>
+        </ng-container>
 
-      <!-- Seleccionado -->
-      <ng-container matColumnDef="Seleccionado">
+        <!-- Columna Seleccionado -->
+        <ng-container matColumnDef="Seleccionado">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Seleccionado </th>
-          <td  mat-cell *matCellDef="let student">
-              {{ student.seleccionado }} 
-              <!-- Botón para eliminar si está seleccionado -->
-              <button *ngIf="student.seleccionado === 'Sí'" mat-icon-button (click)="removeCandidate(student)">
-                  <i class="fa fa-trash" style="color: red;"></i>
-              </button>
-          </td>
-      </ng-container>
+          <td mat-cell *matCellDef="let student">
+            {{ student.seleccionado }}
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-
-  <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
-</div>
-
-      
-    
-    </mat-tab>
-
-    
-    <!--tercer tab-------------------------------------------------------->
-  
-    <mat-tab label="Votos">
-      <div style="text-align: center;">
-        <strong style="display: block; margin-bottom: 10px; font-size: 18px;">Votos totales de la elección</strong>
-        
-        <div style="display: flex; justify-content: center; gap: 20px;">
-          <h6>Personero</h6>
-          <ngx-charts-bar-vertical
-            [view]="view"
-            [scheme]="colorScheme"
-            [results]="data"
-            [gradient]="false"
-            [xAxis]="true"
-            [yAxis]="true"
-            [legend]="true"
-            [showDataLabel]="true">
-          </ngx-charts-bar-vertical>
-          <h6>Contralor</h6>
           
-          <ngx-charts-bar-vertical
-            [view]="view"
-            [scheme]="colorScheme"
-            [results]="data2"
-            [gradient]="false"
-            [xAxis]="true"
-            [yAxis]="true"
-            [legend]="true"
-            [showDataLabel]="true">
-          </ngx-charts-bar-vertical>
-        </div>
-      </div>
-      
-</mat-tab>
+          </td>
+          
+        </ng-container>
+        <ng-container matColumnDef="Opciones">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+         
 
-  
-   
-      
-      
+            <td mat-cell *matCellDef="let student">
+              <div class="form-group"*ngIf="student.seleccionado === 'Sí'">
+                <label for="usr">Numero del candidato:</label>
+                <input type="text" class="form-control" id="usr"  [(ngModel)]="student.numero">
+              </div>
+            <div class="form-group" *ngIf="student.seleccionado === 'Sí'">
+              <label for="comment">Lema:</label>
+              <textarea class="form-control" rows="5" id="comment" [(ngModel)]="student.lema"></textarea>
+            </div>
+            <!-- Input para seleccionar imagen -->
+            <input type="file" (change)="onFileSelected($event, student)" accept="image/*"
+              *ngIf="student.seleccionado === 'Sí'">
+
+            <!-- Botón para subir la imagen -->
+            <button *ngIf="student.selectedFile&&student.lema&&student.numero" mat-button color="primary" (click)="uploadImage(student)">
+              Subir imagen/lema/num_candidato
+            </button>
+
+            <!-- Mostrar la imagen subida -->
+            <img *ngIf="student.uploadedImageUrl" [src]="student.uploadedImageUrl" alt="Imagen subida"
+              style="max-width: 200px; display: block; margin-top: 10px;">
+            
+              <a class="btn btn-danger delete-btn" *ngIf="student.seleccionado === 'Sí'" mat-icon-button (click)="removeCandidate(student)">
+                <i class="fa fa-trash small-icon"> &nbsp;Eliminar candidato</i>
+              </a>
+              
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+
+
+
+
+    </div>
+  </mat-tab>
+
+
+
+
+  <!--tercer tab-------------------------------------------------------->
+
+  <mat-tab label="Votos">
+    <div style="text-align: center;">
+      <strong style="display: block; margin-bottom: 10px; font-size: 18px;">Votos totales de la elección</strong>
+
+      <div style="display: flex; justify-content: center; gap: 20px;">
+        <h6>Personero</h6>
+        <ngx-charts-bar-vertical [view]="view" [scheme]="colorScheme" [results]="data" [gradient]="false" [xAxis]="true"
+          [yAxis]="true" [legend]="true" [showDataLabel]="true">
+        </ngx-charts-bar-vertical>
+        <h6>Contralor</h6>
+
+        <ngx-charts-bar-vertical [view]="view" [scheme]="colorScheme" [results]="data2" [gradient]="false"
+          [xAxis]="true" [yAxis]="true" [legend]="true" [showDataLabel]="true">
+        </ngx-charts-bar-vertical>
+      </div>
+    </div>
+
+  </mat-tab>
+
+
+
+
+
 </mat-tab-group>
