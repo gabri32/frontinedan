@@ -14,6 +14,7 @@ import swal from 'sweetalert2';
 import { FormsModule } from "@angular/forms";
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-vote',
   standalone: true,
@@ -199,6 +200,7 @@ export class VoteComponent implements OnInit {
       }
   
       const formData = new FormData();
+      console.log(formData)
       formData.append("image", student.selectedFile);
   
       const response = await this.backendService.upload(formData);
@@ -208,15 +210,16 @@ export class VoteComponent implements OnInit {
         alert("Error: No se recibió la URL de la imagen");
         return;
       }
-  
+ 
       student.uploadedImageUrl = response.imageUrl;
+      console.log(response.imageUrl)
       const params = {
         num_identificacion: parseInt(student.num_identificacion),
         imageUrl: student.uploadedImageUrl,
         lema:student.lema,
         numero:parseInt(student.numero)
       };
-  
+
       await this.backendService.saveImage(params);
   
       swal.fire({
