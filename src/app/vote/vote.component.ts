@@ -169,14 +169,13 @@ export class VoteComponent implements OnInit {
       });
     }
   }
-
   onFileSelected(event: Event, student: any) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      student.selectedFile = file;
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      student.selectedFile = fileInput.files[0]; 
     }
   }
-
+  
   async uploadImage(student: any) {
     if (!student.selectedFile) {
       alert("Selecciona una imagen primero");
@@ -184,62 +183,39 @@ export class VoteComponent implements OnInit {
     }
   
     try {
-      const result = await swal.fire({
-        title: "¿Estás seguro?",
-        text: "Esta imagen será asignada al candidato.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Sí, asignar",
-        cancelButtonText: "Cancelar"
-      });
-  
-      if (!result.isConfirmed) {
-        return;
-      }
-  
       const formData = new FormData();
-      console.log(formData)
       formData.append("image", student.selectedFile);
+      formData.append("num_identificacion", student.num_identificacion.toString());
+      formData.append("lema", student.lema);
+      formData.append("numero", student.numero.toString());
   
-      const response = await this.backendService.upload(formData);
+      const response = await this.backendService.saveImage(formData);
   
-      if (!response?.imageUrl) {
-        console.error("Respuesta inesperada del servidor:", response);
-        alert("Error: No se recibió la URL de la imagen");
+      if (!response.message) {
+        console.error("Error al guardar la imagen:", response);
+        alert("No se pudo guardar la imagen");
         return;
       }
- 
-      student.uploadedImageUrl = response.imageUrl;
-      console.log(response.imageUrl)
-      const params = {
-        num_identificacion: parseInt(student.num_identificacion),
-        imageUrl: student.uploadedImageUrl,
-        lema:student.lema,
-        numero:parseInt(student.numero)
-      };
-
-      await this.backendService.saveImage(params);
   
       swal.fire({
-        title: "Agregado con éxito",
-        text: "Imagen del candidato agregada con éxito.",
+        title: "Imagen guardada",
+        text: "La imagen del candidato ha sido guardada correctamente.",
         icon: "success",
         timer: 1500,
         showConfirmButton: false
       });
   
     } catch (error) {
-      console.error("Error al subir la imagen:", error);
+      console.error("Error al guardar la imagen:", error);
       swal.fire({
         title: "Error",
-        text: "Hubo un problema al subir la imagen.",
+        text: "Hubo un problema al guardar la imagen.",
         icon: "error",
         confirmButtonText: "Aceptar"
       });
     }
   }
+  
   
 
 
