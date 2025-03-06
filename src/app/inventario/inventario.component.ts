@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatCardModule } from '@angular/material/card';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import swal from 'sweetalert2';
+import { MatTableDataSource } from '@angular/material/table';
 import { BackendService } from '../backend.service';
-import { FormsModule } from '@angular/forms';
+import { MatDividerModule } from '@angular/material/divider';
+import * as alertify from 'alertifyjs';
+import { MatCardModule } from '@angular/material/card';
+import swal from 'sweetalert2';
+import { FormsModule } from "@angular/forms";
+import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-inventario',
   standalone: true,
@@ -32,36 +36,67 @@ import { FormsModule } from '@angular/forms';
 export class InventarioComponent implements OnInit {
   lspropierties: any[] = []; // Lista de bienes a enviar
   types: any[] = []; // Tipos de bienes obtenidos del backend
-
-  constructor(private backendService: BackendService) {}
-   detalle:any;
+  propertisC: any;
+  propertisD: any;
+  lenghtC:number | undefined;
+  lenghtD:number | undefined;
+  displayedColumns: string[] = ['Identificador del bien', 'Detalle del bien', 'Valor', 'Tipo', 'Cantidad', 'Opciones'];
+  dataSource = new MatTableDataSource<any>();
+  dataSource2 = new MatTableDataSource<any>();
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  
+  constructor(private backendService: BackendService) { }
+  
+  detalle: any;
+  
   ngOnInit(): void {
     this.getbienes(); // Obtener tipos de bienes al iniciar
     this.addToList(); // Agregar un bien vacío al inicio
+    this.getPropertisCD();
   }
-
-  // Obtener los tipos de bienes desde el backend
+  
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    
+    this.dataSource2.paginator = this.paginator;
+    this.dataSource2.sort = this.sort;
+  }
+  
+  /**
+   * Obtiene los tipos de bienes desde el backend.
+   * Llama a la función del servicio y almacena la respuesta en `types`.
+   */
   async getbienes() {
     try {
       const types = await this.backendService.gettypes();
-      this.types=types.types
-      console.log("Tipos de bienes:", this.types);
+      this.types = types.types;
     } catch (error) {
       console.error("Error al obtener bienes:", error);
     }
   }
-
-  // Agregar un nuevo bien a la lista
+  
+  /**
+   * Agrega un nuevo bien vacío a la lista `lspropierties`.
+   */
   addToList() {
     this.lspropierties.push({ detalle: '', costo: null, tipo: '' });
   }
-
-  // Eliminar un bien de la lista
+  
+  /**
+   * Elimina un bien de la lista en base a su índice.
+   * @param index Índice del bien a eliminar en `lspropierties`.
+   */
   removeProperty(index: number) {
     this.lspropierties.splice(index, 1);
   }
-
-  // Enviar los bienes al backend
+  
+  /**
+   * Envía los bienes ingresados al backend después de validarlos.
+   * Muestra mensajes de error si hay campos vacíos.
+   * Usa SweetAlert para confirmar la acción antes de enviar.
+   */
   async createproperty() {
     try {
       // Validar que los campos no estén vacíos
@@ -73,7 +108,7 @@ export class InventarioComponent implements OnInit {
         });
         return;
       }
-
+  
       // Confirmación con SweetAlert
       const result = await swal.fire({
         title: "¿Estás seguro?",
@@ -85,12 +120,12 @@ export class InventarioComponent implements OnInit {
         confirmButtonText: "Sí, guardar",
         cancelButtonText: "Cancelar"
       });
-
+  
       if (!result.isConfirmed) return;
-
+  
       // Enviar datos al backend
       await this.backendService.createproperty(this.lspropierties);
-
+  
       // Mostrar mensaje de éxito
       swal.fire({
         title: "Éxito",
@@ -99,11 +134,11 @@ export class InventarioComponent implements OnInit {
         timer: 1000,
         showConfirmButton: false
       });
-
+  
       // Limpiar lista después de enviar
       this.lspropierties = [];
       this.addToList(); // Agregar un bien vacío después de enviar
-
+  
     } catch (error) {
       console.error("Error al crear bienes:", error);
       swal.fire({
@@ -112,5 +147,29 @@ export class InventarioComponent implements OnInit {
         icon: "error"
       });
     }
+  }
+  applyGlobalFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+    this.dataSource2.filter = filterValue;
+  }
+  /**
+   * Obtiene las propiedades C y D desde el backend.
+   * Almacena los datos en `propertisC` y `propertisD`.
+   */
+  async getPropertisCD() {
+    try {
+      this.propertisC = await this.backendService.getPropertiesC();
+      this.lenghtC=this.propertisC.length
+      this.dataSource.data = this.propertisC.map((c: any) => ({ ...c}));
+      this.propertisD = await this.backendService.getPropertiesD();
+      this.lenghtD=this.propertisD.length
+      this.dataSource2.data = this.propertisD.map((c: any) => ({ ...c}));
+    } catch (error) {
+      console.log("Error al obtener propiedades C y D:", error);
+    }
+  }
+  async editmount(t:any){
+console.log(t)
   }
 }

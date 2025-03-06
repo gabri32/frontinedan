@@ -72,4 +72,10 @@ export class BackendService {
   async saveImage(params:any): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/saveImage`, params));
   }
+  async getPropertiesC():Promise<any>{
+    return firstValueFrom(this.http.get(`${this.apiUrl}/getPropertiesC`))
+  }
+  async getPropertiesD():Promise<any>{
+    return firstValueFrom(this.http.get(`${this.apiUrl}/getPropertiesD`))
+  }
 }

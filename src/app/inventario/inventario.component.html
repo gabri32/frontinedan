@@ -1,7 +1,160 @@
 <mat-tab-group>
     <mat-tab label="Bienes">
-      <!-- <app-bienes-list></app-bienes-list> -->
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" >
+        <mat-tab label="Consumos">
+          <br>
+          <mat-divider></mat-divider>
+          <h5>Bienes de consumo-{{lenghtC}}</h5>
+          <mat-divider></mat-divider>
+          <br>
+          <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
+          <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      
+              <!-- Columna de selección -->
+        
+              <!-- Columna ID -->
+              <ng-container matColumnDef="Identificador del bien">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Identificador del bien </th>
+                <td mat-cell *matCellDef="let C"> {{ C.id_bien }} </td>
+              </ng-container>
+      
+              <!-- Columna Nombre -->
+              <ng-container matColumnDef="Detalle del bien">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalle del bien </th>
+                <td mat-cell *matCellDef="let C"> {{ C.detalle }} </td>
+              </ng-container>
+      
+              <!-- Columna Edad -->
+              <ng-container matColumnDef="Valor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Valor </th>
+                <td mat-cell *matCellDef="let C"><div data-mdb-input-init class="form-outline" style="width: 8rem;">
+                  <input id="postfix" value="$" type="number" id="form2" class="form-control" [(ngModel)]="C.costo"/>
+                  <label class="form-label" for="form2"></label>
+              </div></td>
+              </ng-container>
+      
+              <!-- Columna Grado -->
+              <ng-container matColumnDef="Tipo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+                <td mat-cell *matCellDef="let C"> consumo  </td>
+              </ng-container>
+      
+              <!-- Columna Número de Identificación -->
+              <ng-container matColumnDef="Cantidad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad</th>
+                <td mat-cell *matCellDef="let C"> 
+                  <div data-mdb-input-init class="form-outline" style="width: 5rem;">
+                    <input value="50" type="number" id="typeNumber" class="form-control"[(ngModel)]="C.amount" />
+                    <label class="form-label" for="typeNumber"></label>
+                </div>
+                </td>
+                
+              </ng-container>
+      
+              <!-- Columna Seleccionado -->
+              <ng-container matColumnDef="Opciones">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+                <td mat-cell *matCellDef="let C">
+                  <button class="button-save" *ngIf="C.amount||C.costo" mat-flat-button matTooltip="Guardar candidatos"
+                    matTooltipPosition="above" style="border-radius: 20px;" (click)="editmount(C)">
+                    <i class="fa fa-save" style="color: black;"></i>
+                  </button>
+                  <a class="btn btn-danger delete-btn"  mat-icon-button >
+                    <i class="fa fa-trash small-icon"></i>
+                  </a>
+                </td>
+              </ng-container>
+            
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+      
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+      
+          </div>
+         </mat-tab>
+         <mat-tab label="Devolutivos">
+          <br>
+          <mat-divider></mat-divider>
+          <h5>Bienes devolutivos-{{lenghtD}}</h5>
+          <mat-divider></mat-divider>
+          <br>
+          <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
+          <div class="table-container">
+            <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8">
+      
+              <!-- Columna de selección -->
+        
+              <!-- Columna ID -->
+              <ng-container matColumnDef="Identificador del bien">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Identificador del bien </th>
+                <td mat-cell *matCellDef="let C"> {{ C.id_bien }} </td>
+              </ng-container>
+      
+              <!-- Columna Nombre -->
+              <ng-container matColumnDef="Detalle del bien">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalle del bien </th>
+                <td mat-cell *matCellDef="let C"> {{ C.detalle }} </td>
+              </ng-container>
+      
+              <!-- Columna Edad -->
+              <ng-container matColumnDef="Valor">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Valor </th>
+                <td mat-cell *matCellDef="let C"><div data-mdb-input-init class="form-outline" style="width: 8rem;">
+                  <input id="postfix" value="$" type="number" id="form2" class="form-control" [(ngModel)]="C.costo"/>
+                  <label class="form-label" for="form2"></label>
+              </div></td>
+              </ng-container>
+      
+              <!-- Columna Grado -->
+              <ng-container matColumnDef="Tipo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+                <td mat-cell *matCellDef="let C"> consumo  </td>
+              </ng-container>
+      
+              <!-- Columna Número de Identificación -->
+              <ng-container matColumnDef="Cantidad">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad</th>
+                <td mat-cell *matCellDef="let C"> 
+                  <div data-mdb-input-init class="form-outline" style="width: 5rem;">
+                    <input value="50" type="number" id="typeNumber" class="form-control"[(ngModel)]="C.amount" />
+                    <label class="form-label" for="typeNumber"></label>
+                </div>
+                </td>
+                
+              </ng-container>
+      
+              <!-- Columna Seleccionado -->
+              <ng-container matColumnDef="Opciones">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+                <td mat-cell *matCellDef="let C">
+                  <button class="button-save" *ngIf="C.amount||C.costo" mat-flat-button matTooltip="Guardar candidatos"
+                    matTooltipPosition="above" style="border-radius: 20px;" (click)="editmount(C)">
+                    <i class="fa fa-save" style="color: black;"></i>
+                  </button>
+                  <a class="btn btn-danger delete-btn"  mat-icon-button >
+                    <i class="fa fa-trash small-icon"></i>
+                  </a>
+                </td>
+              </ng-container>
+            
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+      
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+      
+          </div>
+         </mat-tab>
+      </mat-tab-group>
+  
     </mat-tab>
+
+
+
+
+
     <mat-tab label="Ingreso">
       <div class="container">
         <h2>Gestión de Inventario</h2>
