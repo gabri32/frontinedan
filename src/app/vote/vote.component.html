@@ -4,7 +4,7 @@
       <h5 class="warning">Aún no se registran candidatos</h5>
     </div>
   
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" *ngIf="hascandidates == true">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" *ngIf="hascandidates == true ">
       
       <!-- TAB PERSONERO -->
       <mat-tab label="Personero">
@@ -37,7 +37,7 @@
               <p>Si no deseas elegir a ningún candidato, puedes votar en blanco.</p>
             </mat-card-content>
             <mat-card-actions>
-              <button mat-button color="accent" (click)="voteBlank('Personero')">Votar en Blanco</button>
+              <button mat-button color="accent" (click)="voteBlank('personero/a')">Votar en Blanco</button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -74,7 +74,7 @@
               <p>Si no deseas elegir a ningún candidato, puedes votar en blanco.</p>
             </mat-card-content>
             <mat-card-actions>
-              <button mat-button color="accent" (click)="voteBlank('Contralor')">Votar en Blanco</button>
+              <button mat-button color="accent" (click)="voteBlank('contralor/a')">Votar en Blanco</button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -87,7 +87,7 @@
 
 
   <!--segundo tab------------------------------------------------------->
-  <mat-tab label="Ingreso de candidatos">
+  <mat-tab label="Ingreso de candidatos" *ngIf="mostrarTab3===true">
     <mat-divider></mat-divider>
 
     <!-- Mensaje si ya hay candidatos registrados -->

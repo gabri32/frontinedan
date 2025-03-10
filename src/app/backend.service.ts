@@ -78,4 +78,10 @@ export class BackendService {
   async getPropertiesD():Promise<any>{
     return firstValueFrom(this.http.get(`${this.apiUrl}/getPropertiesD`))
   }
+  async updatePropierties(params:any): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/updatePropierties`, params));
+  }
+  async deletePropierties(params:any): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/deletePropierties`, params));
+  }
 }

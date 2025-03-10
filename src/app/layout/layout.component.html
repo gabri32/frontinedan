@@ -25,7 +25,7 @@
       </svg> &nbsp; Votaciones
     </a>
   
-    <a (click)="navigateTo('inventario')" class="w3-bar-item w3-button">
+    <a *ngIf="mostrarTab3===true" (click)="navigateTo('inventario')" class="w3-bar-item w3-button">
       <i class='fas fa-briefcase'></i> &nbsp; Inventario
     </a>
   </div>

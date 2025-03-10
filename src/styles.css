@@ -42,7 +42,27 @@ body {
     color: white;
     border: none;
     cursor: pointer;
-  }
+    border-radius: 20px; /* Mantiene el borde redondeado */
+    transition: background 0.3s ease-in-out; /* Agrega una transición suave */
+}
+
+.button-save:hover {
+    background: #4a8a00; /* Cambia el color cuando el mouse esté encima */
+}
+.button-delete {
+    margin: 5px;
+    padding: 8px;
+    background: #ba0600f3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px; /* Mantiene el borde redondeado */
+    transition: background 0.3s ease-in-out; /* Agrega una transición suave */
+}
+
+.button-delete:hover {
+    background: #8a3e0091; /* Cambia el color cuando el mouse esté encima */
+}
   .warning {
         background-color: #ffcc0083;
         padding: 10px;

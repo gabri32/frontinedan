@@ -1,6 +1,8 @@
-<mat-tab-group>
+<mat-tab-group *ngIf="mostrarTab3">
     <mat-tab label="Bienes">
       <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" >
+         <!--Consumos----------------------------------------------->
+
         <mat-tab label="Consumos">
           <br>
           <mat-divider></mat-divider>
@@ -52,17 +54,30 @@
                 
               </ng-container>
       
-              <!-- Columna Seleccionado -->
               <ng-container matColumnDef="Opciones">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
                 <td mat-cell *matCellDef="let C">
-                  <button class="button-save" *ngIf="C.amount||C.costo" mat-flat-button matTooltip="Guardar candidatos"
-                    matTooltipPosition="above" style="border-radius: 20px;" (click)="editmount(C)">
+                  <!-- Botón Guardar con Tooltip -->
+                  <button 
+                    class="button-save" 
+                    *ngIf="C.amount || C.costo" 
+                    mat-flat-button 
+                    matTooltip="Guardar candidatos"
+                    matTooltipPosition="above" 
+                    style="border-radius: 20px;" 
+                    (click)="updateProperties(C)">
                     <i class="fa fa-save" style="color: black;"></i>
                   </button>
-                  <a class="btn btn-danger delete-btn"  mat-icon-button >
+              
+                  <!-- Botón Eliminar con Tooltip -->
+                  <button 
+                    class="button-delete" 
+                    mat-icon-button 
+                    matTooltip="Eliminar candidato"
+                    matTooltipPosition="above" 
+                    (click)="deleteProperties(C)">
                     <i class="fa fa-trash small-icon"></i>
-                  </a>
+                  </button>
                 </td>
               </ng-container>
             
@@ -74,6 +89,9 @@
       
           </div>
          </mat-tab>
+
+
+         <!--Devolutivos----------------------------------------------->
          <mat-tab label="Devolutivos">
           <br>
           <mat-divider></mat-divider>
@@ -129,15 +147,30 @@
               <ng-container matColumnDef="Opciones">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
                 <td mat-cell *matCellDef="let C">
-                  <button class="button-save" *ngIf="C.amount||C.costo" mat-flat-button matTooltip="Guardar candidatos"
-                    matTooltipPosition="above" style="border-radius: 20px;" (click)="editmount(C)">
+                  <!-- Botón Guardar con Tooltip -->
+                  <button 
+                    class="button-save" 
+                    *ngIf="C.amount || C.costo" 
+                    mat-flat-button 
+                    matTooltip="Guardar candidatos"
+                    matTooltipPosition="above" 
+                    style="border-radius: 20px;" 
+                    (click)="updateProperties(C)">
                     <i class="fa fa-save" style="color: black;"></i>
                   </button>
-                  <a class="btn btn-danger delete-btn"  mat-icon-button >
+              
+                  <!-- Botón Eliminar con Tooltip -->
+                  <button 
+                    class="button-delete" 
+                    mat-icon-button 
+                    matTooltip="Eliminar candidato"
+                    matTooltipPosition="above" 
+                    (click)="deleteProperties(C)">
                     <i class="fa fa-trash small-icon"></i>
-                  </a>
+                  </button>
                 </td>
               </ng-container>
+              
             
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -202,11 +235,8 @@
       
       
     </mat-tab>
-    <mat-tab label="Salida">
-      <!-- <app-salida-form></app-salida-form> -->
-    </mat-tab>
     <mat-tab label="Historial">
-      <!-- <app-historial></app-historial> -->
+ 
     </mat-tab>
   </mat-tab-group>
   

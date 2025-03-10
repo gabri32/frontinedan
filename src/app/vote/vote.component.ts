@@ -61,6 +61,12 @@ export class VoteComponent implements OnInit {
     group: ScaleType.Ordinal,
     domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5']
   };
+
+  //permisos
+  mostrarTab1 = false;
+  mostrarTab2 = false;
+  mostrarTab3 = false;
+rol_id=0;
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -74,8 +80,27 @@ export class VoteComponent implements OnInit {
     const token = sessionStorage.getItem('usuario');
     this.autenticacion = token ? JSON.parse(token) : null;
     this.searchVotes();
+this.verificarPermisos()
 
+  }
+  verificarPermisos() {
+    console.log(this.autenticacion)
 
+    const usuarioString = sessionStorage.getItem('usuario');
+    const usuario = usuarioString ? JSON.parse(usuarioString) : null;
+    this.rol_id = usuario?.rol_id ?? null;
+
+    // Configura la visibilidad de tabs según el rol
+    if (this.rol_id === 1) {
+      this.mostrarTab1 = true;
+    }
+    if (this.rol_id === 2) {
+      this.mostrarTab2 = true;
+    }
+    if (this.rol_id === 3) {
+      this.mostrarTab3 = true;
+    }
+    console.log(this.rol_id)
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -253,10 +278,7 @@ export class VoteComponent implements OnInit {
     }
   }
 
-  voteBlank(tipo: string) {
-    console.log(`Voto en blanco para: ${tipo}`);
-   
-  }
+
   
   async searchCandidates() {
     try {
@@ -270,7 +292,7 @@ export class VoteComponent implements OnInit {
       });
   
       const response = await this.backendService.searchCandidate();
-  console.log(response.candidates)
+
       if (response.candidates.length > 0) {
         // Filtrar contralores y personeros solo una vez
         this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
@@ -315,7 +337,7 @@ export class VoteComponent implements OnInit {
         }
       });
       const params = {
-        estudiante_id: this.autenticacion.id,
+        estudiante_id: this.autenticacion.num_identificacion,
         candidato_id: option.id,
         id_tipo_vote: option.descripcion === "personero/a" ? 1 : 2
       };
@@ -329,7 +351,36 @@ export class VoteComponent implements OnInit {
     }
 
   }
-
+  async voteBlank(tipo: any) {
+    try {
+      console.log(`📤 Enviando voto en blanco para: ${tipo}`);
+      
+      swal.fire({
+        title: 'Registrando voto en blanco...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
+  
+      const params = {
+        estudiante_id: this.autenticacion.num_identificacion,
+        candidato_id: null, // No hay candidato
+        id_tipo_vote: tipo === "personero/a" ? 1 : 2,
+        es_blanco: true // Indicamos que es un voto en blanco
+      };
+  
+      await this.backendService.createVote(params);
+       await this.searchVotes();
+      swal.close();
+      alertify.success('Voto en blanco registrado con éxito 🎉');
+    } catch (error) {
+      alertify.error('❌ Error. Inténtalo de nuevo. ❌');
+      console.error('❌ Error al votar en blanco:', error);
+    }
+  }
+  
   async searchVotes() {
     try {
       const response = await this.backendService.searchVotes();
@@ -348,10 +399,9 @@ export class VoteComponent implements OnInit {
       console.log('Votos obtenidos:', response);
       this.votes = response;
 
-      // Crear un conjunto con los tipos de votos que el usuario ha realizado
       const votosRealizados = new Set(
         response
-          .filter((vote: { estudiante: { id: any }; }) => vote?.estudiante?.id === this.autenticacion.id)
+          .filter((vote: { estudiante: { num_identificacion: any }; }) => vote?.estudiante?.num_identificacion === this.autenticacion.num_identificacion)
           .map((vote: { id_tipo_vote: number; }) => vote?.id_tipo_vote)
       );
 
@@ -375,21 +425,45 @@ export class VoteComponent implements OnInit {
   async obtenerVotos() {
     try {
       const response = await this.backendService.grafVotes();
-
-      const votosPersonero = response.filter((vote: any) => vote.descripcion === "personero/a");
-      const votosContralor = response.filter((vote: any) => vote.descripcion === "contralor/a");
+      console.log(response);
+  
+      // Filtrar votos según el id_tipo_vote
+      const votosPersonero = response.filter((vote: any) => vote.id_tipo_vote === 1);
+      const votosContralor = response.filter((vote: any) => vote.id_tipo_vote === 2);
+  
+      // Filtrar votos en blanco por tipo
+      const votosBlancoPersonero = response.filter((vote: any) => vote.id_tipo_vote === 1 && vote.candidato === null);
+      const votosBlancoContralor = response.filter((vote: any) => vote.id_tipo_vote === 2 && vote.candidato === null);
+  
+      // Mapear datos de votos para Personero
       this.data = votosPersonero.map((item: any) => ({
-        name: item.candidato, // El nombre del candidato
-        value: Number(item.votos) // Convertir los votos a número
+        name: item.candidato ? item.candidato : "Voto en Blanco",
+        value: Number(item.votos)
       }));
+  
+      // Mapear datos de votos para Contralor
       this.data2 = votosContralor.map((item: any) => ({
-        name: item.candidato, // El nombre del candidato
-        value: Number(item.votos) // Convertir los votos a número
+        name: item.candidato ? item.candidato : "Voto en Blanco",
+        value: Number(item.votos)
       }));
+  
+      // Agregar votos en blanco correctamente
+      if (votosBlancoPersonero.length > 0) {
+        const votosBlancoCount = votosBlancoPersonero.reduce((sum: number, v: { votos: any; }) => sum + Number(v.votos), 0);
+        this.data.push({ name: "Voto en Blanco", value: votosBlancoCount });
+      }
+  
+      if (votosBlancoContralor.length > 0) {
+        const votosBlancoCount = votosBlancoContralor.reduce((sum: number, v: { votos: any; }) => sum + Number(v.votos), 0);
+        this.data2.push({ name: "Voto en Blanco", value: votosBlancoCount });
+      }
+  
     } catch (error) {
-      console.error('Error al obtener votos:', error);
+      console.error('❌ Error al obtener votos:', error);
     }
   }
+  
+  
 
 
 
