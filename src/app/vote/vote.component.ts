@@ -72,6 +72,7 @@ rol_id=0;
   @ViewChild(MatSort) sort!: MatSort;
   highcharts: any;
   rawData: any;
+Si: any;
   constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
@@ -83,6 +84,8 @@ rol_id=0;
 this.verificarPermisos()
 
   }
+
+
   verificarPermisos() {
     console.log(this.autenticacion)
 
@@ -110,6 +113,8 @@ this.verificarPermisos()
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
+
+  
   async obtenerEstudiantes() {
     try {
 
@@ -280,51 +285,50 @@ this.verificarPermisos()
 
 
   
-  async searchCandidates() {
-    try {
-      swal.fire({
-        title: 'Cargando candidatos...',
-        text: 'Por favor espera...',
-        allowOutsideClick: false,
-        didOpen: () => {
-          swal.showLoading();
-        }
-      });
-  
-      const response = await this.backendService.searchCandidate();
-
-      if (response.candidates.length > 0) {
-        // Filtrar contralores y personeros solo una vez
-        this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
-        this.arrayPersonberos = response.candidates.filter((c: any) => c.descripcion === "personero/a");
-  
-        // Crear un Set para búsqueda rápida de identificaciones
-        const candidateIds = new Set(response.candidates.map((c: any) => parseInt(c.num_identificacion)));
-  
-        // Actualizar `dataSource` con `seleccionado = "Sí"` si está en los candidatos
-        this.dataSource.data = this.dataSource.data.map((student: any) => ({
-          ...student,
-          seleccionado: candidateIds.has(parseInt(student.num_identificacion)) ? "Sí" : student.seleccionado
-        }));
-  
-        this.hascandidates = true;
-        swal.close();
-    
-      } else {
-        console.log('⚠️ No se encontraron candidatos.');
-        this.hascandidates = false;
-        swal.close();
+  searchCandidates() {
+    swal.fire({
+      title: 'Cargando candidatos...',
+      text: 'Por favor espera...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
       }
-    } catch (error) {
-      swal.close();
-      console.error(error);
-      swal.fire({
-        title: 'Error',
-        text: 'Hubo un problema al buscar los candidatos.',
-        icon: 'error'
+    });
+  
+    this.backendService.searchCandidate()
+      .then((response: any) => {
+        if (response.candidates.length > 0) {
+          // Filtrar contralores y personeros solo una vez
+          this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
+          this.arrayPersonberos = response.candidates.filter((c: any) => c.descripcion === "personero/a");
+  
+          // Crear un Set para búsqueda rápida de identificaciones
+          const candidateIds = new Set(response.candidates.map((c: any) => parseInt(c.num_identificacion)));
+  
+          // Actualizar `dataSource` con `seleccionado = "Sí"` si está en los candidatos
+          this.dataSource.data = this.dataSource.data.map((student: any) => ({
+            ...student,
+            seleccionado: candidateIds.has(parseInt(student.num_identificacion)) ? "Sí" : student.seleccionado
+          }));
+  
+          this.hascandidates = true;
+        } else {
+          console.log('⚠️ No se encontraron candidatos.');
+          this.hascandidates = false;
+        }
+        swal.close();
+      })
+      .catch((error: any) => {
+        swal.close();
+        console.error(error);
+        swal.fire({
+          title: 'Error',
+          text: 'Hubo un problema al buscar los candidatos.',
+          icon: 'error'
+        });
       });
-    }
   }
+  
   
   async vote(option: any) {
     try {
@@ -393,35 +397,39 @@ this.verificarPermisos()
       console.error('❌ Error al buscar votos:', error);
     }
   }
-  async verificarVotos() {
-    try {
-      const response = await this.backendService.searchVotes();
-      console.log('Votos obtenidos:', response);
-      this.votes = response;
-
-      const votosRealizados = new Set(
-        response
-          .filter((vote: { estudiante: { num_identificacion: any }; }) => vote?.estudiante?.num_identificacion === this.autenticacion.num_identificacion)
-          .map((vote: { id_tipo_vote: number; }) => vote?.id_tipo_vote)
-      );
-
-      // Verificar si el usuario ya votó por cada categoría
-      const hasVotedper = votosRealizados.has(1); // 1 = Personero
-      const hasVotedcon = votosRealizados.has(2); // 2 = Contralor
-
-      if (hasVotedcon) {
-        this.showContralor = false;
-        alertify.warning('⚠️ Ya has votado por contralor/a ⚠️');
-      }
-      if (hasVotedper) {
-        this.showPersonero = false;
-        alertify.warning('⚠️ Ya has votado por personero/a ⚠️');
-      }
-    } catch (error) {
-      alertify.warning('❌ Error al traer votos ❌');
-      console.error('❌ Error al buscar votos:', error);
-    }
+  verificarVotos() {
+    this.backendService.searchVotes()
+      .then((response: any) => {
+        console.log('Votos obtenidos:', response);
+        this.votes = response;
+  
+        const votosRealizados = new Set(
+          response
+            .filter((vote: { estudiante: { num_identificacion: any } }) => 
+              vote?.estudiante?.num_identificacion === this.autenticacion.num_identificacion
+            )
+            .map((vote: { id_tipo_vote: number }) => vote?.id_tipo_vote)
+        );
+  
+        // Verificar si el usuario ya votó por cada categoría
+        const hasVotedper = votosRealizados.has(1); // 1 = Personero
+        const hasVotedcon = votosRealizados.has(2); // 2 = Contralor
+  
+        if (hasVotedcon) {
+          this.showContralor = false;
+          alertify.warning('⚠️ Ya has votado por contralor/a ⚠️');
+        }
+        if (hasVotedper) {
+          this.showPersonero = false;
+          alertify.warning('⚠️ Ya has votado por personero/a ⚠️');
+        }
+      })
+      .catch((error: any) => {
+        alertify.warning('❌ Error al traer votos ❌');
+        console.error('❌ Error al buscar votos:', error);
+      });
   }
+  
   async obtenerVotos() {
     try {
       const response = await this.backendService.grafVotes();

@@ -1,9 +1,12 @@
 
-/* You can add global styles to this file, and also import other style files */
 html, body { 
     height: 100%; 
-    font-family: Helvetica, sans-serif; /* Asegura compatibilidad con sans-serif */
+    font-family:Georgia, 'Times New Roman', Times, serif;
 }
+::ng-deep html, body {
+    font-family: 'Roboto', sans-serif !important;
+}
+
 .h-divider{
     margin-top:5px;
     margin-bottom:5px;
@@ -15,16 +18,12 @@ html, body {
     height: 300px; /* Ajusta la altura según necesites */
     object-fit: cover; /* Para que la imagen se ajuste sin deformarse */
   }
-body { 
-    margin: 0; 
-    font-family: inherit; /* Hereda de html */
-}
+
 .global-filter{
     background-color: #4c586411;
     padding: 5px;
     border-radius: 5px;
     margin-bottom: 10px;
-    font-family: Helvetica; 
 }
 .btn-circle.btn-xl {
     width: 70px;

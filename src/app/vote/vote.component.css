@@ -1,6 +1,7 @@
 .vote-container {
     text-align: center;
     padding: 20px;
+    font-family: 'Roboto', sans-serif !important;
   }
   
   .button-save {
@@ -11,7 +12,21 @@
     border: none;
     cursor: pointer;
   }
+  .center-button {
+    display: flex;
+    justify-content: center;
+    margin-left: 1%;
+  }
+  .round-image {
+    width: 150px; /* Ajusta el tamaño según necesites */
+    height: 150px; /* Debe ser igual al width para que sea un círculo */
+    border-radius: 50%;
+    object-fit: cover; /* Asegura que la imagen se ajuste bien */
+    margin: 0 auto; /* Centrar la imagen */
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  }
   
+
   button:hover {
     background: #517300;
   }
@@ -30,13 +45,20 @@
   .candidates-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 5%;
     justify-content: center;
+    padding: 2%;
+    background-color: #d1dab9a6;
 }
 
 .candidate-card {
+  margin-top: 10px;
     width: 250px;
+    justify-content: center;
     text-align: center;
+    background-color:#bfe0c065 ;
+    box-shadow: 2px 2px 2px 1px rgba(1, 1, 1, 0.5);
+
 }
 
 .delete-btn {

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component,ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HighchartsChartModule } from 'highcharts-angular';
+encapsulation: ViewEncapsulation.None
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet,HighchartsChartModule ],

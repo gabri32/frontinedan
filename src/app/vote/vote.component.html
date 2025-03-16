@@ -16,30 +16,32 @@
             <mat-card-header>
               <mat-card-title>{{ candidate.nombre }}</mat-card-title>
             </mat-card-header>
-            <img mat-card-image [src]="candidate.foto" alt="Foto del candidato">
+            <img mat-card-image class="round-image" [src]="candidate.foto" alt="Foto del candidato">
+          <br>
             <mat-card-content>
               <p>{{candidate.lema}}</p>
               &nbsp;
-              <i type="button" class="btn btn-info btn-circle"> {{0}}-{{candidate.numero}}</i>
+              <i type="button" class="btn btn btn-circle"><strong>{{0}}-{{candidate.numero}}</strong></i>
             </mat-card-content>
-            <mat-card-actions>
-              <button mat-button color="primary" (click)="vote(candidate)">Votar</button>
+            <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
+              <button class="btn btn-success btn-circle" mat-button  (click)="vote(candidate)"> Votar</button>
             </mat-card-actions>
           </mat-card>
   
           <!-- Opción de Voto en Blanco -->
-          <mat-card class="candidate-card blank-vote">
+          <mat-card class="candidate-card">
             <mat-card-header>
-              <mat-card-title>Voto en Blanco</mat-card-title>
+              <mat-card-title>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Voto en Blanco</mat-card-title>
             </mat-card-header>
-            <img mat-card-image src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
+            <img mat-card-image class="round-image" src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
+          <br>
             <mat-card-content>
-              <p>Si no deseas elegir a ningún candidato, puedes votar en blanco.</p>
+              <p>Si no deseas elegir a ningún candidato.</p>
             </mat-card-content>
-            <mat-card-actions>
-              <button mat-button color="accent" (click)="voteBlank('personero/a')">Votar en Blanco</button>
+            <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
+              <button mat-button class="btn btn-success btn-circle" (click)="voteBlank('personero/a')">Votar</button>
             </mat-card-actions>
-          </mat-card>
+          </mat-card>          
         </div>
       </mat-tab>
   
@@ -53,28 +55,30 @@
             <mat-card-header>
               <mat-card-title>{{ candidate.nombre }}</mat-card-title>
             </mat-card-header>
-            <img mat-card-image [src]="candidate.foto" alt="Foto del candidato">
+            <img mat-card-image class="round-image" [src]="candidate.foto" alt="Foto del candidato">
+           <br>
             <mat-card-content>
               <p>{{candidate.lema}}</p>
               &nbsp;
-              <i type="button" class="btn btn-info btn-circle"> {{0}}-{{candidate.numero}}</i>
+              <i type="button" class="btn btn btn-circle"> <strong>{{0}}-{{candidate.numero}}</strong></i>
             </mat-card-content>
-            <mat-card-actions>
-              <button mat-button color="primary" (click)="vote(candidate)">Votar</button>
+            <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
+              <button mat-button class="btn btn-success btn-circle" (click)="vote(candidate)">Votar</button>
             </mat-card-actions>
           </mat-card>
   
           <!-- Opción de Voto en Blanco -->
           <mat-card class="candidate-card blank-vote">
             <mat-card-header>
-              <mat-card-title>Voto en Blanco</mat-card-title>
+              <mat-card-title>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voto en Blanco</mat-card-title>
             </mat-card-header>
-            <img mat-card-image src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
+            <img mat-card-image class="round-image" src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
+            <br>
             <mat-card-content>
-              <p>Si no deseas elegir a ningún candidato, puedes votar en blanco.</p>
+              <p>Si no deseas elegir a ningún candidato.</p>
             </mat-card-content>
-            <mat-card-actions>
-              <button mat-button color="accent" (click)="voteBlank('contralor/a')">Votar en Blanco</button>
+            <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
+              <button mat-button class="btn btn-success btn-circle" (click)="voteBlank('contralor/a')">votar</button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -220,7 +224,7 @@
 
   <!--tercer tab-------------------------------------------------------->
 
-  <mat-tab label="Votos">
+  <mat-tab label="Votos" *ngIf="mostrarTab3===true">
     <div style="text-align: center;">
       <strong style="display: block; margin-bottom: 10px; font-size: 18px;">Votos totales de la elección</strong>
 
@@ -238,9 +242,5 @@
     </div>
 
   </mat-tab>
-
-
-
-
 
 </mat-tab-group>

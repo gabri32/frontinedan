@@ -11,7 +11,8 @@ import { MatTabsModule } from '@angular/material/tabs';  // ✅ Importar MatTabs
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import { HighchartsChartModule } from 'highcharts-angular'; 
+import { HighchartsChartModule } from 'highcharts-angular';
+ 
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(HttpClientModule, ReactiveFormsModule,MatTabsModule, MatTableModule,
