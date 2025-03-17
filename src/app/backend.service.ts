@@ -84,4 +84,7 @@ export class BackendService {
   async deletePropierties(params:any): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/deletePropierties`, params));
   }
+  async saerchidstudent(num:any):Promise<any>{
+    return firstValueFrom(this.http.post(`${this.apiUrl}/saerchidstudent`, num))
+  }
 }

@@ -72,22 +72,27 @@ rol_id=0;
   @ViewChild(MatSort) sort!: MatSort;
   highcharts: any;
   rawData: any;
-Si: any;
   constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
+    swal.fire({
+      title: 'Cargando...',
+      text: 'Por favor espera...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
+      }
+    });
     this.obtenerEstudiantes();
     this.searchCandidates();
     const token = sessionStorage.getItem('usuario');
     this.autenticacion = token ? JSON.parse(token) : null;
     this.searchVotes();
 this.verificarPermisos()
+swal.close();
 
   }
-
-
   verificarPermisos() {
-    console.log(this.autenticacion)
 
     const usuarioString = sessionStorage.getItem('usuario');
     const usuario = usuarioString ? JSON.parse(usuarioString) : null;
@@ -113,8 +118,6 @@ this.verificarPermisos()
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
-
-  
   async obtenerEstudiantes() {
     try {
 
@@ -285,50 +288,51 @@ this.verificarPermisos()
 
 
   
-  searchCandidates() {
-    swal.fire({
-      title: 'Cargando candidatos...',
-      text: 'Por favor espera...',
-      allowOutsideClick: false,
-      didOpen: () => {
-        swal.showLoading();
-      }
-    });
-  
-    this.backendService.searchCandidate()
-      .then((response: any) => {
-        if (response.candidates.length > 0) {
-          // Filtrar contralores y personeros solo una vez
-          this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
-          this.arrayPersonberos = response.candidates.filter((c: any) => c.descripcion === "personero/a");
-  
-          // Crear un Set para búsqueda rápida de identificaciones
-          const candidateIds = new Set(response.candidates.map((c: any) => parseInt(c.num_identificacion)));
-  
-          // Actualizar `dataSource` con `seleccionado = "Sí"` si está en los candidatos
-          this.dataSource.data = this.dataSource.data.map((student: any) => ({
-            ...student,
-            seleccionado: candidateIds.has(parseInt(student.num_identificacion)) ? "Sí" : student.seleccionado
-          }));
-  
-          this.hascandidates = true;
-        } else {
-          console.log('⚠️ No se encontraron candidatos.');
-          this.hascandidates = false;
+  async searchCandidates() {
+    try {
+      swal.fire({
+        title: 'Cargando candidatos...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
         }
-        swal.close();
-      })
-      .catch((error: any) => {
-        swal.close();
-        console.error(error);
-        swal.fire({
-          title: 'Error',
-          text: 'Hubo un problema al buscar los candidatos.',
-          icon: 'error'
-        });
       });
-  }
   
+      const response = await this.backendService.searchCandidate();
+
+      if (response.candidates.length > 0) {
+        // Filtrar contralores y personeros solo una vez
+        this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
+        this.arrayPersonberos = response.candidates.filter((c: any) => c.descripcion === "personero/a");
+  
+        // Crear un Set para búsqueda rápida de identificaciones
+        const candidateIds = new Set(response.candidates.map((c: any) => parseInt(c.num_identificacion)));
+  
+        // Actualizar `dataSource` con `seleccionado = "Sí"` si está en los candidatos
+        this.dataSource.data = this.dataSource.data.map((student: any) => ({
+          ...student,
+          seleccionado: candidateIds.has(parseInt(student.num_identificacion)) ? "Sí" : student.seleccionado
+        }));
+  
+        this.hascandidates = true;
+        swal.close();
+    
+      } else {
+        console.log('⚠️ No se encontraron candidatos.');
+        this.hascandidates = false;
+        swal.close();
+      }
+    } catch (error) {
+      swal.close();
+      console.error(error);
+      swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al buscar los candidatos.',
+        icon: 'error'
+      });
+    }
+  }
   
   async vote(option: any) {
     try {
@@ -340,8 +344,13 @@ this.verificarPermisos()
           swal.showLoading();
         }
       });
+      const num={
+        num_identificacion:this.autenticacion.num_identificacion
+      }
+      const student = await this.backendService.saerchidstudent(num)
+      console.log(student)
       const params = {
-        estudiante_id: this.autenticacion.num_identificacion,
+        estudiante_id: student.student.id,
         candidato_id: option.id,
         id_tipo_vote: option.descripcion === "personero/a" ? 1 : 2
       };
@@ -357,7 +366,6 @@ this.verificarPermisos()
   }
   async voteBlank(tipo: any) {
     try {
-      console.log(`📤 Enviando voto en blanco para: ${tipo}`);
       
       swal.fire({
         title: 'Registrando voto en blanco...',
@@ -387,53 +395,70 @@ this.verificarPermisos()
   
   async searchVotes() {
     try {
+      swal.fire({
+        title: 'Cargando...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
       const response = await this.backendService.searchVotes();
-      console.log('Votos obtenidos:', response);
       this.votes = response;
       await this.verificarVotos();
       await this.obtenerVotos();
+      swal.close();
     } catch (error) {
       alertify.warning('❌ error al traer votos ❌');
       console.error('❌ Error al buscar votos:', error);
     }
   }
-  verificarVotos() {
-    this.backendService.searchVotes()
-      .then((response: any) => {
-        console.log('Votos obtenidos:', response);
-        this.votes = response;
-  
-        const votosRealizados = new Set(
-          response
-            .filter((vote: { estudiante: { num_identificacion: any } }) => 
-              vote?.estudiante?.num_identificacion === this.autenticacion.num_identificacion
-            )
-            .map((vote: { id_tipo_vote: number }) => vote?.id_tipo_vote)
-        );
-  
-        // Verificar si el usuario ya votó por cada categoría
-        const hasVotedper = votosRealizados.has(1); // 1 = Personero
-        const hasVotedcon = votosRealizados.has(2); // 2 = Contralor
-  
-        if (hasVotedcon) {
-          this.showContralor = false;
-          alertify.warning('⚠️ Ya has votado por contralor/a ⚠️');
+  async verificarVotos() {
+    try {
+      swal.fire({
+        title: 'Cargando...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
         }
-        if (hasVotedper) {
-          this.showPersonero = false;
-          alertify.warning('⚠️ Ya has votado por personero/a ⚠️');
-        }
-      })
-      .catch((error: any) => {
-        alertify.warning('❌ Error al traer votos ❌');
-        console.error('❌ Error al buscar votos:', error);
       });
+      const response = await this.backendService.searchVotes();
+   
+      this.votes = response;
+
+      const votosRealizados = new Set(
+        response
+          .filter((vote: { estudiante: { num_identificacion: any }; }) => vote?.estudiante?.num_identificacion === this.autenticacion.num_identificacion)
+          .map((vote: { id_tipo_vote: number; }) => vote?.id_tipo_vote)
+      );
+
+
+      const hasVotedper = votosRealizados.has(1); // 1 = Personero
+      const hasVotedcon = votosRealizados.has(2); // 2 = Contralor
+
+      if (hasVotedcon) {
+        this.showContralor = false;
+        alertify.warning('⚠️ Ya has votado por contralor/a ⚠️');
+      }
+      if (hasVotedper) {
+        this.showPersonero = false;
+        alertify.warning('⚠️ Ya has votado por personero/a ⚠️');
+      }
+      swal.close();
+    } catch (error) {
+      alertify.warning('❌ Error al traer votos ❌');
+      console.error('❌ Error al buscar votos:', error);
+    }
   }
-  
+
+
   async obtenerVotos() {
     try {
+
+
       const response = await this.backendService.grafVotes();
-      console.log(response);
+   
   
       // Filtrar votos según el id_tipo_vote
       const votosPersonero = response.filter((vote: any) => vote.id_tipo_vote === 1);
