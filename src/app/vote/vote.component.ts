@@ -75,14 +75,7 @@ rol_id=0;
   constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
-    swal.fire({
-      title: 'Cargando...',
-      text: 'Por favor espera...',
-      allowOutsideClick: false,
-      didOpen: () => {
-        swal.showLoading();
-      }
-    });
+
     this.obtenerEstudiantes();
     this.searchCandidates();
     const token = sessionStorage.getItem('usuario');
