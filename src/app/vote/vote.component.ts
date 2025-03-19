@@ -15,6 +15,12 @@ import { FormsModule } from "@angular/forms";
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
+declare global {
+  interface Window {
+    alertify: any;
+  }
+}
+
 @Component({
   selector: 'app-vote',
   standalone: true,
@@ -357,12 +363,15 @@ swal.close();
       await this.backendService.createVote(params);
       await this.searchVotes();
       swal.close();
-      alertify.success('Voto registrado con éxito 🎉');
+      if (window.alertify) {
+        alertify.success('Voto registrado con éxito 🎉');
+      } else {
+        console.error('Alertify no está definido en producción');
+      }
     } catch (error) {
       alertify.error('❌Error. Inténtalo de nuevo.❌');
       console.error('❌ Error al votar:', error);
     }
-
   }
   async voteBlank(tipo: any) {
     try {
