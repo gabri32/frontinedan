@@ -350,6 +350,7 @@ swal.close();
       await this.backendService.createVote(params);
       await this.searchVotes();
       swal.close();
+      alertify.success('Voto registrado');
       swal.fire({
                  title: '¡Éxito!',
                  text: 'Voto registrado con exito',
