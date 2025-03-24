@@ -1,6 +1,6 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit,AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-header',
   imports: [],
@@ -19,11 +19,13 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     const token = sessionStorage.getItem('usuario');
     const usuario = token ? JSON.parse(token) : null; 
-  
-    this.nombre = usuario ? usuario.nombre.split(' ')[0] : ''; 
-  
-    
+    const spaceCount = (usuario.nombre.match(/ /g) || []).length;
+
+      this.nombre = (usuario.nombre).toUpperCase()  
   }
-  
+  ngAfterViewInit() {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+  }
 
 }

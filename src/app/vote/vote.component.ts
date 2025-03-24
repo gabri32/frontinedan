@@ -36,7 +36,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class VoteComponent implements OnInit {
 
   //variables iniciales del componente ------------------------
-  displayedColumns: string[] = ['selecciona', 'id', 'nombre', 'edad', 'grado', 'num_identificacion', 'Seleccionado','Opciones'];
+  displayedColumns: string[] = ['selecciona', 'id', 'nombre', 'edad', 'grado', 'num_identificacion', 'Seleccionado', 'Opciones'];
   dataSource = new MatTableDataSource<any>();
   selectedStudents: Array<any> = []
   loading = false;
@@ -48,25 +48,25 @@ export class VoteComponent implements OnInit {
   showPersonero = true;
   showContralor = true;
   chartOptions: any;
-  lema:string | undefined;
+  lema: string | undefined;
   view: [number, number] = [400, 400]; // Tamaño del gráfico
   data: Array<any> = [];
   data2: Array<any> = [];
   selectedFile: File | null = null;
   uploadedImageUrl: string = '';
-  sortStudents:any
+  sortStudents: any
   colorScheme: Color = {
     name: 'customScheme',
     selectable: true,
     group: ScaleType.Ordinal,
     domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5']
   };
-
+  estudiante_id: number = 0;
   //permisos
   mostrarTab1 = false;
   mostrarTab2 = false;
   mostrarTab3 = false;
-rol_id=0;
+  rol_id = 0;
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -76,13 +76,16 @@ rol_id=0;
 
   ngOnInit(): void {
 
-    this.obtenerEstudiantes();
-    this.searchCandidates();
+
     const token = sessionStorage.getItem('usuario');
     this.autenticacion = token ? JSON.parse(token) : null;
+    this.estudiante_id = this.autenticacion.num_identificacion
+    this.verificarPermisos()
+    this.obtenerEstudiantes();
+    this.searchCandidates();
     this.searchVotes();
-this.verificarPermisos()
-swal.close();
+
+    swal.close();
 
   }
   verificarPermisos() {
@@ -101,7 +104,7 @@ swal.close();
     if (this.rol_id === 3) {
       this.mostrarTab3 = true;
     }
-    console.log(this.rol_id)
+
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -120,7 +123,7 @@ swal.close();
       this.searchCandidates()
     } catch (error) {
       console.error('Error al obtener estudiantes:', error);
- 
+
     }
   }
 
@@ -131,7 +134,7 @@ swal.close();
   }
   toggleSelection(student: any) {
     const index = this.selectedStudents.findIndex(s => s.nombre === student.nombre);
-  
+
     if (index > -1) {
       // Si ya está seleccionado, lo eliminamos
       this.selectedStudents.splice(index, 1);
@@ -143,10 +146,10 @@ swal.close();
         num_identificacion: parseInt(student.num_identificacion)
       });
     }
-  
-   
+
+
   }
-  
+
   async removeCandidate(student: any) {
     try {
       // Confirmar eliminación con SweetAlert2
@@ -198,31 +201,37 @@ swal.close();
   onFileSelected(event: Event, student: any) {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
-      student.selectedFile = fileInput.files[0]; 
+      student.selectedFile = fileInput.files[0];
     }
   }
-  
+
   async uploadImage(student: any) {
     if (!student.selectedFile) {
       alert("Selecciona una imagen primero");
       return;
     }
-  
+
     try {
       const formData = new FormData();
       formData.append("image", student.selectedFile);
       formData.append("num_identificacion", student.num_identificacion.toString());
       formData.append("lema", student.lema);
       formData.append("numero", student.numero.toString());
-  
+
+
+      //CONSOLE.LOG PARA VER SIO LOS DATOS DEL FORMN DATA ESTAN BIEN Y SE ENVIAN AL MULTER DEL BACK
+      // for (let pair of formData.entries()) {
+      //   console.log(pair[0] + ":", pair[1]);
+      // }
+      
       const response = await this.backendService.saveImage(formData);
-  
+
       if (!response.message) {
         console.error("Error al guardar la imagen:", response);
         alert("No se pudo guardar la imagen");
         return;
       }
-  
+
       swal.fire({
         title: "Imagen guardada",
         text: "La imagen del candidato ha sido guardada correctamente.",
@@ -230,7 +239,7 @@ swal.close();
         timer: 1500,
         showConfirmButton: false
       });
-  
+
     } catch (error) {
       console.error("Error al guardar la imagen:", error);
       swal.fire({
@@ -241,8 +250,8 @@ swal.close();
       });
     }
   }
-  
-  
+
+
 
 
 
@@ -280,7 +289,7 @@ swal.close();
   }
 
 
-  
+
   async searchCandidates() {
     try {
       swal.fire({
@@ -291,26 +300,26 @@ swal.close();
           swal.showLoading();
         }
       });
-  
-      const response = await this.backendService.searchCandidate();
 
+      const response = await this.backendService.searchCandidate();
+console.log(response)
       if (response.candidates.length > 0) {
         // Filtrar contralores y personeros solo una vez
         this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
         this.arrayPersonberos = response.candidates.filter((c: any) => c.descripcion === "personero/a");
-  
+
         // Crear un Set para búsqueda rápida de identificaciones
         const candidateIds = new Set(response.candidates.map((c: any) => parseInt(c.num_identificacion)));
-  
+
         // Actualizar `dataSource` con `seleccionado = "Sí"` si está en los candidatos
         this.dataSource.data = this.dataSource.data.map((student: any) => ({
           ...student,
           seleccionado: candidateIds.has(parseInt(student.num_identificacion)) ? "Sí" : student.seleccionado
         }));
-  
+
         this.hascandidates = true;
         swal.close();
-    
+
       } else {
         console.log('⚠️ No se encontraron candidatos.');
         this.hascandidates = false;
@@ -326,7 +335,7 @@ swal.close();
       });
     }
   }
-  
+
   async vote(option: any) {
     try {
       swal.fire({
@@ -337,11 +346,10 @@ swal.close();
           swal.showLoading();
         }
       });
-      const num={
-        num_identificacion:this.autenticacion.num_identificacion
+      const num = {
+        num_identificacion: this.autenticacion.num_identificacion
       }
       const student = await this.backendService.saerchidstudent(num)
-      console.log(student)
       const params = {
         estudiante_id: student.student.id,
         candidato_id: option.id,
@@ -352,21 +360,23 @@ swal.close();
       swal.close();
       alertify.success('Voto registrado');
       swal.fire({
-                 title: '¡Éxito!',
-                 text: 'Voto registrado con exito',
-                 icon: 'success',
-                 timer: 500,
-                 timerProgressBar: true,
-                 showConfirmButton: false
-               })
+        title: '¡Éxito!',
+        text: 'Voto registrado con exito',
+        icon: 'success',
+        timer: 500,
+        timerProgressBar: true,
+        showConfirmButton: false
+      })
     } catch (error) {
       alertify.error('❌Error. Inténtalo de nuevo.❌');
       console.error('❌ Error al votar:', error);
     }
   }
+
+
   async voteBlank(tipo: any) {
     try {
-      
+
       swal.fire({
         title: 'Registrando voto en blanco...',
         text: 'Por favor espera...',
@@ -375,16 +385,19 @@ swal.close();
           swal.showLoading();
         }
       });
-  
+      const num = {
+        num_identificacion: this.autenticacion.num_identificacion
+      }
+      const student = await this.backendService.saerchidstudent(num)
       const params = {
-        estudiante_id: this.autenticacion.num_identificacion,
+        estudiante_id: student.student.id,
         candidato_id: null, // No hay candidato
         id_tipo_vote: tipo === "personero/a" ? 1 : 2,
         es_blanco: true // Indicamos que es un voto en blanco
       };
-  
+
       await this.backendService.createVote(params);
-       await this.searchVotes();
+      await this.searchVotes();
       swal.close();
       alertify.success('Voto en blanco registrado con éxito 🎉');
     } catch (error) {
@@ -392,7 +405,7 @@ swal.close();
       console.error('❌ Error al votar en blanco:', error);
     }
   }
-  
+
   async searchVotes() {
     try {
       swal.fire({
@@ -403,8 +416,7 @@ swal.close();
           swal.showLoading();
         }
       });
-      const response = await this.backendService.searchVotes();
-      this.votes = response;
+
       await this.verificarVotos();
       await this.obtenerVotos();
       swal.close();
@@ -415,25 +427,19 @@ swal.close();
   }
   async verificarVotos() {
     try {
-      swal.fire({
-        title: 'Cargando...',
-        text: 'Por favor espera...',
-        allowOutsideClick: false,
-        didOpen: () => {
-          swal.showLoading();
-        }
-      });
-      const response = await this.backendService.searchVotes();
-   
-      this.votes = response;
 
-      const votosRealizados = new Set(
-        response
-          .filter((vote: { estudiante: { num_identificacion: any }; }) => vote?.estudiante?.num_identificacion === this.autenticacion.num_identificacion)
-          .map((vote: { id_tipo_vote: number; }) => vote?.id_tipo_vote)
-      );
-
-
+      const num = {
+        num_identificacion: this.autenticacion.num_identificacion
+      }
+      if (this.rol_id === 3 || this.rol_id === 1) {
+        console.info("no es estudiante")
+      } else {
+        console.log(this.rol_id)
+        const student = await this.backendService.saerchidstudent(num)
+        const response = await this.backendService.searchVotes(student.student.id);
+        this.votes = response;
+      }
+      const votosRealizados = new Set(this.votes.map((v: any) => v.id_tipo_vote));
       const hasVotedper = votosRealizados.has(1); // 1 = Personero
       const hasVotedcon = votosRealizados.has(2); // 2 = Contralor
 
@@ -445,7 +451,6 @@ swal.close();
         this.showPersonero = false;
         alertify.warning('⚠️ Ya has votado por personero/a ⚠️');
       }
-      swal.close();
     } catch (error) {
       alertify.warning('❌ Error al traer votos ❌');
       console.error('❌ Error al buscar votos:', error);
@@ -455,48 +460,42 @@ swal.close();
 
   async obtenerVotos() {
     try {
-
-
       const response = await this.backendService.grafVotes();
-   
-  
       // Filtrar votos según el id_tipo_vote
       const votosPersonero = response.filter((vote: any) => vote.id_tipo_vote === 1);
       const votosContralor = response.filter((vote: any) => vote.id_tipo_vote === 2);
-  
+
       // Filtrar votos en blanco por tipo
       const votosBlancoPersonero = response.filter((vote: any) => vote.id_tipo_vote === 1 && vote.candidato === null);
       const votosBlancoContralor = response.filter((vote: any) => vote.id_tipo_vote === 2 && vote.candidato === null);
-  
+
       // Mapear datos de votos para Personero
       this.data = votosPersonero.map((item: any) => ({
         name: item.candidato ? item.candidato : "Voto en Blanco",
         value: Number(item.votos)
       }));
-  
+
       // Mapear datos de votos para Contralor
       this.data2 = votosContralor.map((item: any) => ({
         name: item.candidato ? item.candidato : "Voto en Blanco",
         value: Number(item.votos)
       }));
-  
+
       // Agregar votos en blanco correctamente
       if (votosBlancoPersonero.length > 0) {
         const votosBlancoCount = votosBlancoPersonero.reduce((sum: number, v: { votos: any; }) => sum + Number(v.votos), 0);
         this.data.push({ name: "Voto en Blanco", value: votosBlancoCount });
       }
-  
+
       if (votosBlancoContralor.length > 0) {
         const votosBlancoCount = votosBlancoContralor.reduce((sum: number, v: { votos: any; }) => sum + Number(v.votos), 0);
         this.data2.push({ name: "Voto en Blanco", value: votosBlancoCount });
       }
-  
+
     } catch (error) {
       console.error('❌ Error al obtener votos:', error);
     }
   }
-  
-  
 
 
 

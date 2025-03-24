@@ -1,12 +1,19 @@
 <header class="header">
   <img src="favicon.ico" alt="" style="max-width: 3.5%;">
   <h4>I.E.M Antonio Nariño</h4>
-  <nav>
+  <nav class="nav flex-column">
     <ul>
-     
-      <li>Bienvenido, <strong>{{ nombre }}</strong></li> 
-      <li><a href="#" routerLinkActive="active">Inicio</a></li>
-      <li><a href="#" (click)="logout()">Salir</a></li>
+      <br>
+      <li> <strong>{{ nombre }}</strong>  </li> 
+      <li>
+        <a href="#" routerLinkActive="active" data-bs-toggle="tooltip" title="Inicio">
+          <i class="fas fa-home" style="font-size:20px"></i>
+        </a>
+        &nbsp;
+        <a href="#" (click)="logout()" data-bs-toggle="tooltip" title="Cerrar sesión">
+          <i class="fa fa-sign-out-alt" style="font-size:20px"></i>
+        </a>
+      </li>
     </ul>
   </nav>
 </header>

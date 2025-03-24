@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../app/auth/enviroments';
 import { firstValueFrom } from 'rxjs';
 
@@ -50,9 +50,11 @@ export class BackendService {
   async createVote(params: any): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/createvotes`, params));
   }
-  async searchVotes(): Promise<any> {
-    return firstValueFrom(this.http.get(`${this.apiUrl}/getVotes`));
-  }
+async searchVotes(estudiante_id: number): Promise<any> {
+  const params = new HttpParams().set('estudiante_id', estudiante_id.toString());
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getvotes`, { params }));
+}
+
   async grafVotes(): Promise<any> {
     return firstValueFrom(this.http.get(`${this.apiUrl}/grafVotes`));
   }
@@ -86,5 +88,11 @@ export class BackendService {
   }
   async saerchidstudent(num:any):Promise<any>{
     return firstValueFrom(this.http.post(`${this.apiUrl}/saerchidstudent`, num))
+  }
+  async getsliderImages():Promise<any>{
+    return firstValueFrom(this.http.get(`${this.apiUrl}/getsliderImages`))
+  }
+  async updatesliderImages(formData:FormData): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/updatesliderImages`, formData));
   }
 }

@@ -10,11 +10,13 @@ import{VoteComponent} from './vote/vote.component'
 //import { HomeComponent } from './home/home.component';
 import{InventarioComponent}from'./inventario/inventario.component'
 import { AuthGuard } from './auth.guard'; 
+import { AdministracionComponent } from './administracion/administracion.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'layout', component: LayoutComponent, canActivate: [AuthGuard] ,
-    children:[  {path:'vote',component:VoteComponent},{path:'inventario',component:InventarioComponent}]
+    children:[  {path:'vote',component:VoteComponent},{path:'inventario',component:InventarioComponent},
+      {path:'administracion',component:AdministracionComponent}]
   }, // ✅ Protegemos la ruta
   { path: '**', redirectTo: 'login' } // Redirigir cualquier otra ruta al login
 ];
