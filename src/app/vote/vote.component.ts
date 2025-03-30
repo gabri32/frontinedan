@@ -16,7 +16,7 @@ import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { ReporteService } from '../services/reporte.service';
+  //import { ReporteService } from '../services/reporte.service';
 @Component({
   selector: 'app-vote',
   standalone: true,
@@ -79,7 +79,7 @@ export class VoteComponent implements OnInit {
   rawData: any;
   ganadorper:any;
   ganadorcon:any;
-  constructor(private backendService: BackendService, private sanitizer: DomSanitizer,private reporteService: ReporteService) { }
+  constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
 const date = new Date();
 
