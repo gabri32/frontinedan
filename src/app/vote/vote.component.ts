@@ -14,7 +14,9 @@ import swal from 'sweetalert2';
 import { FormsModule } from "@angular/forms";
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { ReporteService } from '../services/reporte.service';
 @Component({
   selector: 'app-vote',
   standalone: true,
@@ -67,16 +69,21 @@ export class VoteComponent implements OnInit {
   mostrarTab2 = false;
   mostrarTab3 = false;
   rol_id = 0;
+  now:number|null=null;
+  time:Date|null=null;
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   highcharts: any;
   rawData: any;
-  constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
-
+  ganadorper:any;
+  ganadorcon:any;
+  constructor(private backendService: BackendService, private sanitizer: DomSanitizer,private reporteService: ReporteService) { }
   ngOnInit(): void {
+const date = new Date();
 
-
+   this.time=date
+   this.now=date.getFullYear();
     const token = sessionStorage.getItem('usuario');
     this.autenticacion = token ? JSON.parse(token) : null;
     this.estudiante_id = this.autenticacion.num_identificacion
@@ -302,7 +309,6 @@ export class VoteComponent implements OnInit {
       });
 
       const response = await this.backendService.searchCandidate();
-console.log(response)
       if (response.candidates.length > 0) {
         // Filtrar contralores y personeros solo una vez
         this.arrayContralores = response.candidates.filter((c: any) => c.descripcion === "contralor/a");
@@ -461,6 +467,7 @@ console.log(response)
   async obtenerVotos() {
     try {
       const response = await this.backendService.grafVotes();
+
       // Filtrar votos según el id_tipo_vote
       const votosPersonero = response.filter((vote: any) => vote.id_tipo_vote === 1);
       const votosContralor = response.filter((vote: any) => vote.id_tipo_vote === 2);
@@ -474,23 +481,16 @@ console.log(response)
         name: item.candidato ? item.candidato : "Voto en Blanco",
         value: Number(item.votos)
       }));
-
+      this.ganadorper = [...this.data].sort((a, b) => b.value - a.value)[0];
+      console.log("Ganador Personero:", this.ganadorper);
       // Mapear datos de votos para Contralor
       this.data2 = votosContralor.map((item: any) => ({
         name: item.candidato ? item.candidato : "Voto en Blanco",
         value: Number(item.votos)
       }));
 
-      // Agregar votos en blanco correctamente
-      if (votosBlancoPersonero.length > 0) {
-        const votosBlancoCount = votosBlancoPersonero.reduce((sum: number, v: { votos: any; }) => sum + Number(v.votos), 0);
-        this.data.push({ name: "Voto en Blanco", value: votosBlancoCount });
-      }
-
-      if (votosBlancoContralor.length > 0) {
-        const votosBlancoCount = votosBlancoContralor.reduce((sum: number, v: { votos: any; }) => sum + Number(v.votos), 0);
-        this.data2.push({ name: "Voto en Blanco", value: votosBlancoCount });
-      }
+      this.ganadorcon = [...this.data2].sort((a, b) => b.value - a.value)[0];
+      console.log("Ganador Personero:", this.ganadorcon);
 
     } catch (error) {
       console.error('❌ Error al obtener votos:', error);
@@ -498,5 +498,10 @@ console.log(response)
   }
 
 
-
+  generatePDF() {
+   
+    const datos =this.data
+    const datos2=this.data2
+    this.reporteService.generarPDF(datos,datos2);
+  }
 }

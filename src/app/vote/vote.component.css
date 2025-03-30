@@ -25,8 +25,6 @@
     margin: 0 auto; /* Centrar la imagen */
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   }
-  
-
   button:hover {
     background: #517300;
   }
@@ -73,4 +71,24 @@
 
 .small-icon {
   font-size: 12px; /* Ajusta según sea necesario */
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+}
+.header {
+  background: linear-gradient(20deg, #09729fcc 40%, #ceb62eb9 60%);
+  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+
 }

@@ -240,7 +240,73 @@
         </ngx-charts-bar-vertical>
       </div>
     </div>
-
+    <br>
+    <div class="reporte">
+      <label for="reporte">Reporte total votaciones - {{now}}</label> &nbsp;
+      <button type="button" class="btn btn-success" (click)="generatePDF()"><i class="fa fa-file-pdf-o" style="font-size:18px"></i></button>
+    </div>
   </mat-tab>
+    <!--cuarto tab-------------------------------------------------------->
+    <mat-tab label="Reporte">
+      <div class="votos_totales" style="text-align: center;">
+       
+        <h5>Reporte de votaciones I.E.M Antonio Nariño</h5>
+        <!-- Contenedor del reporte que se convertirá a PDF -->
+        <div id="pdfContent">
+          <!-- Tabla 1 -->
+          <div class="header">
+            <img src="favicon.ico" alt="" style="max-width: 4%;">
+            <h5>Reporte de votaciones</h5>
+            <h6>Año: {{now}}</h6>
+            <h6>Hora: {{time}}</h6>
 
+          </div>
+         <br>
+          <h6>Tabla 1: Personero/a</h6>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Votos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of data">
+                <td>{{ item.name }}</td>
+                <td>{{ item.value }}</td>
+              </tr>
+            </tbody>
+
+          </table>
+    
+          <!-- Tabla 2 -->
+          <h6>Tabla 2: Contralor/a</h6>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Votos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of data2">
+                <td>{{ item.name }}</td>
+                <td>{{ item.value }}</td>
+              </tr>
+              <tr>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <footer>
+            <p>Este reporte fue generado por el sistema de votación de la I.E.M Antonio Nariño.</p>
+            <p>Fecha de generación: {{time}}</p>
+            <p><i class="fa fa-copyright" aria-hidden="true"></i> Todos los derechos reservados.<br>
+               I.E.M Antonio Nariño. Prohibida su reproducción total o parcial.
+               <br> Año {{ now }}.</p>
+          </footer>
+        </div>
+      </div>
+    </mat-tab>
+    
 </mat-tab-group>
