@@ -90,5 +90,8 @@ th, td {
   background: linear-gradient(20deg, #09729fcc 40%, #ceb62eb9 60%);
   color: rgb(0, 0, 0);
   padding: 10px 20px;
-
+  border-radius:4px;
+}
+.pdfcontent{
+  border-radius:4px;
 }

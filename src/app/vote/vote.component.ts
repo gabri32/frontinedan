@@ -61,7 +61,7 @@ export class VoteComponent implements OnInit {
     name: 'customScheme',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5']
+    domain: ['#e74c3c', '#f7dc6f', '#959aa1', '#7aa3e5']
   };
   estudiante_id: number = 0;
   //permisos
@@ -69,6 +69,7 @@ export class VoteComponent implements OnInit {
   mostrarTab2 = false;
   mostrarTab3 = false;
   rol_id = 0;
+  repor=false;
   now:number|null=null;
   time:Date|null=null;
   //paginadores de la tabla ------------------------
@@ -482,7 +483,7 @@ const date = new Date();
         value: Number(item.votos)
       }));
       this.ganadorper = [...this.data].sort((a, b) => b.value - a.value)[0];
-      console.log("Ganador Personero:", this.ganadorper);
+      // console.log("Ganador Personero:", this.ganadorper);
       // Mapear datos de votos para Contralor
       this.data2 = votosContralor.map((item: any) => ({
         name: item.candidato ? item.candidato : "Voto en Blanco",
@@ -490,7 +491,7 @@ const date = new Date();
       }));
 
       this.ganadorcon = [...this.data2].sort((a, b) => b.value - a.value)[0];
-      console.log("Ganador Personero:", this.ganadorcon);
+      // console.log("Ganador Personero:", this.ganadorcon);
 
     } catch (error) {
       console.error('❌ Error al obtener votos:', error);
@@ -498,10 +499,59 @@ const date = new Date();
   }
 
 
-  generatePDF() {
-   
-    const datos =this.data
-    const datos2=this.data2
-    this.reporteService.generarPDF(datos,datos2);
+
+
+  //reporte renderiza 1 sola vez y oculta
+  private delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms)); 
+    //tiempo de renderizado para que el html pueda tomar la info
+  }
+  async generatePDF() {
+    swal.fire({
+      title: 'Creando reporte...',
+      text: 'Por favor espera...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
+      }
+    });
+    this.repor=true
+    await this.delay(700);
+    const element = document.getElementById('pdfContent'); // Selecciona el div por su ID
+    if (!element) {
+      console.error('No se encontró el elemento con id="pdfContent".');
+      return;
+    }
+  
+    html2canvas(element).then((canvas) => {
+
+      const imgData = canvas.toDataURL('image/png'); // Convierte el canvas a una imagen PNG
+      const pdf = new jsPDF('p', 'mm', 'a4'); // Crea un documento PDF en formato A4
+  
+      const imgWidth = 190; // Ancho de la imagen en el PDF (ajustado al ancho de la página)
+      const pageHeight = 250; // Altura de la página en mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Escala la altura proporcionalmente
+      let heightLeft = imgHeight;
+  
+      let position = 10; // Margen superior inicial
+  
+      // Agrega la imagen al PDF
+      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+  
+      // Si el contenido es más grande que una página, agrega páginas adicionales
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+  
+      pdf.save('Reporte_votaciones_'+this.now+'Antonio_nariño.pdf'); 
+      this.repor=false// Guarda el PDF con el nombre "reporte.pdf"
+      swal.close()
+    }).catch((error) => {
+      console.error('Error al generar el PDF:', error);
+    });
   }
 }

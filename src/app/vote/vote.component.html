@@ -3,9 +3,9 @@
     <div *ngIf="hascandidates == false">
       <h5 class="warning">Aún no se registran candidatos</h5>
     </div>
-  
+
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" *ngIf="hascandidates == true ">
-      
+
       <!-- TAB PERSONERO -->
       <mat-tab label="Personero">
         <div *ngIf="showPersonero == false">
@@ -17,34 +17,35 @@
               <mat-card-title>{{ candidate.nombre }}</mat-card-title>
             </mat-card-header>
             <img mat-card-image class="round-image" [src]="candidate.foto" alt="Foto del candidato">
-          <br>
+            <br>
             <mat-card-content>
               <p>{{candidate.lema}}</p>
               &nbsp;
               <i type="button" class="btn btn btn-circle"><strong>{{0}}-{{candidate.numero}}</strong></i>
             </mat-card-content>
             <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
-              <button class="btn btn-success btn-circle" mat-button  (click)="vote(candidate)"> Votar</button>
+              <button class="btn btn-success btn-circle" mat-button (click)="vote(candidate)"> Votar</button>
             </mat-card-actions>
           </mat-card>
-  
+
           <!-- Opción de Voto en Blanco -->
           <mat-card class="candidate-card">
             <mat-card-header>
               <mat-card-title>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Voto en Blanco</mat-card-title>
             </mat-card-header>
-            <img mat-card-image class="round-image" src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
-          <br>
+            <img mat-card-image class="round-image" src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg"
+              alt="Voto en Blanco">
+            <br>
             <mat-card-content>
               <p>Si no deseas elegir a ningún candidato.</p>
             </mat-card-content>
             <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
               <button mat-button class="btn btn-success btn-circle" (click)="voteBlank('personero/a')">Votar</button>
             </mat-card-actions>
-          </mat-card>          
+          </mat-card>
         </div>
       </mat-tab>
-  
+
       <!-- TAB CONTRALORA -->
       <mat-tab label="Contralora">
         <div *ngIf="showContralor == false">
@@ -56,7 +57,7 @@
               <mat-card-title>{{ candidate.nombre }}</mat-card-title>
             </mat-card-header>
             <img mat-card-image class="round-image" [src]="candidate.foto" alt="Foto del candidato">
-           <br>
+            <br>
             <mat-card-content>
               <p>{{candidate.lema}}</p>
               &nbsp;
@@ -66,13 +67,14 @@
               <button mat-button class="btn btn-success btn-circle" (click)="vote(candidate)">Votar</button>
             </mat-card-actions>
           </mat-card>
-  
+
           <!-- Opción de Voto en Blanco -->
           <mat-card class="candidate-card blank-vote">
             <mat-card-header>
               <mat-card-title>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Voto en Blanco</mat-card-title>
             </mat-card-header>
-            <img mat-card-image class="round-image" src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg" alt="Voto en Blanco">
+            <img mat-card-image class="round-image" src="https://backend-inedan.onrender.com/uploads/voto-blanco.jpeg"
+              alt="Voto en Blanco">
             <br>
             <mat-card-content>
               <p>Si no deseas elegir a ningún candidato.</p>
@@ -83,10 +85,10 @@
           </mat-card>
         </div>
       </mat-tab>
-  
+
     </mat-tab-group>
   </mat-tab>
-  
+
 
 
 
@@ -100,8 +102,8 @@
     </div>
 
     <!-- Formulario para registrar candidatos -->
-    <div >
-      <div class="text-center"*ngIf="!hascandidates">
+    <div>
+      <div class="text-center" *ngIf="!hascandidates">
         <h5>Selecciona los estudiantes que deseas registrar como candidatos</h5>
       </div>
 
@@ -116,8 +118,9 @@
       <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
 
       <!-- Botón para guardar candidatos -->
-      <button class="button-save" *ngIf="selectedStudents.length > 0&&!hascandidates" mat-flat-button matTooltip="Guardar candidatos"
-        matTooltipPosition="above" style="border-radius: 20px;" (click)="createCandidates()">
+      <button class="button-save" *ngIf="selectedStudents.length > 0&&!hascandidates" mat-flat-button
+        matTooltip="Guardar candidatos" matTooltipPosition="above" style="border-radius: 20px;"
+        (click)="createCandidates()">
         <i class="fa fa-save" style="color: black;"></i>
       </button>
     </div>
@@ -127,10 +130,11 @@
       <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
         <!-- Columna de selección -->
-        <ng-container matColumnDef="selecciona" >
+        <ng-container matColumnDef="selecciona">
           <th mat-header-cell *matHeaderCellDef> Selecciona <i class="fa fa-check"></i></th>
-          <td mat-cell *matCellDef="let student" >
-            <mat-checkbox *ngIf="student.seleccionado=='No'" (change)="toggleSelection(student)" [checked]="selectedStudents.includes(student)">
+          <td mat-cell *matCellDef="let student">
+            <mat-checkbox *ngIf="student.seleccionado=='No'" (change)="toggleSelection(student)"
+              [checked]="selectedStudents.includes(student)">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -171,19 +175,19 @@
           <td mat-cell *matCellDef="let student">
             {{ student.seleccionado }}
 
-          
+
           </td>
-          
+
         </ng-container>
         <ng-container matColumnDef="Opciones">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
-         
 
-            <td mat-cell *matCellDef="let student">
-              <div class="form-group"*ngIf="student.seleccionado === 'Sí'">
-                <label for="usr">Numero del candidato:</label>
-                <input type="text" class="form-control" id="usr"  [(ngModel)]="student.numero">
-              </div>
+
+          <td mat-cell *matCellDef="let student">
+            <div class="form-group" *ngIf="student.seleccionado === 'Sí'">
+              <label for="usr">Numero del candidato:</label>
+              <input type="text" class="form-control" id="usr" [(ngModel)]="student.numero">
+            </div>
             <div class="form-group" *ngIf="student.seleccionado === 'Sí'">
               <label for="comment">Lema:</label>
               <textarea class="form-control" rows="5" id="comment" [(ngModel)]="student.lema"></textarea>
@@ -193,19 +197,21 @@
               *ngIf="student.seleccionado === 'Sí'">
 
             <!-- Botón para subir la imagen -->
-            <button *ngIf="student.selectedFile&&student.lema&&student.numero" mat-button color="primary" (click)="uploadImage(student)">
+            <button *ngIf="student.selectedFile&&student.lema&&student.numero" mat-button color="primary"
+              (click)="uploadImage(student)">
               Subir imagen/lema/num_candidato
             </button>
 
             <!-- Mostrar la imagen subida -->
             <img *ngIf="student.uploadedImageUrl" [src]="student.uploadedImageUrl" alt="Imagen subida"
               style="max-width: 200px; display: block; margin-top: 10px;">
-            
-              <a class="btn btn-danger delete-btn" *ngIf="student.seleccionado === 'Sí'" mat-icon-button (click)="removeCandidate(student)">
-                <i class="fa fa-trash small-icon"> &nbsp;Eliminar candidato</i>
-              </a>
-              
-            </td>
+
+            <a class="btn btn-danger delete-btn" *ngIf="student.seleccionado === 'Sí'" mat-icon-button
+              (click)="removeCandidate(student)">
+              <i class="fa fa-trash small-icon"> &nbsp;Eliminar candidato</i>
+            </a>
+
+          </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -241,72 +247,107 @@
       </div>
     </div>
     <br>
-    <div class="reporte">
-      <label for="reporte">Reporte total votaciones - {{now}}</label> &nbsp;
-      <button type="button" class="btn btn-success" (click)="generatePDF()"><i class="fa fa-file-pdf-o" style="font-size:18px"></i></button>
+    <br>
+    <div class="votos_totales" style="text-align: center;">
+      <div class="reporte">
+        <label for="reporte">Reporte total votaciones - {{now}}</label> &nbsp;
+        <button type="button" class="btn btn-success" (click)="generatePDF()"><i class="fa fa-file-pdf-o"
+            style="font-size:18px"></i></button>
+      </div>
+      <h5>Reporte de votaciones I.E.M Antonio Nariño</h5>
+      <!-- Contenedor del reporte que se convertirá a PDF -->
+      <div id="pdfContent" class="border border-primary" *ngIf="repor==true">
+        <!-- Tabla 1 -->
+        <div class="header">
+          <img src="favicon.ico" alt="" style="max-width: 6%;">
+          <h5>Reporte de votaciones</h5>
+          <h6>Año: {{now}}</h6>
+          <h6>Hora: {{time}}</h6>
+
+        </div>
+        <br>
+        <h6>Tabla 1: Personero/a</h6>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Votos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of data">
+              <td>{{ item.name }}</td>
+              <td>{{ item.value }}</td>
+            </tr>
+            <br>
+            <label for="win"><strong>Ganador</strong></label>
+            <tr *ngIf="ganadorper" style="background-color: #d4edda;">
+              <td>
+                {{ganadorper.name}}
+              </td>
+              <td>
+                {{ganadorper.value}}
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <!-- Tabla 2 -->
+        <h6>Tabla 2: Contralor/a</h6>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Votos</th>
+            </tr>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of data2">
+              <td>{{ item.name }}</td>
+              <td>{{ item.value }}</td>
+            </tr>
+
+            <br>
+            <label for="win"><strong>Ganador</strong></label>
+            <tr *ngIf="ganadorcon" style="background-color: #d4edda;">
+              <td>
+                {{ganadorcon.name}}
+              </td>
+              <td>
+                {{ganadorcon.value}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <div style="text-align: center;">
+          <strong style="display: block; margin-bottom: 10px; font-size: 18px;">Votos totales de la elección</strong>
+
+          <div style="display: flex; justify-content: center; gap: 20px;">
+            <h6>Personero</h6>
+            <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="data" [gradient]="false"
+              [legend]="false" [labels]="true">
+            </ngx-charts-pie-chart>
+            <br>
+            <h6>Contralor</h6>
+            <ngx-charts-pie-chart [view]="view" [scheme]="colorScheme" [results]="data2" [gradient]="false"
+              [legend]="false" [labels]="true">
+            </ngx-charts-pie-chart>
+          </div>
+        </div>
+        <footer>
+          <p>Este reporte fue generado por el sistema de votación de la I.E.M Antonio Nariño.</p>
+          <p>Fecha de generación: {{time}}</p>
+          <p><i class="fa fa-copyright" aria-hidden="true"></i> Todos los derechos reservados.<br>
+            I.E.M Antonio Nariño. <br>Prohibida su reproducción total o parcial.
+            <br> Año {{ now }}.
+          </p>
+        </footer>
+      </div>
     </div>
   </mat-tab>
-    <!--cuarto tab-------------------------------------------------------->
-    <mat-tab label="Reporte">
-      <div class="votos_totales" style="text-align: center;">
-       
-        <h5>Reporte de votaciones I.E.M Antonio Nariño</h5>
-        <!-- Contenedor del reporte que se convertirá a PDF -->
-        <div id="pdfContent">
-          <!-- Tabla 1 -->
-          <div class="header">
-            <img src="favicon.ico" alt="" style="max-width: 4%;">
-            <h5>Reporte de votaciones</h5>
-            <h6>Año: {{now}}</h6>
-            <h6>Hora: {{time}}</h6>
 
-          </div>
-         <br>
-          <h6>Tabla 1: Personero/a</h6>
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Votos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of data">
-                <td>{{ item.name }}</td>
-                <td>{{ item.value }}</td>
-              </tr>
-            </tbody>
 
-          </table>
-    
-          <!-- Tabla 2 -->
-          <h6>Tabla 2: Contralor/a</h6>
-          <table>
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Votos</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of data2">
-                <td>{{ item.name }}</td>
-                <td>{{ item.value }}</td>
-              </tr>
-              <tr>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-          <footer>
-            <p>Este reporte fue generado por el sistema de votación de la I.E.M Antonio Nariño.</p>
-            <p>Fecha de generación: {{time}}</p>
-            <p><i class="fa fa-copyright" aria-hidden="true"></i> Todos los derechos reservados.<br>
-               I.E.M Antonio Nariño. Prohibida su reproducción total o parcial.
-               <br> Año {{ now }}.</p>
-          </footer>
-        </div>
-      </div>
-    </mat-tab>
-    
 </mat-tab-group>
