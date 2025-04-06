@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.allowChords": true,
+    "editor.screenReaderAnnounceInlineSuggestion": false,
+    "editor.inlineSuggest.suppressSuggestions": true,
+    "terminal.integrated.suggest.suggestOnTriggerCharacters": true
+}

@@ -17,6 +17,8 @@ export class LayoutComponent implements OnInit {
   mostrarTab1 = false;
   mostrarTab2 = false;
   mostrarTab3 = false;
+  isAdminDropdownOpen = false;
+
 rol_id=0;
   constructor(private router: Router, private renderer: Renderer2) {}
 

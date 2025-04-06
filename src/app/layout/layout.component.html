@@ -29,8 +29,19 @@
       <i class='fas fa-briefcase'></i> &nbsp; Inventario
     </a>
     <a *ngIf="mostrarTab3===true" (click)="navigateTo('administracion')" class="w3-bar-item w3-button">
-      <i class='fas fa-briefcase'></i> &nbsp; Administracion
+      <i class='fas fa-cogs'></i> &nbsp; Administracion
     </a>
+    <a *ngIf="mostrarTab3" (click)="isAdminDropdownOpen = !isAdminDropdownOpen" class="w3-bar-item w3-button">
+      <i class="fas fa-cogs"></i> &nbsp; Administración academica
+      <span style="float: right;">▼</span>
+    </a>
+    
+    <!-- Submenú desplegable -->
+    <div *ngIf="isAdminDropdownOpen" style="padding-left: 15px;">
+      <a (click)="navigateTo('administracion_academica/docentes')" class="w3-bar-item w3-button">Docentes</a>
+      <a (click)="navigateTo('administracion_academica/estudiantes')" class="w3-bar-item w3-button">Estudiantes</a>
+    </div>
+    
   </div>
   
   <div class="w3-container" [class.open]="isSidebarOpen">

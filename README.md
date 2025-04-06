@@ -57,3 +57,9 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+Component structure for layout:
+
+If it's a single component, only the `children` property goes in the component declarations within `app-routes.ts`.
+
+However, if it's a component with sub-routes, it needs to have a parent component with a `routes` declaration containing the children routes. This `routes` configuration is then imported into `app-routes.ts` with its sub-routes.
