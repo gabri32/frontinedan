@@ -95,4 +95,10 @@ async searchVotes(estudiante_id: number): Promise<any> {
   async updatesliderImages(formData:FormData): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/updatesliderImages`, formData));
   }
+  async getprofesores(): Promise<any> {
+    return firstValueFrom(this.http.get(`${this.apiUrl}/getprofesores`));
+  }
+   async getcursos(): Promise<any> {
+    return firstValueFrom(this.http.get(`${this.apiUrl}/getcursos`));
+  }
 }

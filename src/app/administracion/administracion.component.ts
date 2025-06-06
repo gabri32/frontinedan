@@ -14,6 +14,16 @@ import swal from 'sweetalert2';
 import { FormsModule } from "@angular/forms";
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+
+
+
+
+import { ModalAsignarAsignaturasComponent } from './modales/asignaturas/modal-asignar-asignaturas/modal-asignar-asignaturas.component';
+
+
+import { ModalAsignarGradoComponent } from './modales/dir_grado/modal-asignar-grado/modal-asignar-grado.component';
+
 
 @Component({
   selector: 'app-administracion',
@@ -34,9 +44,17 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 })
 
 export class AdministracionComponent implements OnInit {
+  
   images:any;
+  docentes:any;
+
   displayedColumns: string[] = ['Numero', 'imagen','Opciones'];
+  displayedColumnsdocentes: string[] = ['Identificacion del docente', 'Nombre completo','Sede','Vigencia','Opciones'];
+
+
   dataSource = new MatTableDataSource<any>();
+  dataSource2 = new MatTableDataSource<any>();
+
   mostrarTab1 = false;
   mostrarTab2 = false;
   mostrarTab3 = false;
@@ -44,13 +62,13 @@ export class AdministracionComponent implements OnInit {
    //paginadores de la tabla ------------------------
    @ViewChild(MatPaginator) paginator!: MatPaginator;
    @ViewChild(MatSort) sort!: MatSort;
-  constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
-
+  constructor(private backendService: BackendService, private sanitizer: DomSanitizer,private dialog: MatDialog) { }
 
 
   ngOnInit(): void {
     this.verificarPermisos()
     this.getimages()
+    this.getprofesores()
   }
 
   verificarPermisos() {
@@ -74,10 +92,13 @@ export class AdministracionComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+      this.dataSource2.paginator = this.paginator;
+    this.dataSource2.sort = this.sort;
   }
   applyGlobalFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
+    this.dataSource2.filter = filterValue;
   }
   async getimages() {
     try {
@@ -86,6 +107,23 @@ export class AdministracionComponent implements OnInit {
     } catch (error)
      { console.log(error) }
 
+  }
+
+  async getprofesores(){
+    try{
+this.docentes=await this.backendService.getprofesores()
+
+this.dataSource2.data=this.docentes
+console.log(this.dataSource2.data)
+    }catch(error){
+console.error("Error traer docentes:", error);
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al traer los docentes.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }
   }
   onFileSelected(event: Event, student: any) {
     const fileInput = event.target as HTMLInputElement;
@@ -133,5 +171,18 @@ export class AdministracionComponent implements OnInit {
     }
   }
 
+abrirModalGrado(profesor: any) {
+  this.dialog.open(ModalAsignarGradoComponent, {
+    width: '3500px',
+    data: profesor
+  });
+}
+
+abrirModalAsignaturas(profesor: any) {
+  this.dialog.open(ModalAsignarAsignaturasComponent, {
+    width: '1600px',
+    data: profesor
+  });
+}
 
 }

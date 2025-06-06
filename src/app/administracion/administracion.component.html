@@ -4,18 +4,17 @@
 
         <div>
 
-            <!-- Input de búsqueda -->
+
             <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
         </div>
 
-        <!-- Tabla de estudiantes -->
+
         <div class="table-container">
             <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
-                <!-- Columna de selección -->
 
 
-                <!-- Columna ID -->
+
                 <ng-container matColumnDef="Numero">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
                     <td mat-cell *matCellDef="let student"> {{ student.id }} </td>
@@ -26,8 +25,8 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Imagen </th>
                     <td mat-cell *matCellDef="let student">
                         <img *ngIf="student.foto" [src]="student.foto" alt="Foto" width="50">
-                      </td>
-                      
+                    </td>
+
                 </ng-container>
 
 
@@ -36,10 +35,10 @@
 
 
                     <td mat-cell *matCellDef="let student">
-                    
+
                         <br>
-                        <input type="file" (change)="onFileSelected($event, student)" accept="image/*" >
-                         &nbsp;
+                        <input type="file" (change)="onFileSelected($event, student)" accept="image/*">
+                        &nbsp;
                         <a mat-button class="btn btn-success btn-sm" (click)="uploadImage(student)">
                             <i class="fa fa-save"></i>
                         </a>
@@ -53,6 +52,57 @@
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-tab>
+    <mat-tab label="Aignación de carga academica">
+        <mat-divider></mat-divider>
+
+        <div>
+
+            <!-- Input de búsqueda -->
+            <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
+        </div>
+
+        <!-- Tabla de estudiantes -->
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8">
+                <ng-container matColumnDef="Identificacion del docente">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let profesor"> {{ profesor.num_identificacion }} </td>
+                </ng-container>
+                <ng-container matColumnDef="Nombre completo">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let profesor"> {{ profesor.nombre }} </td>
+                </ng-container>
+                <ng-container matColumnDef="Sede">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let profesor"> {{ profesor.sede_info.detalle }} </td>
+                </ng-container>
+                <ng-container matColumnDef="Vigencia">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let profesor"> {{ profesor.vigencia }} </td>
+                </ng-container>
+                <ng-container matColumnDef="Opciones">
+                    <th mat-header-cell *matHeaderCellDef> Opciones </th>
+                    <td mat-cell *matCellDef="let profesor">
+                        <!-- Botón para asignar grado -->
+                        <button mat-icon-button color="primary" (click)="abrirModalGrado(profesor)"
+                            matTooltip="Asignar grado">
+                            <i class="fas fa-user-graduate"></i>
+                        </button>
+                        &nbsp;
+                        <!-- Botón para asignar asignaturas -->
+                        <button mat-icon-button color="accent" (click)="abrirModalAsignaturas(profesor)">
+                            <i class="fas fa-book"></i>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsdocentes"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsdocentes;"></tr>
             </table>
 
             <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
