@@ -70,33 +70,33 @@
         <div class="table-container">
             <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8">
                 <ng-container matColumnDef="Identificacion del docente">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Numero de Identificación </th>
                     <td mat-cell *matCellDef="let profesor"> {{ profesor.num_identificacion }} </td>
                 </ng-container>
                 <ng-container matColumnDef="Nombre completo">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre completo del docente </th>
                     <td mat-cell *matCellDef="let profesor"> {{ profesor.nombre }} </td>
                 </ng-container>
                 <ng-container matColumnDef="Sede">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Sede </th>
                     <td mat-cell *matCellDef="let profesor"> {{ profesor.sede_info.detalle }} </td>
                 </ng-container>
                 <ng-container matColumnDef="Vigencia">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Vigencia </th>
                     <td mat-cell *matCellDef="let profesor"> {{ profesor.vigencia }} </td>
                 </ng-container>
                 <ng-container matColumnDef="Opciones">
                     <th mat-header-cell *matHeaderCellDef> Opciones </th>
                     <td mat-cell *matCellDef="let profesor">
                         <!-- Botón para asignar grado -->
-                        <button mat-icon-button color="primary" (click)="abrirModalGrado(profesor)"
+                        <button mat-icon-button  (click)="abrirModalGrado(profesor)"
                             matTooltip="Asignar grado">
-                            <i class="fas fa-user-graduate"></i>
+                            <i class="fas fa-user-clock">Asignar director de grupo</i>
                         </button>
                         &nbsp;
                         <!-- Botón para asignar asignaturas -->
-                        <button mat-icon-button color="accent" (click)="abrirModalAsignaturas(profesor)">
-                            <i class="fas fa-book"></i>
+                        <button mat-icon-button  (click)="abrirModalAsignaturas(profesor)">
+                            <i class="fas fa-book"> Distribuir asignaturas</i>
                         </button>
                     </td>
                 </ng-container>
@@ -108,4 +108,106 @@
             <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </mat-tab>
+<mat-tab label="Creación de cursos y asignaturas">
+  <mat-divider></mat-divider>
+  <mat-tab-group>
+  <mat-tab label="Crear cursos">
+  <form [formGroup]="cursoForm" (ngSubmit)="crearCurso()">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Nombre del curso</mat-label>
+      <input matInput formControlName="nombre" required>
+    </mat-form-field>
+
+<mat-form-field appearance="fill" class="w-100">
+  <mat-label>Grado</mat-label>
+  <mat-select formControlName="grado" required>
+    <mat-option [value]="1">Preescolar</mat-option>
+    <mat-option [value]="2">Primero</mat-option>
+    <mat-option [value]="3">Segundo</mat-option>
+    <mat-option [value]="4">Tercero</mat-option>
+    <mat-option [value]="5">Cuarto</mat-option>
+    <mat-option [value]="6">Quinto</mat-option>
+    <mat-option [value]="7">Sexto</mat-option>
+    <mat-option [value]="8">Séptimo</mat-option>
+    <mat-option [value]="9">Octavo</mat-option>
+    <mat-option [value]="10">Noveno</mat-option>
+    <mat-option [value]="11">Décimo</mat-option>
+    <mat-option [value]="12">Once</mat-option>
+  </mat-select>
+</mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Cantidad</mat-label>
+      <input matInput type="number" formControlName="cantidad" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Sede</mat-label>
+      <mat-select formControlName="sede" required>
+        <mat-option *ngFor="let s of sedes" [value]="s.id">{{ s.detalle }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" class="btn btn-success" [disabled]="cursoForm.invalid"><i class="fa fa-save" ></i></button>
+  </form>
+</mat-tab>
+    <!-- Tercera pestaña NUEVA -->
+    <mat-tab label="Grados Disponibles">
+      <mat-divider></mat-divider>
+
+      <div>
+        <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
+      </div>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource3" matSort class="mat-elevation-z8">
+
+          <ng-container matColumnDef="Grado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Grado </th>
+            <td mat-cell *matCellDef="let profesor"> {{ profesor.tipo_grado - 1 }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Curso">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </th>
+            <td mat-cell *matCellDef="let profesor"> {{ profesor.nombre }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Director de grado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Director de grado </th>
+            <td mat-cell *matCellDef="let profesor">
+              {{ profesor.profesor_id ? profesor.profesor.nombre : 'Aún no tiene asignado director' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Sede">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sede </th>
+            <td mat-cell *matCellDef="let profesor">
+              {{ profesor.sede_info?.detalle ? profesor.sede_info.detalle : 'Aún no tiene sede' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Opciones">
+          <th mat-header-cell *matHeaderCellDef></th>
+  <td mat-cell *matCellDef="let row">
+  
+  </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnscursos"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnscursos;"></tr>
+
+        </table>
+
+        <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Asignaturas disponibles">
+      <!-- Contenido para crear asignaturas -->
+      <div>
+        <!-- Formulario o tabla para asignaturas -->
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-tab>
 </mat-tab-group>

@@ -14,8 +14,9 @@ import swal from 'sweetalert2';
 import { FormsModule } from "@angular/forms";
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
+import { Inject } from '@angular/core';
 @Component({
   selector: 'app-modal-asignar-grado',
   imports: [  CommonModule,
@@ -40,8 +41,9 @@ export class ModalAsignarGradoComponent  implements OnInit  {
    //paginadores de la tabla ------------------------
    @ViewChild(MatPaginator) paginator!: MatPaginator;
    @ViewChild(MatSort) sort!: MatSort;
-  constructor(private backendService: BackendService, private sanitizer: DomSanitizer,private dialog: MatDialog) { }
+  constructor(  @Inject(MAT_DIALOG_DATA) public profesor: any,private backendService: BackendService, private sanitizer: DomSanitizer,private dialog: MatDialog) { }
   ngOnInit(): void {
+  
 this.getcursos()
   }
     ngAfterViewInit() {
@@ -57,13 +59,87 @@ async getcursos(){
   try{
 
 const grados=await this.backendService.getcursos()
-console.log(grados)
 this.dataSource.data=grados
   }catch(error){
 console.error("Error traer grados:", error);
       swal.fire({
         title: "Error",
         text: "Hubo un problema al traer los grados.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+  }
+}
+
+async asignarSede_Director(event:any){
+  try{
+     swal.fire({
+            title: 'Cargando',
+            text: 'Por favor espera...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+              swal.showLoading();
+            }
+          });
+    const id_p=this.profesor.id_profesor
+    const idc=event.id
+    const data={
+      profesor_id:this.profesor.id_profesor
+    
+    }
+     const updated=await this.backendService.editCurso(idc,data)
+  this.getcursos()
+     swal.fire({
+         title: "Exito",
+         text: "El curso ha sido actualizado correctamente.",
+         icon: "success",
+         timer: 1000,
+         showConfirmButton: false
+       });
+    }
+  catch(error){
+    console.log(error)
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al editar el curso.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+  }
+}
+async deleteSede_Director(event:any){
+  try{
+     swal.fire({
+            title: 'Cargando',
+            text: 'Por favor espera...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+              swal.showLoading();
+            }
+          });
+    const id_p=this.profesor.id_profesor
+    const idc=event.id
+    const data={
+      profesor_id:null
+    
+    }
+     const updated=await this.backendService.deletePropiertiescurso(idc,data)
+  this.getcursos()
+     swal.fire({
+         title: "Exito",
+         text: "El curso ha sido actualizado correctamente.",
+         icon: "success",
+         timer: 1000,
+         showConfirmButton: false
+       });
+    }
+  catch(error){
+    console.log(error)
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al editar el curso.",
         icon: "error",
         confirmButtonText: "Aceptar"
       });

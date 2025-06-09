@@ -101,4 +101,16 @@ async searchVotes(estudiante_id: number): Promise<any> {
    async getcursos(): Promise<any> {
     return firstValueFrom(this.http.get(`${this.apiUrl}/getcursos`));
   }
+  async editCurso(id: number, data: any): Promise<any> {
+  return firstValueFrom(this.http.patch(`${this.apiUrl}/editCurso/${id}`, data));
+}
+  async deletePropiertiescurso(id: number, data: any): Promise<any> {
+  return firstValueFrom(this.http.patch(`${this.apiUrl}/deletePropiertiescurso/${id}`, data));
+}
+async getsedes ():Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getsedes`,))
+}
+async createCurso(event:any):Promise<any>{
+  return firstValueFrom(this.http.post(`${this.apiUrl}/createCurso`,event))
+}
 }

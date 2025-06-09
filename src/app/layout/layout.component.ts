@@ -56,7 +56,7 @@ rol_id=0;
     }
   }
   toggleSidebar(): void {
-    this.isSidebarOpen = !this.isSidebarOpen; // ✅ Alterna el estado
+    this.isSidebarOpen = !this.isSidebarOpen; 
   }
   w3Close(): void {
     const sidebar = document.getElementById("mySidebar");
