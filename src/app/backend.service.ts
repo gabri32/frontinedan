@@ -104,6 +104,12 @@ async searchVotes(estudiante_id: number): Promise<any> {
   async editCurso(id: number, data: any): Promise<any> {
   return firstValueFrom(this.http.patch(`${this.apiUrl}/editCurso/${id}`, data));
 }
+  async aditasignatura(id: number, data: any): Promise<any> {
+  return firstValueFrom(this.http.patch(`${this.apiUrl}/aditasignatura/${id}`, data));
+}
+  async deletePropiertieasig(id: number, data: any): Promise<any> {
+  return firstValueFrom(this.http.patch(`${this.apiUrl}/deletePropiertieasig/${id}`, data));
+}
   async deletePropiertiescurso(id: number, data: any): Promise<any> {
   return firstValueFrom(this.http.patch(`${this.apiUrl}/deletePropiertiescurso/${id}`, data));
 }
@@ -112,5 +118,8 @@ async getsedes ():Promise<any>{
 }
 async createCurso(event:any):Promise<any>{
   return firstValueFrom(this.http.post(`${this.apiUrl}/createCurso`,event))
+}
+async getasignaturas():Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getasignaturas`))
 }
 }

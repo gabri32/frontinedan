@@ -17,6 +17,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
+
 @Component({
   selector: 'app-modal-asignar-grado',
   imports: [  CommonModule,

@@ -151,7 +151,7 @@
     <button mat-raised-button type="submit" class="btn btn-success" [disabled]="cursoForm.invalid"><i class="fa fa-save" ></i></button>
   </form>
 </mat-tab>
-    <!-- Tercera pestaña NUEVA -->
+    <!-- Tercera pestaña NUEVA
     <mat-tab label="Grados Disponibles">
       <mat-divider></mat-divider>
 
@@ -200,14 +200,40 @@
 
         <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
       </div>
-    </mat-tab>
+    </mat-tab> -->
 
-    <mat-tab label="Asignaturas disponibles">
-      <!-- Contenido para crear asignaturas -->
-      <div>
-        <!-- Formulario o tabla para asignaturas -->
+ <mat-tab label="Asignaturas disponibles">
+  <mat-accordion>
+
+    <mat-expansion-panel *ngFor="let curso of cursos">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ curso.nombre }} ({{ curso.asignaturas.length }} asignaturas)
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div *ngIf="curso.asignaturas.length > 0; else sinAsignaturas">
+        <ul>
+          <li *ngFor="let asignatura of curso.asignaturas">
+            {{ asignatura.descripcion }} 
+            <span *ngIf="asignatura.profesor">
+              — Profesor: {{ asignatura.profesor.nombre }}
+            </span>
+            <span *ngIf="!asignatura.profesor">
+              — <em>Sin profesor asignado</em>
+            </span>
+          </li>
+        </ul>
       </div>
-    </mat-tab>
+
+      <ng-template #sinAsignaturas>
+        <p>Este curso no tiene asignaturas registradas.</p>
+      </ng-template>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</mat-tab>
+
   </mat-tab-group>
 </mat-tab>
 </mat-tab-group>

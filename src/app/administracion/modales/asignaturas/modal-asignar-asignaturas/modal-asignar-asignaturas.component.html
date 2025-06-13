@@ -1,1 +1,64 @@
-<p>modal-asignar-asignaturas works!</p>
+<mat-tab-group>
+  <mat-tab label="Asignaturas disponibles">
+<br>
+    <!-- Campo de búsqueda -->
+    <mat-form-field appearance="outline" class="w-100 mb-4">
+      <mat-label>Buscar curso</mat-label>
+<input matInput placeholder="Ej: Primero uno" (input)="buscarCurso($event)">
+    </mat-form-field>
+
+    <!-- Lista de cursos con acordeón -->
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let curso of cursosPaginados()">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ curso.nombre }} ({{ curso.asignaturas.length }} asignaturas)
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <!-- Lista de asignaturas -->
+        <ul class="list-group">
+          <li *ngFor="let asignatura of curso.asignaturas"
+              class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              {{ asignatura.descripcion }}
+              <span *ngIf="asignatura.profesor">— {{ asignatura.profesor.nombre }}</span>
+              <span *ngIf="!asignatura.profesor">— <em>Sin profesor asignado</em></span>
+            </span>
+
+            <!-- Botones para asignar o eliminar docente -->
+            <span style="display: flex; gap: 0.5rem;">
+              <a mat-button class="btn btn-success btn-sm"
+                 *ngIf="!asignatura.profesor"
+                 (click)="asignarDocente(asignatura)">
+                <i class="fa fa-user-graduate"></i>
+              </a>
+
+              <a mat-button class="btn btn-danger btn-sm"
+                 *ngIf="asignatura.profesor"
+                 (click)="deleteDocente(asignatura)">
+                <i class="fa fa-trash"></i>
+              </a>
+            </span>
+          </li>
+        </ul>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <!-- Paginador de cursos -->
+    <div class="d-flex justify-content-end mt-3" *ngIf="paginasTotales > 1">
+      <button mat-icon-button (click)="paginaActual = paginaActual - 1" [disabled]="paginaActual === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <span class="px-2">
+        Página {{ paginaActual + 1 }} de {{ paginasTotales }}
+      </span>
+
+      <button mat-icon-button (click)="paginaActual = paginaActual + 1" [disabled]="paginaActual >= paginasTotales - 1">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+  </mat-tab>
+</mat-tab-group>

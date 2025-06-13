@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ModalAsignarAsignaturasComponent } from './modales/asignaturas/modal-asignar-asignaturas/modal-asignar-asignaturas.component';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ModalAsignarGradoComponent } from './modales/dir_grado/modal-asignar-grado/modal-asignar-grado.component';
 
 
@@ -42,7 +42,8 @@ imports: [
   MatFormFieldModule,
   MatInputModule,
   MatIconModule,
-  MatSelectModule
+  MatSelectModule,
+   MatExpansionModule,
 ],
   templateUrl: './administracion.component.html',
   styleUrl: './administracion.component.css'
@@ -53,6 +54,7 @@ export class AdministracionComponent implements OnInit {
   images:any;
   docentes:any;
     cursoForm: FormGroup;
+cursos:any[]=[]
 sedes:any[]=[]
   displayedColumns: string[] = ['Numero', 'imagen','Opciones'];
   displayedColumnsdocentes: string[] = ['Identificacion del docente', 'Nombre completo','Sede','Vigencia','Opciones'];
@@ -62,7 +64,6 @@ sedes:any[]=[]
   dataSource = new MatTableDataSource<any>();
   dataSource2 = new MatTableDataSource<any>();
 dataSource3=new MatTableDataSource<any>();
-
   mostrarTab1 = false;
   mostrarTab2 = false;
   mostrarTab3 = false;
@@ -90,6 +91,7 @@ dataSource3=new MatTableDataSource<any>();
     this.getprofesores()
     this.getSedes()
     this.getcursos()
+    this.getasignaturas()
   }
 
   verificarPermisos() {
@@ -203,9 +205,25 @@ abrirModalGrado(profesor: any) {
 
 abrirModalAsignaturas(profesor: any) {
   this.dialog.open(ModalAsignarAsignaturasComponent, {
-    width: '1600px',
+    width: '3500px',
     data: profesor
   });
+}
+
+async getasignaturas(){
+  try {
+     const data = await this.backendService.getasignaturas()
+     console.log(data)
+     this.cursos=data
+  } catch (error) {
+       console.error("Error al cargar asignaturas:", error);
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }
 }
 async getSedes(){
   try{
