@@ -54,7 +54,8 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
-            <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+           <mat-paginator #paginatorLogin [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+
         </div>
     </mat-tab>
     <mat-tab label="Aignación de carga academica">
@@ -105,135 +106,32 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumnsdocentes;"></tr>
             </table>
 
-            <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+       <mat-paginator #paginatorDocentes [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+
         </div>
     </mat-tab>
 <mat-tab label="Creación de cursos y asignaturas">
   <mat-divider></mat-divider>
-  <mat-tab-group>
-  <mat-tab label="Crear cursos">
-  <form [formGroup]="cursoForm" (ngSubmit)="crearCurso()">
-    <mat-form-field appearance="fill" class="w-100">
-      <mat-label>Nombre del curso</mat-label>
-      <input matInput formControlName="nombre" required>
-    </mat-form-field>
+  <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Sede</th>
+      <th>Grado</th>
+      <th>Cantidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let grupo of grupoEstudiantes">
+      <td>{{ grupo.sede }}</td>
+      <td>{{ grupo.grado-1 }}</td>
+      <td>{{ grupo.cantidad }}</td>
+    </tr>
+  </tbody>
+</table>
 
-<mat-form-field appearance="fill" class="w-100">
-  <mat-label>Grado</mat-label>
-  <mat-select formControlName="grado" required>
-    <mat-option [value]="1">Preescolar</mat-option>
-    <mat-option [value]="2">Primero</mat-option>
-    <mat-option [value]="3">Segundo</mat-option>
-    <mat-option [value]="4">Tercero</mat-option>
-    <mat-option [value]="5">Cuarto</mat-option>
-    <mat-option [value]="6">Quinto</mat-option>
-    <mat-option [value]="7">Sexto</mat-option>
-    <mat-option [value]="8">Séptimo</mat-option>
-    <mat-option [value]="9">Octavo</mat-option>
-    <mat-option [value]="10">Noveno</mat-option>
-    <mat-option [value]="11">Décimo</mat-option>
-    <mat-option [value]="12">Once</mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="text-end mt-3">
+  <button class="btn btn-success" (click)="crearCursos()">Crear Cursos</button>
+</div>
 
-    <mat-form-field appearance="fill" class="w-100">
-      <mat-label>Cantidad</mat-label>
-      <input matInput type="number" formControlName="cantidad" required>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill" class="w-100">
-      <mat-label>Sede</mat-label>
-      <mat-select formControlName="sede" required>
-        <mat-option *ngFor="let s of sedes" [value]="s.id">{{ s.detalle }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <button mat-raised-button type="submit" class="btn btn-success" [disabled]="cursoForm.invalid"><i class="fa fa-save" ></i></button>
-  </form>
-</mat-tab>
-    <!-- Tercera pestaña NUEVA
-    <mat-tab label="Grados Disponibles">
-      <mat-divider></mat-divider>
-
-      <div>
-        <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
-      </div>
-
-      <div class="table-container">
-        <table mat-table [dataSource]="dataSource3" matSort class="mat-elevation-z8">
-
-          <ng-container matColumnDef="Grado">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Grado </th>
-            <td mat-cell *matCellDef="let profesor"> {{ profesor.tipo_grado - 1 }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="Curso">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalle </th>
-            <td mat-cell *matCellDef="let profesor"> {{ profesor.nombre }} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="Director de grado">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Director de grado </th>
-            <td mat-cell *matCellDef="let profesor">
-              {{ profesor.profesor_id ? profesor.profesor.nombre : 'Aún no tiene asignado director' }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="Sede">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sede </th>
-            <td mat-cell *matCellDef="let profesor">
-              {{ profesor.sede_info?.detalle ? profesor.sede_info.detalle : 'Aún no tiene sede' }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="Opciones">
-          <th mat-header-cell *matHeaderCellDef></th>
-  <td mat-cell *matCellDef="let row">
-  
-  </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumnscursos"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnscursos;"></tr>
-
-        </table>
-
-        <mat-paginator [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
-      </div>
-    </mat-tab> -->
-
- <mat-tab label="Asignaturas disponibles">
-  <mat-accordion>
-
-    <mat-expansion-panel *ngFor="let curso of cursos">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{ curso.nombre }} ({{ curso.asignaturas.length }} asignaturas)
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div *ngIf="curso.asignaturas.length > 0; else sinAsignaturas">
-        <ul>
-          <li *ngFor="let asignatura of curso.asignaturas">
-            {{ asignatura.descripcion }} 
-            <span *ngIf="asignatura.profesor">
-              — Profesor: {{ asignatura.profesor.nombre }}
-            </span>
-            <span *ngIf="!asignatura.profesor">
-              — <em>Sin profesor asignado</em>
-            </span>
-          </li>
-        </ul>
-      </div>
-
-      <ng-template #sinAsignaturas>
-        <p>Este curso no tiene asignaturas registradas.</p>
-      </ng-template>
-    </mat-expansion-panel>
-
-  </mat-accordion>
-</mat-tab>
-
-  </mat-tab-group>
 </mat-tab>
 </mat-tab-group>

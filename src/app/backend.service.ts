@@ -122,4 +122,62 @@ async createCurso(event:any):Promise<any>{
 async getasignaturas():Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/getasignaturas`))
 }
+async  getInfo():Promise<any> {
+    return firstValueFrom(this.http.get(`${this.apiUrl}/landing`))
+}
+//fallando aun cooreccion nombre no llegaba 
+async registrarInscripcion(formulario: any): Promise<any> {
+  const formData = new FormData();
+if (!formulario.estudiante || !formulario.acudiente) {
+  throw new Error('Datos incompletos en el formulario.');
+}
+
+  // Campos básicos del estudiante
+  formData.append('grado', formulario.grado);
+  formData.append('subGrado', formulario.subGrado || '');
+  formData.append('nombre_estudiante', formulario.estudiante.nombre);
+  formData.append('cedula_estudiante', formulario.estudiante.cedula);
+  formData.append('fecha_nacimiento', formulario.estudiante.fechaNacimiento);
+  formData.append('eps', formulario.estudiante.eps);
+  formData.append('sisben', formulario.estudiante.sisben || '');
+
+  // Archivos del estudiante
+  if (formulario.estudiante.registroCivil)
+    formData.append('registro_civil', formulario.estudiante.registroCivil);
+  if (formulario.estudiante.vacunas)
+    formData.append('carnet_vacunas', formulario.estudiante.vacunas);
+  if (formulario.estudiante.fotografia)
+    formData.append('fotografia', formulario.estudiante.fotografia);
+
+  // Datos del acudiente
+  formData.append('nombre_acudiente', formulario.acudiente.nombre);
+  formData.append('cedula_acudiente', formulario.acudiente.cedula);
+  formData.append('contacto1', formulario.acudiente.contacto1);
+  formData.append('contacto2', formulario.acudiente.contacto2);
+
+  // Estado por defecto: I (Inscrito)
+  formData.append('estado', formulario.estado || 'I');
+
+  // Agregar boletines si existen
+  if (formulario.boletines && Array.isArray(formulario.boletines)) {
+    formulario.boletines.forEach((archivo: File, index: number) => {
+      if (archivo) {
+        formData.append('boletines', archivo);
+      }
+    });
+  }
+
+  // Petición POST al backend
+  return firstValueFrom(this.http.post(`${this.apiUrl}/registro`, formData));
+}
+
+
+//peticion de conteo de estudiantes para el admin
+async getNumberStudents():Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/estudiantesAgrupados`))
+}
+
+async createCurses():Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/createCurses`))
+}
 }

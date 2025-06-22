@@ -13,8 +13,10 @@ export class AuthService {
   login(num_identificacion: number, contraseña: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, { num_identificacion, contraseña }).pipe(
       tap(response => {
+        console.log(response)
         if (response.success && response.token) {
-          sessionStorage.setItem('token', response.token); // Guardamos el token
+          sessionStorage.setItem('token', response.token);
+          sessionStorage.setItem('data', response); // Guardamos el token
         }
       })
     );

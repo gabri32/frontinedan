@@ -7,7 +7,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app/app.routes';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { MatTabsModule } from '@angular/material/tabs';  // ✅ Importar MatTabsModule
+import { MatTabsModule } from '@angular/material/tabs';  
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';

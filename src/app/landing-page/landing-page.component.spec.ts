@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdminAcademicaComponent } from './admin-academica.component';
+import { LandingPageComponent } from './landing-page.component';
 
-describe('AdminAcademicaComponent', () => {
-  let component: AdminAcademicaComponent;
-  let fixture: ComponentFixture<AdminAcademicaComponent>;
+describe('LandingPageComponent', () => {
+  let component: LandingPageComponent;
+  let fixture: ComponentFixture<LandingPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdminAcademicaComponent]
+      imports: [LandingPageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AdminAcademicaComponent);
+    fixture = TestBed.createComponent(LandingPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,108 @@
+<h3 class="mb-4 text-center">Formulario de Inscripción</h3>
+
+<form [formGroup]="form" (ngSubmit)="guardarFormulario()" class="p-4 container-fluid">
+
+  <!-- Grado -->
+  <div class="form-group mb-3">
+    <label for="grado">Grado al que se inscribe:</label>
+    <select formControlName="grado" class="form-control" id="grado">
+      <option value="Transición">Transición</option>
+      <option value="Primaria">Primaria</option>
+    </select>
+  </div>
+
+  <!-- Subgrado -->
+  <div class="form-group mb-3" *ngIf="esPrimaria">
+    <label for="subGrado">Seleccione grado:</label>
+    <select formControlName="subGrado" class="form-control" id="subGrado">
+      <option *ngFor="let grado of gradosPrimaria" [value]="grado">{{ grado }}</option>
+    </select>
+  </div>
+
+  <!-- Boletines -->
+  <div *ngIf="boletines.length > 0" class="mb-4">
+    <label class="fw-bold">Suba los boletines requeridos en PDF:</label>
+    <div *ngFor="let control of boletines.controls; let i = index" class="form-group mt-2">
+      <label>Boletín {{ i + 1 }}:</label>
+      <input type="file" accept="application/pdf" class="form-control"
+             (change)="onFileChange($event, i)">
+    </div>
+  </div>
+
+  <!-- Estudiante -->
+  <fieldset formGroupName="estudiante" class="p-3 mb-4">
+    <legend>Datos del Estudiante</legend>
+
+    <div class="row">
+      <div class="form-group col-md-6 mb-2">
+        <label>Nombre completo:</label>
+        <input formControlName="nombre" type="text" class="form-control">
+      </div>
+      <div class="form-group col-md-6 mb-2">
+        <label>Cédula o Tarjeta de Identidad:</label>
+        <input formControlName="cedula" type="text" class="form-control">
+      </div>
+
+      <div class="form-group col-md-6 mb-2">
+        <label>Fecha de nacimiento:</label>
+        <input formControlName="fechaNacimiento" type="date" class="form-control">
+      </div>
+      <div class="form-group col-md-6 mb-2">
+        <label>Número de Registro Civil:</label>
+        <input formControlName="registroCivil" type="text" class="form-control">
+      </div>
+
+      <div class="form-group col-md-6 mb-2">
+        <label>EPS:</label>
+        <input formControlName="eps" type="text" class="form-control">
+      </div>
+      <div class="form-group col-md-6 mb-2">
+        <label>Sisbén (si aplica):</label>
+        <input formControlName="sisben" type="text" class="form-control">
+      </div>
+
+ <div class="form-group col-md-6 mb-2">
+  <label>Carné de vacunas (PDF):</label>
+  <input type="file" accept="application/pdf" class="form-control"
+         (change)="onArchivoSeleccionado($event, 'carnet_vacunas')">
+</div>
+
+<div class="form-group col-md-6 mb-2">
+  <label>Fotografía 3x4 (imagen):</label>
+  <input type="file" accept="image/*" class="form-control"
+         (change)="onArchivoSeleccionado($event, 'fotografia')">
+</div>
+
+    </div>
+  </fieldset>
+
+  <!-- Acudiente -->
+  <fieldset formGroupName="acudiente" class="p-3 mb-4">
+    <legend>Datos del Acudiente</legend>
+
+    <div class="row">
+      <div class="form-group col-md-6 mb-2">
+        <label>Nombre del acudiente:</label>
+        <input formControlName="nombre" type="text" class="form-control">
+      </div>
+      <div class="form-group col-md-6 mb-2">
+        <label>Cédula del acudiente:</label>
+        <input formControlName="cedula" type="text" class="form-control">
+      </div>
+
+      <div class="form-group col-md-6 mb-2">
+        <label>Teléfono principal:</label>
+        <input formControlName="contacto1" type="text" class="form-control">
+      </div>
+      <div class="form-group col-md-6 mb-2">
+        <label>Teléfono alternativo:</label>
+        <input formControlName="contacto2" type="text" class="form-control">
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- Botón enviar -->
+  <div class="text-end">
+    <button type="submit" class="btn btn-primary px-4">Enviar</button>
+  </div>
+</form>
