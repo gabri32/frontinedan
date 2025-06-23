@@ -1,8 +1,7 @@
-<div class="login-container">
- 
-  
+<div class="grid1">
+  <div class="login-container">
   <div class="carrusel">
-    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-bs-interval="500">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img class="d-block w-100"  [src]="image1" alt="First slide">
@@ -16,6 +15,7 @@
       </div>
     </div>
   </div>
+
   <form [formGroup]="loginForm" (ngSubmit)="authLogin()">
     <div class="logo">
       <img  class="icono" src="favicon.ico" alt="Logo">
@@ -37,4 +37,6 @@
     </div>
   </form>
 </div>
+</div>
+
 

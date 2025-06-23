@@ -21,7 +21,7 @@
   transition: margin-left 0.3s ease;
 }
 #mySidebar {
-  background-color: #09729f !important;
+  background-color: #ffffcb !important;
  
 }
 
@@ -44,5 +44,5 @@
   width: 15%; /* Ancho fijo del sidebar */
 }
 .w3-sidebar {
-  border: 2px solid rgba(133, 129, 129, 0.692);
+  border: 2px solid rgba(133, 129, 129, 0);
 }
