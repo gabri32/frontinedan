@@ -2,6 +2,10 @@ import { Routes } from '@angular/router';
 import { importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
 
 //importacion de la landing
 import { LandingPageComponent } from './landing-page/landing-page.component';

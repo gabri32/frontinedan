@@ -126,7 +126,7 @@ const date = new Date();
     try {
 
       const data = await this.backendService.getAllStudents();
-
+console.log(data)
       this.dataSource.data = data.students.map((student: any) => ({ ...student, seleccionado: "No" }));
       this.searchCandidates()
     } catch (error) {

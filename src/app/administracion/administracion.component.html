@@ -120,13 +120,21 @@
       <th>Cantidad</th>
     </tr>
   </thead>
-  <tbody>
-    <tr *ngFor="let grupo of grupoEstudiantes">
-      <td>{{ grupo.sede }}</td>
-      <td>{{ grupo.grado-1 }}</td>
-      <td>{{ grupo.cantidad }}</td>
-    </tr>
-  </tbody>
+ <tbody>
+  <tr *ngFor="let grupo of grupoEstudiantes">
+    <td>{{ grupo.sede }}</td>
+    <td>{{ grupo.grado - 1 }}</td>
+    <td>
+      {{ grupo.cantidad }}
+      <span *ngIf="grupo.cantidad > 37" class="text-warning ms-2">
+        Se crearán dos grupos
+      </span>
+          <span *ngIf="grupo.cantidad < 37" class="text-warning ms-2">
+        Se crearán un grupo
+      </span>
+    </td>
+  </tr>
+</tbody>
 </table>
 
 <div class="text-end mt-3">

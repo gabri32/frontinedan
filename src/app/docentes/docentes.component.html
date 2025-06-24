@@ -1,1 +1,164 @@
-<p>docentes works!</p>
+<div class="container mt-4">
+
+    <h2 class="mb-4 text-center">Asignaturas del Docente</h2>
+
+    <!-- Filtro global -->
+    <div class="mb-3">
+        <input matInput placeholder="Buscar en todas las columnas" (keyup)="applyGlobalFilter($event)"
+            class="form-control" />
+    </div>
+
+    <!-- Tabla de asignaturas -->
+    <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table table-bordered">
+
+            <!-- Sede -->
+            <ng-container matColumnDef="Sede">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Sede</th>
+                <td mat-cell *matCellDef="let element">{{ element.detalle }}</td>
+            </ng-container>
+
+            <!-- Descripción -->
+            <ng-container matColumnDef="Descripción">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripción</th>
+                <td mat-cell *matCellDef="let element">{{ element.descripcion }}</td>
+            </ng-container>
+
+            <!-- Nombre -->
+            <ng-container matColumnDef="Nombre">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Curso</th>
+                <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+            </ng-container>
+
+            <!-- Horas -->
+            <ng-container matColumnDef="Horas">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Horas/Semana</th>
+                <td mat-cell *matCellDef="let element">{{ element.cantidad_horas_week }}</td>
+            </ng-container>
+
+            <!-- Opciones -->
+            <ng-container matColumnDef="Opciones">
+                <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                <!-- Botones -->
+                <td mat-cell *matCellDef="let element">
+                    <button mat-button color="accent" (click)="abrirModal(element.id_asignatura, true)">
+                        Crear
+                    </button>
+                    &nbsp;
+                    <button mat-button color="accent" (click)="verLista(element.id_asignatura)">
+                        Ver talleres
+                    </button>
+                </td>
+
+
+            </ng-container>
+
+            <!-- Header y rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+</div>
+<!-- Modal -->
+<div *ngIf="modalVisible" class="modal-backdrop d-flex align-items-center justify-content-center">
+    <div class="modal-contenido p-4 rounded shadow bg-white w-100" style="max-width: 600px;">
+        <h4 class="mb-3 text-center">{{ modoEdicion ? 'Crear Taller' : 'Detalle del Taller' }} - {{now}}</h4>
+
+        <form [formGroup]="tallerForm" (ngSubmit)="guardarTaller()">
+            <div class="form-group mb-3">
+                <label for="detalle_taller">Detalle</label>
+                <input type="text" class="form-control" formControlName="detalle_taller" [readonly]="!modoEdicion">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="fecha_ini">Fecha Inicio</label>
+                <input type="date" class="form-control" formControlName="fecha_ini" [readonly]="!modoEdicion">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="fecha_fin">Fecha Fin</label>
+                <input type="date" class="form-control" formControlName="fecha_fin" [readonly]="!modoEdicion">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="periodo">Periodo</label>
+                <select class="form-control" formControlName="periodo">
+                    <option value="">Seleccione</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+
+
+
+            <div class="form-group mb-3">
+                <label for="doc">Documento 1 (URL o nombre)</label>
+                <input type="text" class="form-control" formControlName="doc" [readonly]="!modoEdicion">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="doc2">Documento 2 (URL o nombre)</label>
+                <input type="text" class="form-control" formControlName="doc2" [readonly]="!modoEdicion">
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="button" class="btn btn-outline-danger" (click)="cerrarModal()">Cerrar</button>
+                <button *ngIf="modoEdicion" type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div *ngIf="modalVisible2" class="modal-backdrop d-flex align-items-center justify-content-center">
+    <div class="modal-contenido p-4 rounded shadow bg-white w-100" style="max-width: 800px;">
+        <h4 class="mb-3 text-center">{{ modoEdicion ? 'Crear Taller' : 'Detalle del Taller' }} - {{now}}</h4>
+    <h5 class="mb-3">Lista de talleres</h5>
+    <div *ngIf="talleres.length > 0; else sinTalleres">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>Detalle</th>
+              <th>Periodo</th>
+              <th>Vigencia</th>
+              <th>Fecha inicio</th>
+              <th>Fecha fin</th>
+              <th>Documento 1</th>
+              <th>Documento 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let taller of talleres">
+              <td>{{ taller.detalle_taller }}</td>
+              <td>{{ taller.periodo }}</td>
+              <td>{{ taller.vigencia }}</td>
+              <td>{{ taller.fecha_ini | date:'yyyy-MM-dd' }}</td>
+              <td>{{ taller.fecha_fin | date:'yyyy-MM-dd' }}</td>
+              <td>
+                <a *ngIf="taller.doc" [href]="taller.doc" target="_blank">{{ taller.doc }}</a>
+                <span *ngIf="!taller.doc" class="text-muted">No disponible</span>
+              </td>
+              <td>
+                <a *ngIf="taller.doc2" [href]="taller.doc2" target="_blank">{{ taller.doc2 }}</a>
+                <span *ngIf="!taller.doc2" class="text-muted">No disponible</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <ng-template #sinTalleres>
+      <div class="text-muted">No hay talleres registrados.</div>
+    </ng-template>
+    <div class="text-end mt-3">
+      <button class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </div>
+</div>

@@ -59,7 +59,6 @@ async searchVotes(estudiante_id: number): Promise<any> {
     return firstValueFrom(this.http.get(`${this.apiUrl}/grafVotes`));
   }
   async removeCandidate(num_identificacion:any):Promise<any>{
-    console.log({num_identificacion})
     return firstValueFrom(this.http.post(`${this.apiUrl}/removeCandidate`,num_identificacion))
   }
   async gettypes():Promise<any>{
@@ -179,5 +178,15 @@ async getNumberStudents():Promise<any>{
 
 async createCurses():Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/createCurses`))
+}
+
+async getAsingDocente(id:string):Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getAsingDocente?id=${id}`))
+}
+async createWorks(formData:any):Promise<any>{
+  return firstValueFrom(this.http.post(`${this.apiUrl}/createWorks`,formData))
+}
+async getTalleres(id:number):Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getTalleres?id=${id}`))
 }
 }

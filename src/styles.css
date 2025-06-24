@@ -1,11 +1,9 @@
 
 html, body { 
     height: 100%; 
-    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-family: "Red Hat Text", sans-serif;
 }
-::ng-deep html, body {
-    font-family: 'Roboto', sans-serif !important;
-}
+
 .tooltip {
   position: relative;
   display: inline-block;
