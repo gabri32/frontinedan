@@ -189,4 +189,26 @@ async createWorks(formData:any):Promise<any>{
 async getTalleres(id:number):Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/getTalleres?id=${id}`))
 }
+async getEstudiantesPorGrado(grado: number, sede: number,id:number): Promise<any> {
+  const params = new HttpParams()
+    .set('grado', grado.toString())
+    .set('sede', sede.toString()) 
+    .set('id', id.toString());
+  return firstValueFrom(this.http.get(`${this.apiUrl}/estudiantesPorgrado`, { params }));
+}
+async gettotalcursos():Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/gettotalcursos`))
+}
+async actualizarEstudiantesAsignados(cursoId: number, estudiantes: number[]): Promise<any> {
+  return firstValueFrom(
+    this.http.patch(`${this.apiUrl}/actualizarEstudiantesAsignados/${cursoId}`, { estudiantes })
+  );
+}
+async consultarEstudianteCursoAsignaturas(identificacion:number):Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/consultarEstudianteCursoAsignaturas?identificacion=${identificacion}`))
+}
+async getTalleresPorAsignatura(id: number): Promise<any[]> {
+  return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/talleres/asignatura/${id}`));
+}
+
 }

@@ -1,0 +1,61 @@
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+    <mat-tab label="Login administracion">
+        <mat-divider></mat-divider>
+
+        <div>
+
+
+            <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
+        </div>
+
+
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+
+
+
+                <ng-container matColumnDef="Numero">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                    <td mat-cell *matCellDef="let student"> {{ student.id }} </td>
+                </ng-container>
+
+                <!-- Columna Nombre -->
+                <ng-container matColumnDef="imagen">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Imagen </th>
+                    <td mat-cell *matCellDef="let student">
+                        <img *ngIf="student.foto" [src]="student.foto" alt="Foto" width="50">
+                    </td>
+
+                </ng-container>
+
+
+                <ng-container matColumnDef="Opciones">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+
+
+                    <td mat-cell *matCellDef="let student">
+
+                        <br>
+                        <input type="file" (change)="onFileSelected($event, student)" accept="image/*">
+                        &nbsp;
+                        <a mat-button class="btn btn-success btn-sm" (click)="uploadImage(student)">
+                            <i class="fa fa-save"></i>
+                        </a>
+
+                        <!-- Mostrar la imagen subida -->
+                        <img *ngIf="student.uploadedImageUrl" [src]="student.uploadedImageUrl" alt="Imagen subida"
+                            style="max-width: 200px; display: block; margin-top: 10px;">
+
+
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+           <mat-paginator #paginatorLogin [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+
+        </div>
+    </mat-tab>
+</mat-tab-group>

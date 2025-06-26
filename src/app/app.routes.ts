@@ -20,6 +20,7 @@ import { AuthGuard } from './auth.guard';
 import { AdministracionComponent } from './administracion/administracion.component';
 import { DocentesComponent } from './docentes/docentes.component';
 import { EstudiantesComponent } from './estudiantes/estudiantes.component';
+import { AdminAcademicaComponent } from './admin-academica/admin-academica.component';
 export const routes: Routes = [
   { path: '', component: LandingPageComponent }, // 👈 ahora esta es la raíz
   { path: 'login', component: LoginComponent },
@@ -29,8 +30,10 @@ export const routes: Routes = [
       { path: 'vote', component: VoteComponent }, 
       { path: 'inventario', component: InventarioComponent },
       { path: 'administracion', component: AdministracionComponent },
-      {path:'profesores',component:DocentesComponent},
-      {path:'estudiantes',component:EstudiantesComponent}
+      {path:'adminacademica',component: AdminAcademicaComponent },
+      {path:'profesores',component: DocentesComponent },
+      {path:'estudiantes',component: EstudiantesComponent }
+
     ]
   },
   { path: '**', redirectTo: '' } 

@@ -28,7 +28,10 @@
       <i class='fas fa-briefcase'></i> &nbsp; Inventario
     </a>
     <a *ngIf="mostrarTab3===true" (click)="navigateTo('administracion')" class="w3-bar-item w3-button">
-      <i class='fas fa-cogs'></i> &nbsp; Administracion
+      <i class='fas fa-cogs'></i> &nbsp; Administración
+    </a>
+     <a *ngIf="mostrarTab3===true" (click)="navigateTo('adminacademica')" class="w3-bar-item w3-button">
+      <i class='fas fa-cogs'></i> &nbsp; Administración sistema
     </a>
        <a *ngIf="mostrarTab1===true" (click)="navigateTo('profesores')" class="w3-bar-item w3-button">
       <i class='fas fa-cogs'></i> &nbsp; Docentes asignación

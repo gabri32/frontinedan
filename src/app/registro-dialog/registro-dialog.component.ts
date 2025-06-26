@@ -103,10 +103,10 @@ onArchivoSeleccionado(event: Event, campo: string) {
   }
 
 guardarFormulario() {
-  if (this.form.invalid) {
-    alert('Por favor complete todos los campos requeridos.');
-    return;
-  }
+  // if (this.form.invalid) {
+  //   alert('Por favor complete todos los campos requeridos.');
+  //   return;
+  // }
 
   const datos = {
     ...this.form.value,
