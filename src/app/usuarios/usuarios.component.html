@@ -1,0 +1,78 @@
+<!-- NOMBRE -->
+<div class="mb-3">
+  <label for="nombre" class="form-label">Nombre</label>
+  <input
+    type="text"
+    class="form-control"
+    id="nombre"
+    name="nombre"
+    [(ngModel)]="nombre"
+    required
+  />
+</div>
+
+<!-- CONTRASEÑA -->
+<div class="mb-3">
+  <label for="contraseña" class="form-label">Contraseña</label>
+  <input
+    type="password"
+    class="form-control"
+    id="contraseña"
+    name="contraseña"
+    [(ngModel)]="contrasena"
+    required
+  />
+</div>
+
+<!-- CORREO -->
+<div class="mb-3">
+  <label for="correo" class="form-label">Correo electrónico</label>
+  <input
+    type="email"
+    class="form-control"
+    id="correo"
+    name="correo"
+    [(ngModel)]="correo"
+    required
+  />
+</div>
+
+<!-- NÚMERO DE IDENTIFICACIÓN -->
+<div class="mb-3">
+  <label for="numIdentificacion" class="form-label">Número de identificación</label>
+  <input
+    type="text"
+    class="form-control"
+    id="numIdentificacion"
+    name="numIdentificacion"
+    [(ngModel)]="num_identificacion"
+    required
+  />
+</div>
+
+<!-- ROL / TIPO DE USUARIO -->
+<div class="mb-3">
+  <label for="tipoUsuario" class="form-label">Tipo de usuario</label>
+  <select
+    class="form-select"
+    id="tipoUsuario"
+    name="tipoUsuario"
+    [(ngModel)]="rol_id"
+    required
+  >
+    <option value="" disabled>Seleccione un tipo</option>
+    <option *ngFor="let type of roles" [value]="type.id">
+      {{ type.nombre }}
+    </option>
+  </select>
+</div>
+<div >
+  <button
+    type="submit"
+    class="btn btn-success"
+    (click)="guardarUsuario()"
+   
+  >
+    Guardar Usuario
+  </button>&nbsp;
+</div>

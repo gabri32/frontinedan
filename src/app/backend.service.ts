@@ -210,5 +210,17 @@ async consultarEstudianteCursoAsignaturas(identificacion:number):Promise<any>{
 async getTalleresPorAsignatura(id: number): Promise<any[]> {
   return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/talleres/asignatura/${id}`));
 }
+async createuser(data: any): Promise<any> {
+  return firstValueFrom(this.http.post(`${this.apiUrl}/user`, data)); 
+}
+async getroles(): Promise<any> {
+  return firstValueFrom(this.http.get(`${this.apiUrl}/roles`));
+}
+async getEventos(): Promise<any> {
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getEventos`));
+}
+async registerEventos(data:{}): Promise<any> {
+  return firstValueFrom(this.http.post(`${this.apiUrl}/registerEventos`,data));
+}
 
 }

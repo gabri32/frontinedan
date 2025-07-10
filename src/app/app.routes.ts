@@ -21,6 +21,7 @@ import { AdministracionComponent } from './administracion/administracion.compone
 import { DocentesComponent } from './docentes/docentes.component';
 import { EstudiantesComponent } from './estudiantes/estudiantes.component';
 import { AdminAcademicaComponent } from './admin-academica/admin-academica.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
 export const routes: Routes = [
   { path: '', component: LandingPageComponent }, // 👈 ahora esta es la raíz
   { path: 'login', component: LoginComponent },
@@ -32,8 +33,8 @@ export const routes: Routes = [
       { path: 'administracion', component: AdministracionComponent },
       {path:'adminacademica',component: AdminAcademicaComponent },
       {path:'profesores',component: DocentesComponent },
-      {path:'estudiantes',component: EstudiantesComponent }
-
+      {path:'estudiantes',component: EstudiantesComponent },
+     {path:'usuarios',component: UsuariosComponent },
     ]
   },
   { path: '**', redirectTo: '' } 

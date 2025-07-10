@@ -58,6 +58,7 @@ export class AdminAcademicaComponent implements OnInit {
   displayedColumns: string[] = ['Numero', 'imagen', 'Opciones'];
   displayedColumnsdocentes: string[] = ['Identificacion del docente', 'Nombre completo', 'Sede', 'Vigencia', 'Opciones'];
   displayedColumnscursos: string[] = ['Grado', 'Curso', 'Director de grado', 'Sede', 'Opciones'];
+sections = new Array(9); // Creamos un array de 9 espacios
 
 
   dataSource = new MatTableDataSource<any>();

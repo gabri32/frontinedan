@@ -16,6 +16,13 @@ import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { MatError } from "@angular/material/form-field";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core'; // o MatMomentDateModule si usas Moment.js
+
   //import { ReporteService } from '../services/reporte.service';
 @Component({
   selector: 'app-vote',
@@ -26,12 +33,21 @@ import html2canvas from 'html2canvas';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatCheckboxModule,  // ✅ Importar checkbox
+    MatCheckboxModule, // ✅ Importar checkbox
     MatDividerModule,
     MatCardModule,
     NgxChartsModule,
     FormsModule,
-  ],
+    MatError,
+        MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCardModule,
+    MatTableModule,
+    MatTabsModule
+],
   templateUrl: './vote.component.html',
   styleUrls: ['./vote.component.css']
 })
@@ -39,6 +55,8 @@ export class VoteComponent implements OnInit {
 
   //variables iniciales del componente ------------------------
   displayedColumns: string[] = ['selecciona', 'id', 'nombre', 'edad', 'grado', 'num_identificacion', 'Seleccionado', 'Opciones'];
+  displayedColumns2: string[] = ['descripcion', 'fechaInicio', 'fechaFin'];
+
   dataSource = new MatTableDataSource<any>();
   selectedStudents: Array<any> = []
   loading = false;
@@ -79,6 +97,13 @@ export class VoteComponent implements OnInit {
   rawData: any;
   ganadorper:any;
   ganadorcon:any;
+  eventos: [] = [];
+eventoForm: any;
+eventoform = {
+  descripcion: '',
+  fechaInicio: null,
+  fechaFin: null
+};
   constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
 const date = new Date();
@@ -92,7 +117,7 @@ const date = new Date();
     this.obtenerEstudiantes();
     this.searchCandidates();
     this.searchVotes();
-
+this.getEventos();
     swal.close();
 
   }
@@ -553,5 +578,48 @@ console.log(data)
     }).catch((error) => {
       console.error('Error al generar el PDF:', error);
     });
+  }
+
+
+  async getEventos() {
+    try {
+      const eventos = await this.backendService.getEventos();
+      console.log(eventos);
+      if (eventos.length > 0) {
+        this.eventos = eventos;
+      console.log('Eventos obtenidos:', eventos);
+      } else {
+        console.warn('⚠️ No se encontraron eventos.');
+      }
+    } catch (error) {
+      console.error('Error al obtener eventos:', error);
+    }
+  }
+
+
+  async registerEventos() {
+    try {
+      if (!this.eventoform.descripcion || !this.eventoform.fechaInicio || !this.eventoform.fechaFin) {
+        alertify.error('❌ Todos los campos son obligatorios ❌');
+        return;
+      }
+      const data = {
+        detalle_del_evento: this.eventoform.descripcion,
+        fecha_ini: this.eventoform.fechaInicio,
+        fecha_fin: this.eventoform.fechaFin
+      };
+      console.log('Datos del evento:', data);
+      await this.backendService.registerEventos(data);
+      alertify.success('Evento registrado con éxito 🎉');
+      this.getEventos(); // Actualizar la lista de eventos
+      this.eventoform = {
+        descripcion: '',
+        fechaInicio: null,
+        fechaFin: null
+      }; // Limpiar el formulario
+    } catch (error) {
+      console.error('❌ Error al registrar el evento:', error);
+      alertify.error('❌ Error al registrar el evento ❌');
+    }
   }
 }

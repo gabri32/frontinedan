@@ -150,6 +150,11 @@
                 <span *ngIf="!taller.doc2" class="text-muted">No disponible</span>
               </td>
             </tr>
+            <div class="form-group mb-3">
+  <label for="archivo_pdf">Documento PDF</label>
+  <input type="file" class="form-control" accept="application/pdf" (change)="onFileChange($event)">
+</div>
+
           </tbody>
         </table>
       </div>

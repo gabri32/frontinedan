@@ -39,7 +39,9 @@
           <a *ngIf="mostrarTab2===true" (click)="navigateTo('estudiantes')" class="w3-bar-item w3-button">
       <i class='fas fa-cogs'></i> &nbsp; Estudiantes
     </a>
-    
+    <a *ngIf="mostrarTab3===true" (click)="navigateTo('usuarios')" class="w3-bar-item w3-button">
+      <i class='fas fa-users'></i> &nbsp; Usuarios
+    </a>
   </div>
   
   <div class="w3-container" [class.open]="isSidebarOpen">

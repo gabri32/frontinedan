@@ -54,8 +54,13 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
-           <mat-paginator #paginatorLogin [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator #paginatorLogin [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]"
+                showFirstLastButtons></mat-paginator>
 
         </div>
     </mat-tab>
+
+
+
+ 
 </mat-tab-group>

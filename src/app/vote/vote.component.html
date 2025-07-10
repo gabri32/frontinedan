@@ -98,7 +98,13 @@
 
     <!-- Mensaje si ya hay candidatos registrados -->
     <div *ngIf="hascandidates" class="text-center">
+    
       <h5 class="warning">Ya has registrado candidatos para esta elección</h5>
+    <br>
+      <label for="">Reactivar votaciones</label> 
+      &nbsp;
+      <button type="button" class="btn btn-success" (click)="generatePDF()"><i class="fa fa-save"
+            style="font-size:18px"></i></button>
     </div>
 
     <!-- Formulario para registrar candidatos -->
@@ -253,6 +259,8 @@
         <label for="reporte">Reporte total votaciones - {{now}}</label> &nbsp;
         <button type="button" class="btn btn-success" (click)="generatePDF()"><i class="fa fa-file-pdf-o"
             style="font-size:18px"></i></button>
+            <br>
+        
       </div>
       <h5>Reporte de votaciones I.E.M Antonio Nariño</h5>
       <!-- Contenedor del reporte que se convertirá a PDF -->
@@ -348,6 +356,84 @@
       </div>
     </div>
   </mat-tab>
+<mat-tab label="Parámetros votaciones" *ngIf="mostrarTab3 === true">
+  <div style="text-align: center;">
+    <strong style="display: block; margin-bottom: 10px; font-size: 18px;">Configuración de eventos</strong>
+  </div>
+
+  <!-- Sección 1: Formulario de creación de evento -->
+<mat-card>
+  <mat-card-title>Nuevo evento</mat-card-title>
+  <mat-card-content>
+    <form #eventoForm="ngForm">
+      <mat-form-field appearance="outline" style="width: 100%;">
+        <mat-label>Descripción del evento</mat-label>
+        <input matInput name="descripcion" [(ngModel)]="eventoform.descripcion" required>
+        <mat-error *ngIf="eventoForm.submitted && !eventoform.descripcion">
+          La descripción es obligatoria.
+        </mat-error>
+      </mat-form-field>
+
+      <div style="display: flex; gap: 20px;">
+        <mat-form-field appearance="outline" style="flex: 1;">
+          <mat-label>Fecha inicial</mat-label>
+          <input matInput [matDatepicker]="pickerInicio" name="fechaInicio" [(ngModel)]="eventoform.fechaInicio" required>
+          <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInicio></mat-datepicker>
+          <mat-error *ngIf="eventoForm.submitted && !eventoform.fechaInicio">
+            La fecha inicial es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="flex: 1;">
+          <mat-label>Fecha final</mat-label>
+          <input matInput [matDatepicker]="pickerFin" name="fechaFin" [(ngModel)]="eventoform.fechaFin" required>
+          <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFin></mat-datepicker>
+          <mat-error *ngIf="eventoForm.submitted && eventoform.fechaFin && eventoform.fechaInicio && eventoform.fechaFin < eventoform.fechaInicio">
+            La fecha final no puede ser anterior a la fecha inicial.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary" (click)="registerEventos()">Guardar evento</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+
+  <br>
+
+  <!-- Sección 2: Tabla de eventos -->
+  <mat-card>
+    <mat-card-title>Lista de eventos</mat-card-title>
+    <mat-card-content>
+      <table mat-table [dataSource]="eventos" class="mat-elevation-z8" style="width: 100%;">
+
+        <!-- Descripción Column -->
+        <ng-container matColumnDef="descripcion">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let evento"> {{evento.detalle_del_evento}} </td>
+        </ng-container>
+
+        <!-- Fecha Inicio Column -->
+        <ng-container matColumnDef="fechaInicio">
+          <th mat-header-cell *matHeaderCellDef>Fecha Inicio</th>
+          <td mat-cell *matCellDef="let evento"> {{evento.fecha_ini | date}} </td>
+        </ng-container>
+
+        <!-- Fecha Fin Column -->
+        <ng-container matColumnDef="fechaFin">
+          <th mat-header-cell *matHeaderCellDef>Fecha Final</th>
+          <td mat-cell *matCellDef="let evento"> {{evento.fecha_fin | date}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</mat-tab>
 
 
 </mat-tab-group>

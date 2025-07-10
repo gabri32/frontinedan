@@ -59,14 +59,16 @@ constructor(private backendService: BackendService, private fb: FormBuilder) { }
    const currentYear = new Date().getFullYear();
    this.now=currentYear
 console.log(currentYear)
-  this.tallerForm = this.fb.group({
-    detalle_taller: [''],
-    fecha_ini: [''],
-    fecha_fin: [''],
-    periodo: [''],
-    doc: [''],
-    doc2: ['']
-  });
+this.tallerForm = this.fb.group({
+  detalle_taller: [''],
+  fecha_ini: [''],
+  fecha_fin: [''],
+  periodo: [''],
+  doc: [''],
+  doc2: [''],
+  archivo_pdf: [null]
+});
+
 
 
     this.getAsingDocente()
@@ -116,6 +118,16 @@ this.token = token !== null ? token : undefined;
 
 
 }
+onFileChange(event: any) {
+  const file = event.target.files[0];
+  if (file && file.type === 'application/pdf') {
+    this.tallerForm.patchValue({
+      archivo_pdf: file
+    });
+  } else {
+    swal.fire("Archivo inválido", "Por favor selecciona un archivo PDF válido.", "warning");
+  }
+}
 
 async verLista(id_asignatura:number){
 try {
@@ -133,18 +145,21 @@ cerrarModal() {
   this.idAsignaturaActual = null;
 
 }
+
+
 async guardarTaller() {
   if (!this.idAsignaturaActual) return;
-
-  const tallerData = {
-    ...this.tallerForm.value,
-    id_asignatura: this.idAsignaturaActual,
-    vigencia:new Date().getFullYear()
-  };
-  console.log(tallerData)
-// 
+  const formData = new FormData();
+  formData.append('detalle_taller', this.tallerForm.value.detalle_taller);
+  formData.append('fecha_ini', this.tallerForm.value.fecha_ini);
+  formData.append('fecha_fin', this.tallerForm.value.fecha_fin);
+  formData.append('periodo', this.tallerForm.value.periodo);
+  formData.append('vigencia', new Date().getFullYear().toString());
+  if (this.tallerForm.value.doc) formData.append('doc', this.tallerForm.value.doc);
+  if (this.tallerForm.value.doc2) formData.append('doc2', this.tallerForm.value.doc2);
+  if (this.tallerForm.value.archivo_pdf) formData.append('archivo_pdf', this.tallerForm.value.archivo_pdf);
   try {
-await this.backendService.createWorks(tallerData)
+    await this.backendService.createWorks(formData);  
     swal.fire("Guardado", "Taller registrado correctamente.", "success");
     this.cerrarModal();
   } catch (error) {
