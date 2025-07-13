@@ -30,9 +30,9 @@ this.form = this.fb.group({
     cedula: ['', Validators.required],
     fechaNacimiento: ['', Validators.required],
     registroCivil: [null, Validators.required],
-    eps: ['', Validators.required],
+    eps: [''],
     sisben: [''],
-    vacunas: [null, Validators.required],
+    carnet_vacunas: [null, Validators.required],
     fotografia: [null, Validators.required],
   }),
   acudiente: this.fb.group({
@@ -40,8 +40,9 @@ this.form = this.fb.group({
     cedula: ['', Validators.required],
     contacto1: ['', Validators.required],
     contacto2: ['', Validators.required],
+    documento_acudiente: [null, Validators.required] 
   }),
-  boletines: this.fb.array([])  // ✅ Agregado aquí
+  boletines: this.fb.array([])
 });
 
 
@@ -79,7 +80,24 @@ this.form = this.fb.group({
 onArchivoSeleccionado(event: Event, campo: string) {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
-    this.form.get('estudiante.' + campo)?.setValue(input.files[0]);
+    const file = input.files[0];
+
+    // Verifica si el campo está dentro del grupo estudiante
+    const estudiante = this.form.get('estudiante') as FormGroup;
+    if (estudiante.controls[campo]) {
+      estudiante.get(campo)?.setValue(file);
+      return;
+    }
+
+    // Verifica si el campo está dentro del grupo acudiente
+    const acudiente = this.form.get('acudiente') as FormGroup;
+    if (acudiente.controls[campo]) {
+      acudiente.get(campo)?.setValue(file);
+      return;
+    }
+
+    // Si no se encuentra el campo, puedes registrar un error opcionalmente
+    console.warn(`Campo ${campo} no encontrado en el formulario`);
   }
 }
 
@@ -117,7 +135,6 @@ guardarFormulario() {
 
   this.backendService.registrarInscripcion(datos).then(() => {
     alert('Formulario enviado exitosamente');
-    this.dialogRef.close();
   }).catch(error => {
     alert('Ocurrió un error al enviar el formulario');
     console.error(error);

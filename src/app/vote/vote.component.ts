@@ -23,7 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; // o MatMomentDateModule si usas Moment.js
 
-  //import { ReporteService } from '../services/reporte.service';
+//import { ReporteService } from '../services/reporte.service';
 @Component({
   selector: 'app-vote',
   standalone: true,
@@ -39,7 +39,7 @@ import { MatNativeDateModule } from '@angular/material/core'; // o MatMomentDate
     NgxChartsModule,
     FormsModule,
     MatError,
-        MatFormFieldModule,
+    MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatDatepickerModule,
@@ -47,7 +47,7 @@ import { MatNativeDateModule } from '@angular/material/core'; // o MatMomentDate
     MatCardModule,
     MatTableModule,
     MatTabsModule
-],
+  ],
   templateUrl: './vote.component.html',
   styleUrls: ['./vote.component.css']
 })
@@ -87,29 +87,29 @@ export class VoteComponent implements OnInit {
   mostrarTab2 = false;
   mostrarTab3 = false;
   rol_id = 0;
-  repor=false;
-  now:number|null=null;
-  time:Date|null=null;
+  repor = false;
+  now: number | null = null;
+  time: Date | null = null;
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   highcharts: any;
   rawData: any;
-  ganadorper:any;
-  ganadorcon:any;
+  ganadorper: any;
+  ganadorcon: any;
   eventos: [] = [];
-eventoForm: any;
-eventoform = {
-  descripcion: '',
-  fechaInicio: null,
-  fechaFin: null
-};
+  eventoForm: any;
+  eventoform = {
+    descripcion: '',
+    fechaInicio: null,
+    fechaFin: null
+  };
   constructor(private backendService: BackendService, private sanitizer: DomSanitizer) { }
   ngOnInit(): void {
-const date = new Date();
+    const date = new Date();
 
-   this.time=date
-   this.now=date.getFullYear();
+    this.time = date
+    this.now = date.getFullYear();
     const token = sessionStorage.getItem('usuario');
     this.autenticacion = token ? JSON.parse(token) : null;
     this.estudiante_id = this.autenticacion.num_identificacion
@@ -117,7 +117,7 @@ const date = new Date();
     this.obtenerEstudiantes();
     this.searchCandidates();
     this.searchVotes();
-this.getEventos();
+    this.getEventos();
     swal.close();
 
   }
@@ -151,7 +151,7 @@ this.getEventos();
     try {
 
       const data = await this.backendService.getAllStudents();
-console.log(data)
+      console.log(data)
       this.dataSource.data = data.students.map((student: any) => ({ ...student, seleccionado: "No" }));
       this.searchCandidates()
     } catch (error) {
@@ -256,7 +256,7 @@ console.log(data)
       // for (let pair of formData.entries()) {
       //   console.log(pair[0] + ":", pair[1]);
       // }
-      
+
       const response = await this.backendService.saveImage(formData);
 
       if (!response.message) {
@@ -528,7 +528,7 @@ console.log(data)
 
   //reporte renderiza 1 sola vez y oculta
   private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms)); 
+    return new Promise((resolve) => setTimeout(resolve, ms));
     //tiempo de renderizado para que el html pueda tomar la info
   }
   async generatePDF() {
@@ -540,30 +540,30 @@ console.log(data)
         swal.showLoading();
       }
     });
-    this.repor=true
+    this.repor = true
     await this.delay(700);
     const element = document.getElementById('pdfContent'); // Selecciona el div por su ID
     if (!element) {
       console.error('No se encontró el elemento con id="pdfContent".');
       return;
     }
-  
+
     html2canvas(element).then((canvas) => {
 
       const imgData = canvas.toDataURL('image/png'); // Convierte el canvas a una imagen PNG
       const pdf = new jsPDF('p', 'mm', 'a4'); // Crea un documento PDF en formato A4
-  
+
       const imgWidth = 190; // Ancho de la imagen en el PDF (ajustado al ancho de la página)
       const pageHeight = 250; // Altura de la página en mm
       const imgHeight = (canvas.height * imgWidth) / canvas.width; // Escala la altura proporcionalmente
       let heightLeft = imgHeight;
-  
+
       let position = 10; // Margen superior inicial
-  
+
       // Agrega la imagen al PDF
       pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
       heightLeft -= pageHeight;
-  
+
       // Si el contenido es más grande que una página, agrega páginas adicionales
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
@@ -571,9 +571,9 @@ console.log(data)
         pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-  
-      pdf.save('Reporte_votaciones_'+this.now+'Antonio_nariño.pdf'); 
-      this.repor=false// Guarda el PDF con el nombre "reporte.pdf"
+
+      pdf.save('Reporte_votaciones_' + this.now + 'Antonio_nariño.pdf');
+      this.repor = false// Guarda el PDF con el nombre "reporte.pdf"
       swal.close()
     }).catch((error) => {
       console.error('Error al generar el PDF:', error);
@@ -587,7 +587,7 @@ console.log(data)
       console.log(eventos);
       if (eventos.length > 0) {
         this.eventos = eventos;
-      console.log('Eventos obtenidos:', eventos);
+        console.log('Eventos obtenidos:', eventos);
       } else {
         console.warn('⚠️ No se encontraron eventos.');
       }
@@ -603,14 +603,42 @@ console.log(data)
         alertify.error('❌ Todos los campos son obligatorios ❌');
         return;
       }
+      swal.fire({
+        title: 'Creando reporte...',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
       const data = {
         detalle_del_evento: this.eventoform.descripcion,
         fecha_ini: this.eventoform.fechaInicio,
         fecha_fin: this.eventoform.fechaFin
       };
       console.log('Datos del evento:', data);
-      await this.backendService.registerEventos(data);
-      alertify.success('Evento registrado con éxito 🎉');
+      if (this.eventoform.fechaInicio > this.eventoform.fechaFin) {
+         swal.fire({
+          title: 'Advertencia!',
+          text: 'La fecha inicial no puede ser mayor que la fecha final',
+          icon: 'warning',
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        })
+      }
+      else {
+        await this.backendService.registerEventos(data);
+        swal.fire({
+          title: '¡Éxito!',
+          text: 'Registrado con exito',
+          icon: 'success',
+          timer: 500,
+          timerProgressBar: true,
+          showConfirmButton: false
+        })
+      }
+
       this.getEventos(); // Actualizar la lista de eventos
       this.eventoform = {
         descripcion: '',

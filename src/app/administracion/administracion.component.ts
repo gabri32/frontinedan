@@ -69,6 +69,8 @@ export class AdministracionComponent implements OnInit {
   mostrarTab3 = false;
   rol_id = 0;
   cursosCreados: any[] = [];
+  inscripciones: any[] = []; // cargada desde tu servicio
+
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -96,6 +98,7 @@ export class AdministracionComponent implements OnInit {
     this.getSedes()
     this.getcursos()
     this.getasignaturas()
+      this.getInscritos();
     this.backendService.getNumberStudents().then(data => {
       this.grupoEstudiantes = data;
     });
@@ -421,5 +424,26 @@ console.log(this.grupo.id, this.estudiantesSeleccionados)
       });
     }
   }
+  // Limpia slashes incorrectos en Windows
+limpiarRuta(ruta: string): string {
+  return ruta?.replace(/\\/g, '/');
+}
+
+// Convierte texto tipo '[]' a array real
+boletinesArray(boletines: string): string[] {
+  try {
+    const parsed = JSON.parse(boletines);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+async getInscritos(){
+  try {
+    this.inscripciones=await this.backendService.getInscritos()
+  } catch (error) {
+    console.log(error)
+  }
+}
 }
 

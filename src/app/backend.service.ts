@@ -137,14 +137,15 @@ if (!formulario.estudiante || !formulario.acudiente) {
   formData.append('nombre_estudiante', formulario.estudiante.nombre);
   formData.append('cedula_estudiante', formulario.estudiante.cedula);
   formData.append('fecha_nacimiento', formulario.estudiante.fechaNacimiento);
-  formData.append('eps', formulario.estudiante.eps);
+  formData.append('eps', formulario.estudiante.eps|| null);
   formData.append('sisben', formulario.estudiante.sisben || '');
 
   // Archivos del estudiante
   if (formulario.estudiante.registroCivil)
     formData.append('registro_civil', formulario.estudiante.registroCivil);
-  if (formulario.estudiante.vacunas)
-    formData.append('carnet_vacunas', formulario.estudiante.vacunas);
+
+  if (formulario.estudiante.carnet_vacunas)
+    formData.append('carnet_vacunas', formulario.estudiante.carnet_vacunas);
   if (formulario.estudiante.fotografia)
     formData.append('fotografia', formulario.estudiante.fotografia);
 
@@ -153,8 +154,7 @@ if (!formulario.estudiante || !formulario.acudiente) {
   formData.append('cedula_acudiente', formulario.acudiente.cedula);
   formData.append('contacto1', formulario.acudiente.contacto1);
   formData.append('contacto2', formulario.acudiente.contacto2);
-
-  // Estado por defecto: I (Inscrito)
+formData.append('documento_acudiente', formulario.acudiente.documento_acudiente);
   formData.append('estado', formulario.estado || 'I');
 
   // Agregar boletines si existen
@@ -222,5 +222,7 @@ async getEventos(): Promise<any> {
 async registerEventos(data:{}): Promise<any> {
   return firstValueFrom(this.http.post(`${this.apiUrl}/registerEventos`,data));
 }
-
+async getInscritos(): Promise<any> {
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getInscritos`));
+}
 }

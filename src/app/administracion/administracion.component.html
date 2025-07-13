@@ -58,7 +58,7 @@
     <tr>
       <th>Sede</th>
       <th>Grado</th>
-      <th>Cantidad</th>
+      <th>Cantidad de estudiantes del grado</th>
     </tr>
   </thead>
  <tbody>
@@ -117,6 +117,80 @@
         <h3>Asignación de estudiantes a cursos</h3>
     </div>
 </mat-tab>
+<mat-tab label="Listado de estudiantes inscritos">
+  <mat-divider></mat-divider>
+
+  <div class="text-center mb-3">
+    <h3>Estudiantes inscritos</h3>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover text-center align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>Nombre Estudiante</th>
+          <th>Cédula</th>
+          <th>Grado</th>
+          <th>Fecha Nacimiento</th>
+          <th>Fotografía</th>
+          <th>Documentos</th>
+          <th>Acudiente</th>
+          <th>Boletines</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ins of inscripciones; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ ins.nombre_estudiante }}</td>
+          <td>{{ ins.cedula_estudiante }}</td>
+          <td>{{ ins.grado }}<br *ngIf="ins.sub_grado">({{ ins.sub_grado }})</td>
+          <td>{{ ins.fecha_nacimiento | date:'dd/MM/yyyy' }}</td>
+
+          <!-- Fotografía -->
+          <td>
+            <img [src]="'http://localhost:3000/' + limpiarRuta(ins.fotografia)" alt="Foto" width="70" class="rounded">
+          </td>
+
+          <!-- Documentos -->
+          <td>
+            <a *ngIf="ins.registro_civil" [href]="'http://localhost:3000/' + limpiarRuta(ins.registro_civil)" target="_blank">Registro Civil</a><br>
+            <a *ngIf="ins.eps" [href]="'http://localhost:3000/' + limpiarRuta(ins.eps)" target="_blank">EPS</a><br>
+            <a *ngIf="ins.carnet_vacunas" [href]="'http://localhost:3000/' + limpiarRuta(ins.carnet_vacunas)" target="_blank">Carnet Vacunas</a><br>
+            <a *ngIf="ins.doc_acudiente" [href]="'http://localhost:3000/' + limpiarRuta(ins.doc_acudiente)" target="_blank">Doc. Acudiente</a>
+          </td>
+
+          <!-- Acudiente -->
+          <td>
+            {{ ins.nombre_acudiente }}<br>
+            Cédula: {{ ins.cedula_acudiente }}<br>
+            Tel: {{ ins.contacto1 }}<br>
+            Alt: {{ ins.contacto2 }}
+          </td>
+
+          <!-- Boletines -->
+          <td>
+            <ng-container *ngIf="boletinesArray(ins.boletines).length > 0; else sinBoletines">
+              <div *ngFor="let b of boletinesArray(ins.boletines); let j = index">
+                <a [href]="'http://localhost:3000/' + limpiarRuta(b)" target="_blank">Boletín {{ j + 1 }}</a><br>
+              </div>
+            </ng-container>
+            <ng-template #sinBoletines>
+              <span class="text-muted">Sin boletines</span>
+            </ng-template>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <div class="text-center">
+    <h3>Asignación de estudiantes a cursos</h3>
+  </div>
+</mat-tab>
+
 </mat-tab-group>
 <div *ngIf="modalEstudiantesVisible" 
      class="modal-backdrop d-flex align-items-center justify-content-center"

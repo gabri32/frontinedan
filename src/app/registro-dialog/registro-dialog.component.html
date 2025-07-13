@@ -48,13 +48,15 @@
         <input formControlName="fechaNacimiento" type="date" class="form-control">
       </div>
       <div class="form-group col-md-6 mb-2">
-        <label>Número de Registro Civil:</label>
-        <input formControlName="registroCivil" type="text" class="form-control">
+        <label>Registro Civil:</label>
+        <input type="file" accept="application/pdf" class="form-control"
+         (change)="onArchivoSeleccionado($event, 'registroCivil')">
       </div>
 
       <div class="form-group col-md-6 mb-2">
         <label>EPS:</label>
-        <input formControlName="eps" type="text" class="form-control">
+        <input type="file" accept="application/pdf" class="form-control"
+         (change)="onArchivoSeleccionado($event, 'eps')">
       </div>
       <div class="form-group col-md-6 mb-2">
         <label>Sisbén (si aplica):</label>
@@ -86,10 +88,14 @@
         <input formControlName="nombre" type="text" class="form-control">
       </div>
       <div class="form-group col-md-6 mb-2">
-        <label>Cédula del acudiente:</label>
+        <label>Identificación del acudiente:</label>
         <input formControlName="cedula" type="text" class="form-control">
       </div>
-
+<div class="form-group col-md-6 mb-2">
+  <label>Documento de acudiente:</label>
+  <input type="file" accept="application/pdf"  class="form-control"
+         (change)="onArchivoSeleccionado($event, 'documento_acudiente')">
+</div>
       <div class="form-group col-md-6 mb-2">
         <label>Teléfono principal:</label>
         <input formControlName="contacto1" type="text" class="form-control">
