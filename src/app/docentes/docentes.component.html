@@ -69,7 +69,7 @@
     <div class="modal-contenido p-4 rounded shadow bg-white w-100" style="max-width: 600px;">
         <h4 class="mb-3 text-center">{{ modoEdicion ? 'Crear Taller' : 'Detalle del Taller' }} - {{now}}</h4>
 
-        <form [formGroup]="tallerForm" (ngSubmit)="guardarTaller()">
+        <form [formGroup]="tallerForm" (ngSubmit)="guardarTaller(tallerForm)">
             <div class="form-group mb-3">
                 <label for="detalle_taller">Detalle</label>
                 <input type="text" class="form-control" formControlName="detalle_taller" [readonly]="!modoEdicion">
@@ -118,7 +118,7 @@
 
 <div *ngIf="modalVisible2" class="modal-backdrop d-flex align-items-center justify-content-center">
     <div class="modal-contenido p-4 rounded shadow bg-white w-100" style="max-width: 800px;">
-        <h4 class="mb-3 text-center">{{ modoEdicion ? 'Crear Taller' : 'Detalle del Taller' }} - {{now}}</h4>
+        <h4 class="mb-3 text-center">{{ modoEdicion ? 'Ver Taller' : 'Detalle del Taller' }} - {{now}}</h4>
     <h5 class="mb-3">Lista de talleres</h5>
     <div *ngIf="talleres.length > 0; else sinTalleres">
       <div class="table-responsive">
@@ -150,10 +150,7 @@
                 <span *ngIf="!taller.doc2" class="text-muted">No disponible</span>
               </td>
             </tr>
-            <div class="form-group mb-3">
-  <label for="archivo_pdf">Documento PDF</label>
-  <input type="file" class="form-control" accept="application/pdf" (change)="onFileChange($event)">
-</div>
+ 
 
           </tbody>
         </table>

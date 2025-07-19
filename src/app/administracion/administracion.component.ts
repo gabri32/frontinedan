@@ -23,6 +23,7 @@ import { ModalAsignarAsignaturasComponent } from './modales/asignaturas/modal-as
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ModalAsignarGradoComponent } from './modales/dir_grado/modal-asignar-grado/modal-asignar-grado.component';
+import { environment } from '../../app/auth/enviroments';
 
 
 @Component({
@@ -70,6 +71,7 @@ export class AdministracionComponent implements OnInit {
   rol_id = 0;
   cursosCreados: any[] = [];
   inscripciones: any[] = []; // cargada desde tu servicio
+  url:any
 
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -92,6 +94,7 @@ export class AdministracionComponent implements OnInit {
   grupoEstudiantes: any[] = [];
 
   ngOnInit(): void {
+    this.url=environment.apiAuthUrl + '/'
     this.verificarPermisos()
     this.getimages()
     this.getprofesores()

@@ -56,9 +56,9 @@ export class AdminAcademicaComponent implements OnInit {
   cursos: any[] = []
   sedes: any[] = []
   displayedColumns: string[] = ['Numero', 'imagen', 'Opciones'];
-  displayedColumnsdocentes: string[] = ['Identificacion del docente', 'Nombre completo', 'Sede', 'Vigencia', 'Opciones'];
-  displayedColumnscursos: string[] = ['Grado', 'Curso', 'Director de grado', 'Sede', 'Opciones'];
-sections = new Array(9); // Creamos un array de 9 espacios
+  displayedColumns2: string[] = ['Detalle del evento', 'url', 'imagen', 'Opciones'];
+
+
 
 
   dataSource = new MatTableDataSource<any>();
@@ -72,7 +72,6 @@ sections = new Array(9); // Creamos un array de 9 espacios
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 @ViewChild('paginatorLogin') paginatorLogin!: MatPaginator;
-@ViewChild('paginatorDocentes') paginatorDocentes!: MatPaginator;
 
   constructor(
     private backendService: BackendService,
@@ -91,14 +90,25 @@ grupoEstudiantes: any[] = [];
   ngOnInit(): void {
     this.verificarPermisos()
     this.getimages()
-    this.getprofesores()
     this.getSedes()
-    this.getcursos()
-    this.getasignaturas()
-      this.backendService.getNumberStudents().then(data => {
-    this.grupoEstudiantes = data;
-  });
+ this.getHeaders()
   }
+
+async getHeaders() {
+  try {
+this.dataSource2.data = await this.backendService.getheaders();
+console.log( "datoooooooooooosd",this.dataSource2.data)
+
+  }catch (error) {
+    console.error("Error al cargar los headers:", error);
+    swal.fire({
+      title: "Error",
+      text: "Hubo un problema al cargar los headers.",
+      icon: "error",
+      confirmButtonText: "Aceptar"
+    });
+  }
+}
 
   verificarPermisos() {
 
@@ -120,7 +130,6 @@ grupoEstudiantes: any[] = [];
   }
 ngAfterViewInit() {
   this.dataSource.paginator = this.paginatorLogin;
-  this.dataSource2.paginator = this.paginatorDocentes;
 
   this.dataSource.sort = this.sort;
   this.dataSource2.sort = this.sort;
@@ -140,33 +149,7 @@ ngAfterViewInit() {
 
   }
 
- async getprofesores() {
-  try {
-    this.docentes = await this.backendService.getprofesores();
-
-    // Sumar cantidad_horas_week de las asignaturas de cada docente
-    this.docentes.forEach((docente: any) => {
-      if (Array.isArray(docente.asignaturas)) {
-        docente.totalHorasSemana = docente.asignaturas.reduce(
-          (sum: number, asignatura: any) => sum + (asignatura.cantidad_horas_week || 0),
-          0
-        );
-      } else {
-        docente.totalHorasSemana = 0;
-      }
-    });
-
-    this.dataSource2.data = this.docentes;
-  } catch (error) {
-    console.error("Error traer docentes:", error);
-    swal.fire({
-      title: "Error",
-      text: "Hubo un problema al traer los docentes.",
-      icon: "error",
-      confirmButtonText: "Aceptar"
-    });
-  }
-}
+ 
   onFileSelected(event: Event, student: any) {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {

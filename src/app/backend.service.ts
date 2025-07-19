@@ -166,12 +166,14 @@ formData.append('documento_acudiente', formulario.acudiente.documento_acudiente)
     });
   }
 
-  // Petición POST al backend
+  
   return firstValueFrom(this.http.post(`${this.apiUrl}/registro`, formData));
 }
 
 
-//peticion de conteo de estudiantes para el admin
+async getheaders():Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/landing/getheaders`))
+}
 async getNumberStudents():Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/estudiantesAgrupados`))
 }
@@ -185,6 +187,9 @@ async getAsingDocente(id:string):Promise<any>{
 }
 async createWorks(formData:any):Promise<any>{
   return firstValueFrom(this.http.post(`${this.apiUrl}/createWorks`,formData))
+}
+async createHeaders(formData:any):Promise<any>{
+  return firstValueFrom(this.http.post(`${this.apiUrl}/landing/insertHeader`,formData))
 }
 async getTalleres(id:number):Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/getTalleres?id=${id}`))

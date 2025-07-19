@@ -16,6 +16,7 @@ export class LandingPageComponent implements OnInit {
   slider: any;
   infoButtons: any;
   eventCards: any;
+hovering: any;
 
   constructor(
     private router: Router,
@@ -24,21 +25,19 @@ export class LandingPageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getInfoLanding();
+    this.getInfoheaders();
   }
 
-  async getInfoLanding() {
-    try {
-      const data = await this.backendService.getInfo();
-      this.header = data.find((s: any) => s.type === 'header');
-      this.slider = data.find((s: any) => s.type === 'slider');
-      this.infoButtons = data.find((s: any) => s.type === 'info_buttons');
-      this.eventCards = data.find((s: any) => s.type === 'event_cards');
-    } catch (error) {
-      console.error('Error al obtener la información de landing:', error);
-      swal.fire({ title: 'Error', text: 'No se pudo cargar la información.', icon: 'error' });
-    }
+async getInfoheaders() {
+  try {
+    const data = await this.backendService.getheaders();
+    this.eventCards = data; // ← Es un array
+  } catch (error) {
+    console.error('Error al obtener la información de landing:', error);
+    swal.fire({ title: 'Error', text: 'No se pudo cargar la información.', icon: 'error' });
   }
+}
+
 
   goToLogin() {
     this.router.navigate(['/login']);

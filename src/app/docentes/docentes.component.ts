@@ -147,18 +147,28 @@ cerrarModal() {
 }
 
 
-async guardarTaller() {
+async guardarTaller(taller:any) {
+  console.log(taller.value.detalle_taller)
   if (!this.idAsignaturaActual) return;
-  const formData = new FormData();
-  formData.append('detalle_taller', this.tallerForm.value.detalle_taller);
-  formData.append('fecha_ini', this.tallerForm.value.fecha_ini);
-  formData.append('fecha_fin', this.tallerForm.value.fecha_fin);
-  formData.append('periodo', this.tallerForm.value.periodo);
-  formData.append('vigencia', new Date().getFullYear().toString());
-  if (this.tallerForm.value.doc) formData.append('doc', this.tallerForm.value.doc);
-  if (this.tallerForm.value.doc2) formData.append('doc2', this.tallerForm.value.doc2);
-  if (this.tallerForm.value.archivo_pdf) formData.append('archivo_pdf', this.tallerForm.value.archivo_pdf);
+  const formData ={
+detalle_taller:taller.value.detalle_taller,
+fecha_ini:taller.value.fecha_ini,
+fecha_fin:taller.value.fecha_fin,
+periodo:taller.value.periodo,
+vigencia:new Date().getFullYear().toString(),
+doc: taller.value.doc,
+doc2:taller.value.doc2,
+id_asignatura:this.idAsignaturaActual
+  }
+  // formData.append('detalle_taller', taller.value.detalle_taller);
+  // formData.append('fecha_ini', taller.value.fecha_ini);
+  // formData.append('fecha_fin',taller.value.fecha_fin);
+  // formData.append('periodo', taller.value.periodo);
+  // formData.append('vigencia', );
+  // if (taller.value.doc) formData.append('doc', taller.value.doc);
+  // if (taller.value.doc2) formData.append('doc2', taller.value.doc2);
   try {
+    console.log("datale",formData)
     await this.backendService.createWorks(formData);  
     swal.fire("Guardado", "Taller registrado correctamente.", "success");
     this.cerrarModal();
