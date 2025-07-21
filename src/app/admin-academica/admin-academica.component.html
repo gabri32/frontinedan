@@ -1,10 +1,7 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
     <mat-tab label="Login administracion">
         <mat-divider></mat-divider>
-
         <div>
-
-
             <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
         </div>
 
@@ -63,16 +60,11 @@
     <mat-tab label="Cards landing">
         <mat-divider></mat-divider>
 
-        <div>
 
-
-            <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
-        </div>
 
 
         <div class="table-container">
             <table mat-table [dataSource]="dataSource2" matSort class="mat-elevation-z8">
-
 
 
 
@@ -82,35 +74,32 @@
                 </ng-container>
 
                 <!-- Columna Nombre -->
-         <ng-container matColumnDef="imagen">
-  <th mat-header-cell *matHeaderCellDef mat-sort-header> Imagen </th>
-  <td mat-cell *matCellDef="let student">
-    <img *ngIf="student.image" [src]="student.image" alt="imagen" width="50">
-  </td>
-</ng-container>
+                <ng-container matColumnDef="imagen">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Imagen </th>
+                    <td mat-cell *matCellDef="let student">
+                        <img *ngIf="student.image" [src]="student.image" alt="imagen" width="50">
+                    </td>
+                </ng-container>
 
-                   <ng-container matColumnDef="url">
+                <ng-container matColumnDef="url">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Url </th>
                     <td mat-cell *matCellDef="let student"> {{ student.url }} </td>
                 </ng-container>
                 <ng-container matColumnDef="Opciones">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones
+                        <a class="btn-circle" (click)="openDialog()">
+                            <i class="fa-solid fa-plus"></i>
+                        </a>
+
+
+                    </th>
 
 
                     <td mat-cell *matCellDef="let student">
 
-                        <br>
-                        <input type="file" (change)="onFileSelected($event, student)" accept="image/*">
-                        &nbsp;
-                        <a mat-button class="btn btn-success btn-sm" (click)="uploadImage(student)">
-                            <i class="fa fa-save"></i>
+                        <a class="btn-circle btn-danger" (click)="eliminarHeader(student.id_header)">
+                            <i class="fa-solid fa-trash"></i>
                         </a>
-
-                        <!-- Mostrar la imagen subida -->
-                        <img *ngIf="student.uploadedImageUrl" [src]="student.uploadedImageUrl" alt="Imagen subida"
-                            style="max-width: 200px; display: block; margin-top: 10px;">
-
-
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
@@ -121,7 +110,145 @@
                 showFirstLastButtons></mat-paginator>
 
         </div>
+
+        <!-- Dialogo Crear Header -->
+        <ng-template #dialogHeader>
+            <div style="padding: 1.5rem; text-align: center; max-width: 400px; margin: auto;">
+                <h6 mat-dialog-title style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    Crear nuevo
+                </h6>
+
+                <mat-dialog-content [formGroup]="headerForm"
+                    style="display: flex; flex-direction: column; gap: 1.2rem;">
+
+                    <!-- Descripción -->
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Descripción</mat-label>
+                        <input matInput formControlName="descripcion" required />
+                    </mat-form-field>
+
+                    <!-- URL -->
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>URL</mat-label>
+                        <input matInput formControlName="url" required />
+                    </mat-form-field>
+
+                    <!-- Selección de imagen -->
+                    <div style="text-align: left;">
+                        <label style="font-weight: 500;">Seleccionar Imagen</label>
+                        <input type="file" (change)="onFileChange($event)" accept="image/*"
+                            style="margin-top: 0.5rem;" />
+                    </div>
+
+                    <!-- Vista previa -->
+                    <div *ngIf="previewImage" class="image-preview" style="text-align: center;">
+                        <img [src]="previewImage" alt="Vista previa"
+                            style="max-width: 100%; border-radius: 8px; margin-top: 1rem;" />
+                             <div *ngIf="selectedFile" style="font-size: 0.85rem; margin-top: 0.3rem; color: #555;">
+                            Tamaño: {{ (selectedFile.size / 1024 / 1024) | number:'1.2-2' }} MB
+                        </div>
+                    </div>
+
+                    <!-- Botón -->
+                    <a class="btn-circle btn-success" (click)="crearCard()">
+                        <i class="fa-solid fa-check"></i>
+                    </a>
+                </mat-dialog-content>
+            </div>
+        </ng-template>
+
+
+
+
+    </mat-tab>
+    <mat-tab label="Events landing">
+        <mat-divider></mat-divider>
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource3" matSort class="mat-elevation-z8">
+
+
+
+                <ng-container matColumnDef="Detalle del evento">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> descripción</th>
+                    <td mat-cell *matCellDef="let student"> {{ student.detalle }} </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="imagen">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Imagen </th>
+                    <td mat-cell *matCellDef="let student">
+                        <img *ngIf="student.imagen" [src]="student.imagen" alt="imagen" width="50">
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Opciones">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones
+                        <a class="btn-circle" (click)="openDialogE()">
+                            <i class="fa-solid fa-plus"></i>
+                        </a>
+
+
+                    </th>
+
+
+                    <td mat-cell *matCellDef="let student">
+
+                        <a class="btn-circle btn-danger" (click)="deteleEventos(student.id_evento)">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+            </table>
+
+            <mat-paginator #paginatorLogin [pageSize]="15" [pageSizeOptions]="[5, 10, 15, 20]"
+                showFirstLastButtons></mat-paginator>
+
+        </div>
+
+        <ng-template #dialogEventos>
+            <div style="padding: 1.5rem; text-align: center; max-width: 400px; margin: auto;">
+                <h6 mat-dialog-title style="font-size: 1.2rem; margin-bottom: 1.5rem;">
+                    Crear evento
+                </h6>
+
+                <mat-dialog-content [formGroup]="eventosForm"
+                    style="display: flex; flex-direction: column; gap: 1.2rem;">
+
+                    <!-- Descripción -->
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-label>Descripción</mat-label>
+                        <input matInput formControlName="detalle" required />
+                    </mat-form-field>
+                    <!-- Selección de imagen -->
+                    <div style="text-align: left;">
+                        <label style="font-weight: 500;">Seleccionar Imagen</label>
+                        <input type="file" (change)="onFileChange($event)" accept="image/*"
+                            style="margin-top: 0.5rem;" />
+                        <div *ngIf="selectedFile" style="font-size: 0.85rem; margin-top: 0.3rem; color: #555;">
+                            Tamaño: {{ (selectedFile.size / 1024 / 1024) | number:'1.2-2' }} MB
+                        </div>
+                    </div>
+
+
+                    <!-- Vista previa -->
+                    <div *ngIf="previewImage" class="image-preview" style="text-align: center;">
+                        <img [src]="previewImage" alt="Vista previa"
+                            style="max-width: 100%; border-radius: 8px; margin-top: 1rem;" />
+                    </div>
+
+                    <!-- Botón -->
+                    <a class="btn-circle btn-success" (click)="crearEvento()">
+                        <i class="fa-solid fa-check"></i>
+                    </a>
+                </mat-dialog-content>
+            </div>
+        </ng-template>
+
+
+
+
     </mat-tab>
 
- 
 </mat-tab-group>

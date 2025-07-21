@@ -37,7 +37,12 @@ export class BackendService {
   async deleteStudent(id: number): Promise<any> {
     return firstValueFrom(this.http.delete(`${this.apiUrl}/students/${id}`));
   }
-
+async deleteHeader(id: number): Promise<any> {
+    return firstValueFrom(this.http.delete(`${this.apiUrl}/landing/deleteHeader/${id}`));
+  }
+  async deteleEventos(id: number): Promise<any> {
+    return firstValueFrom(this.http.delete(`${this.apiUrl}/landing/deleteEventos/${id}`));
+  }
   // 🟢 Crear candidatos
   async createCandidate(params: any): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/createCandidate`, params));
@@ -93,6 +98,12 @@ async searchVotes(estudiante_id: number): Promise<any> {
   }
   async updatesliderImages(formData:FormData): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/updatesliderImages`, formData));
+  }
+   async insertHeaders(formData:FormData): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/landing/insertHeader`, formData));
+  }
+     async insertEventos(formData:FormData): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.apiUrl}/landing/insertEventos`, formData));
   }
   async getprofesores(): Promise<any> {
     return firstValueFrom(this.http.get(`${this.apiUrl}/getprofesores`));
@@ -188,9 +199,7 @@ async getAsingDocente(id:string):Promise<any>{
 async createWorks(formData:any):Promise<any>{
   return firstValueFrom(this.http.post(`${this.apiUrl}/createWorks`,formData))
 }
-async createHeaders(formData:any):Promise<any>{
-  return firstValueFrom(this.http.post(`${this.apiUrl}/landing/insertHeader`,formData))
-}
+
 async getTalleres(id:number):Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/getTalleres?id=${id}`))
 }
@@ -225,9 +234,12 @@ async getEventos(): Promise<any> {
   return firstValueFrom(this.http.get(`${this.apiUrl}/getEventos`));
 }
 async registerEventos(data:{}): Promise<any> {
-  return firstValueFrom(this.http.post(`${this.apiUrl}/registerEventos`,data));
+  return firstValueFrom(this.http.post(`${this.apiUrl}/landing/insertEventos`,data));
 }
 async getInscritos(): Promise<any> {
   return firstValueFrom(this.http.get(`${this.apiUrl}/getInscritos`));
+}
+async getLandingEventos(): Promise<any> {
+  return firstValueFrom(this.http.get(`${this.apiUrl}/landing/getLandingEventos`));
 }
 }

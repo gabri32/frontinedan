@@ -17,7 +17,8 @@ export class LandingPageComponent implements OnInit {
   infoButtons: any;
   eventCards: any;
 hovering: any;
-
+mostrarTodos = false; 
+events:any;
   constructor(
     private router: Router,
     private backendService: BackendService,
@@ -26,6 +27,7 @@ hovering: any;
 
   ngOnInit(): void {
     this.getInfoheaders();
+    this.getEventos()
   }
 
 async getInfoheaders() {
@@ -37,7 +39,19 @@ async getInfoheaders() {
     swal.fire({ title: 'Error', text: 'No se pudo cargar la información.', icon: 'error' });
   }
 }
-
+  async getEventos() {
+    try {
+      this.events = await this.backendService.getLandingEventos();
+    } catch (error) {
+      console.error("Error al cargar los eventos:", error);
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al cargar los eventos.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }
+  }
 
   goToLogin() {
     this.router.navigate(['/login']);
@@ -45,8 +59,8 @@ async getInfoheaders() {
   abrirRegistro() {
 this.dialog.open(RegistroDialogComponent, {
   width: '90%',
-  maxWidth: '800px',       // 👈 límite de ancho máximo
-  height: '90vh',          // 👈 límite de altura
+  maxWidth: '800px',       
+  height: '90vh',          
   maxHeight: '90vh',
   panelClass: 'formulario-dialogo'
 });

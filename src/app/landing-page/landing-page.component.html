@@ -1,5 +1,5 @@
 <!-- Header -->
-<header  style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f4f4f4;">
+<header  style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #797777;">
 
 <!-- Botones header -->
 <div>
@@ -11,11 +11,11 @@
 
 
 
-<!-- Eventos -->
-<!-- Eventos -->
 <section *ngIf="eventCards && eventCards.length > 0"
-         style="margin: 3rem auto; max-width: 1200px; text-align: center;">
-  <h2 style="font-size: 2rem; margin-bottom: 2rem;">🎉 Eventos Destacados</h2>
+         style="margin: 3rem auto; max-width: 1200px; text-align: center; background-color: #FFF5BA; padding: 2rem; border-radius: 20px;">
+  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;">
+    Documentos institucionales
+  </h2>
 
   <div style="
       display: flex;
@@ -23,25 +23,30 @@
       justify-content: center;
       gap: 2rem;
     ">
-    <div *ngFor="let event of eventCards"
+    <div *ngFor="let event of mostrarTodos ? eventCards : eventCards.slice(0, 6)"
          class="card-evento"
          style="
            background: #ffffff;
-           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-           border-radius: 12px;
-           width: 280px;
+           box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+           border-radius: 16px;
+           width: 300px;
            overflow: hidden;
            display: flex;
            flex-direction: column;
            transition: transform 0.3s ease, box-shadow 0.3s ease;
-         ">
+         "
+         (mouseenter)="hovering = true"
+         (mouseleave)="hovering = false">
       
       <img [src]="event.image"
            alt="evento"
-           style="width: 100%; height: 180px; object-fit: cover;">
+           style="width: 100%; height: 180px; object-fit: cover; transition: transform 0.3s ease;"
+           [style.transform]="hovering ? 'scale(1.05)' : 'scale(1)'">
 
       <div style="padding: 1rem; flex-grow: 1;">
-        <h4 style="font-size: 1.2rem; margin-bottom: 0.5rem;">{{ event.descripcion }}</h4>
+        <h4 style="font-size: 1.2rem; font-weight: 600; color: #222; margin-bottom: 0.5rem;">
+          {{ event.descripcion }}
+        </h4>
 
         <a *ngIf="event.url"
            [href]="event.url"
@@ -55,15 +60,81 @@
              border-radius: 6px;
              text-decoration: none;
              font-size: 0.9rem;
-             transition: background-color 0.3s ease;
+             transition: background-color 0.3s ease, transform 0.2s ease;
            "
            (mouseover)="hovering = true"
            (mouseout)="hovering = false">
-          Ver más
+         Link para más información
         </a>
       </div>
     </div>
   </div>
+
+  <!-- Botón Ver más / Ver menos -->
+  <div *ngIf="eventCards.length > 6" style="margin-top: 2rem;">
+    <button (click)="mostrarTodos = !mostrarTodos"
+            style="
+              padding: 0.6rem 1.5rem;
+              background-color: #0057ff;
+              color: white;
+              border: none;
+              border-radius: 6px;
+              cursor: pointer;
+              font-size: 1rem;
+              transition: background-color 0.3s ease;
+            ">
+      {{ mostrarTodos ? 'Ver menos ▲' : 'Ver más ▼' }}
+    </button>
+  </div>
 </section>
+
+
+<section *ngIf="events && events.length > 0"
+         style="margin: 3rem auto; max-width: 1200px; text-align: center; background-color: #FFF5BA; padding: 2rem; border-radius: 20px;">
+  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;">
+  eventos
+  </h2>
+
+  <div style="
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    ">
+    <div *ngFor="let event of mostrarTodos ? events : events.slice(0, 6)"
+         class="card-evento"
+         style="
+           background: #ffffff;
+           box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+           border-radius: 16px;
+           width: 300px;
+           overflow: hidden;
+           display: flex;
+           flex-direction: column;
+           transition: transform 0.3s ease, box-shadow 0.3s ease;
+         "
+         (mouseenter)="hovering = true"
+         (mouseleave)="hovering = false">
+      
+      <img [src]="event.imagen"
+           alt="evento"
+           style="width: 100%; height: 180px; object-fit: cover; transition: transform 0.3s ease;"
+           [style.transform]="hovering ? 'scale(1.05)' : 'scale(1)'">
+
+      <div style="padding: 1rem; flex-grow: 1;">
+        <h4 style="font-size: 1.2rem; font-weight: 600; color: #222; margin-bottom: 0.5rem;">
+          {{ event.detalle }}
+        </h4>
+
+     
+      </div>
+    </div>
+  </div>
+
+  
+</section>
+
+
+
 
 
