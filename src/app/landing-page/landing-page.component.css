@@ -10,18 +10,18 @@ header {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* Animación de aparición suave */
+
 .card-evento {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeInUp 0.6s ease forwards;
 }
 
-/* Que cada una entre con un pequeño delay */
+
 .card-evento:nth-child(1) { animation-delay: 0.1s; }
 .card-evento:nth-child(2) { animation-delay: 0.2s; }
 .card-evento:nth-child(3) { animation-delay: 0.3s; }
-/* Puedes agregar más si tienes más cards */
+
 
 @keyframes fadeInUp {
   to {
@@ -29,6 +29,7 @@ header {
     transform: translateY(0);
   }
 }
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }

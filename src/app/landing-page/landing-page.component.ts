@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BackendService } from '../backend.service';
@@ -12,33 +12,37 @@ import { RegistroDialogComponent } from '../registro-dialog/registro-dialog.comp
   imports: [CommonModule]
 })
 export class LandingPageComponent implements OnInit {
+  @ViewChild('slider', { static: false }) sliderRef!: ElementRef;
   header: any;
   slider: any;
   infoButtons: any;
   eventCards: any;
-hovering: any;
-mostrarTodos = false; 
-events:any;
+  hovering: any;
+  mostrarTodos = false;
+  events: any;
   constructor(
     private router: Router,
     private backendService: BackendService,
     private dialog: MatDialog
   ) { }
-
+  currentIndex = 0;
+  slideInterval: any;
+  visibleCards = 5;
   ngOnInit(): void {
     this.getInfoheaders();
     this.getEventos()
+    this.startAutoSlide();
   }
 
-async getInfoheaders() {
-  try {
-    const data = await this.backendService.getheaders();
-    this.eventCards = data; // ← Es un array
-  } catch (error) {
-    console.error('Error al obtener la información de landing:', error);
-    swal.fire({ title: 'Error', text: 'No se pudo cargar la información.', icon: 'error' });
+  async getInfoheaders() {
+    try {
+      const data = await this.backendService.getheaders();
+      this.eventCards = data;
+    } catch (error) {
+      console.error('Error al obtener la información de landing:', error);
+      swal.fire({ title: 'Error', text: 'No se pudo cargar la información.', icon: 'error' });
+    }
   }
-}
   async getEventos() {
     try {
       this.events = await this.backendService.getLandingEventos();
@@ -57,13 +61,60 @@ async getInfoheaders() {
     this.router.navigate(['/login']);
   }
   abrirRegistro() {
-this.dialog.open(RegistroDialogComponent, {
-  width: '90%',
-  maxWidth: '800px',       
-  height: '90vh',          
-  maxHeight: '90vh',
-  panelClass: 'formulario-dialogo'
-});
+    this.dialog.open(RegistroDialogComponent, {
+      width: '90%',
+      maxWidth: '800px',
+      height: '90vh',
+      maxHeight: '90vh',
+      panelClass: 'formulario-dialogo'
+    });
 
   }
+  scrollSlider(container: HTMLElement, distance: number): void {
+    container.scrollBy({ left: distance, behavior: 'smooth' });
+  }
+
+abrirEnlace(url: string): void {
+  if (url) {
+    window.open(url, '_blank');
+  }
+}
+
+
+  ngAfterViewInit(): void {
+    this.startAutoSlide();
+  }
+
+  nextSlide(): void {
+    const totalItems = this.eventCards.length;
+    const maxIndex = totalItems - this.visibleCards;
+
+    this.currentIndex = (this.currentIndex + 1) > maxIndex ? 0 : this.currentIndex + 1;
+    this.updateSlider();
+  }
+
+  prevSlide(): void {
+    const totalItems = this.eventCards.length;
+    const maxIndex = totalItems - this.visibleCards;
+
+    this.currentIndex = this.currentIndex === 0 ? maxIndex : this.currentIndex - 1;
+    this.updateSlider();
+  }
+
+  updateSlider(): void {
+    const slideWidth = 160 + 32;
+    const offset = this.currentIndex * slideWidth;
+    this.sliderRef.nativeElement.style.transform = `translateX(-${offset}px)`;
+  }
+
+  startAutoSlide(): void {
+    this.slideInterval = setInterval(() => {
+      this.nextSlide();
+    }, 4000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.slideInterval);
+  }
+
 }

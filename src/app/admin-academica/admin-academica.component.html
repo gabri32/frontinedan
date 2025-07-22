@@ -1,9 +1,7 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
     <mat-tab label="Login administracion">
         <mat-divider></mat-divider>
-        <div>
-            <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
-        </div>
+
 
 
         <div class="table-container">
@@ -38,8 +36,10 @@
                         &nbsp;
                         <a mat-button class="btn btn-success btn-sm" (click)="uploadImage(student)">
                             <i class="fa fa-save"></i>
+                        </a> &nbsp;
+                        <a mat-button class="btn btn-danger btn-sm" (click)="uploadImage(student)">
+                            <i class="fa fa-trash"></i>
                         </a>
-
                         <!-- Mostrar la imagen subida -->
                         <img *ngIf="student.uploadedImageUrl" [src]="student.uploadedImageUrl" alt="Imagen subida"
                             style="max-width: 200px; display: block; margin-top: 10px;">
@@ -57,7 +57,7 @@
         </div>
     </mat-tab>
 
-    <mat-tab label="Cards landing">
+    <mat-tab label="Documentos institucionales">
         <mat-divider></mat-divider>
 
 
@@ -144,7 +144,7 @@
                     <div *ngIf="previewImage" class="image-preview" style="text-align: center;">
                         <img [src]="previewImage" alt="Vista previa"
                             style="max-width: 100%; border-radius: 8px; margin-top: 1rem;" />
-                             <div *ngIf="selectedFile" style="font-size: 0.85rem; margin-top: 0.3rem; color: #555;">
+                        <div *ngIf="selectedFile" style="font-size: 0.85rem; margin-top: 0.3rem; color: #555;">
                             Tamaño: {{ (selectedFile.size / 1024 / 1024) | number:'1.2-2' }} MB
                         </div>
                     </div>
@@ -161,7 +161,7 @@
 
 
     </mat-tab>
-    <mat-tab label="Events landing">
+    <mat-tab label="Eventos institucionales">
         <mat-divider></mat-divider>
         <div class="table-container">
             <table mat-table [dataSource]="dataSource3" matSort class="mat-elevation-z8">
