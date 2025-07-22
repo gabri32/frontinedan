@@ -26,6 +26,7 @@ export class LandingPageComponent implements OnInit {
     private backendService: BackendService,
     private dialog: MatDialog
   ) { }
+  isMobile = false;
   currentIndex = 0;
   slideInterval: any;
   visibleCards = 5;
@@ -33,6 +34,7 @@ export class LandingPageComponent implements OnInit {
     this.getInfoheaders();
     this.getEventos()
     this.startAutoSlide();
+     this.isMobile = window.innerWidth <= 768;
   }
 
   async getInfoheaders() {
