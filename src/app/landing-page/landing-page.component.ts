@@ -67,7 +67,7 @@ export class LandingPageComponent implements OnInit {
     this.dialog.open(RegistroDialogComponent, {
       width: '90%',
       maxWidth: '800px',
-      height: '90vh',
+      height: '80vh',
       maxHeight: '90vh',
       panelClass: 'formulario-dialogo'
     });
