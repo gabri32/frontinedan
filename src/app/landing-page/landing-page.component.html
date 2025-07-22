@@ -1,20 +1,51 @@
 <!-- Header -->
-<header  style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #797777;">
+<header style="
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #254b9c; /* azul bandera */
+  color: white;
+  font-family: Helvetica, Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+">
 
-<!-- Botones header -->
-<div>
-  <button (click)="goToLogin()" style="margin-right: 1rem;">Iniciar sesión</button>
-  <button (click)="abrirRegistro()">Registrarse</button>
-</div>
+  <!-- Logo -->
+  <div class="logo" style="display: flex; align-items: center;">
+    <img src="favicon.ico" alt="Logo" style="height: 40px; margin-right: 0.5rem;">
+    <span style="font-size: 1.2rem; font-weight: bold;">
+      I.E.M. Antonio Nariño<br>
+      <h6>Colombia 2025</h6>
+    </span>
+  </div>
 
+  <!-- Botones -->
+  <div>
+    <button (click)="goToLogin()"
+            style="background-color: #FFF5BA; color: #0033A0; border: none; padding: 0.5rem 1rem; margin-right: 1rem; border-radius: 8px; font-weight: 600; font-family: Helvetica, Arial, sans-serif; cursor: pointer; transition: 0.3s;">
+      Iniciar sesión
+    </button>
+    <button (click)="abrirRegistro()"
+            style="background-color: #A8D5BA; color: #0033A0; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-family: Helvetica, Arial, sans-serif; cursor: pointer; transition: 0.3s;">
+      Inscripción
+    </button>
+  </div>
 </header>
 
-
+<div class="animated-bg" style="  margin: 0;
+  padding: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #FFF5BA, #A8D5BA, #ffffff, #0033A0);
+  background-size: 400% 400%;
+  animation: fondoAnimado 20s ease infinite;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;">
 <section
   *ngIf="eventCards && eventCards.length > 0"
   style="margin: 3rem auto; max-width: 1200px; text-align: center;"
 >
-  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;">
+  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;font-family: Arial, Helvetica, sans-serif;">
     Documentos institucionales
   </h2>
 
@@ -82,54 +113,84 @@
   </div>
 </section>
 
-
-
-
-
 <section *ngIf="events && events.length > 0"
-         style="margin: 3rem auto; max-width: 1200px; text-align: center; background-color: #FFF5BA; padding: 2rem; border-radius: 20px;">
-  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;">
-  eventos
-  </h2>
+         style="margin: 3rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
+  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;font-family: Arial, Helvetica, sans-serif;">Eventos</h2>
 
-  <div style="
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-    ">
-    <div *ngFor="let event of mostrarTodos ? events : events.slice(0, 6)"
-         class="card-evento"
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+
+    <div *ngFor="let event of mostrarTodos ? events : events.slice(0, 4)"
          style="
-           background: #ffffff;
-           box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-           border-radius: 16px;
-           width: 300px;
-           overflow: hidden;
+           background-color: #f2f9ff;
+           border-radius: 20px;
+           padding: 1.5rem;
            display: flex;
            flex-direction: column;
-           transition: transform 0.3s ease, box-shadow 0.3s ease;
+           align-items: center;
+           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+           transition: transform 0.3s ease;
          "
          (mouseenter)="hovering = true"
-         (mouseleave)="hovering = false">
-      
+         (mouseleave)="hovering = false"
+         [style.transform]="hovering ? 'translateY(-5px)' : 'none'">
+
       <img [src]="event.imagen"
            alt="evento"
-           style="width: 100%; height: 180px; object-fit: cover; transition: transform 0.3s ease;"
-           [style.transform]="hovering ? 'scale(1.05)' : 'scale(1)'">
+           style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;">
 
-      <div style="padding: 1rem; flex-grow: 1;">
-        <h4 style="font-size: 1.2rem; font-weight: 600; color: #222; margin-bottom: 0.5rem;">
-          {{ event.detalle }}
-        </h4>
+      <h3 style="font-size: 1.2rem; font-weight: 700; color: #222; margin-bottom: 0.5rem;">
+        {{ event.titulo }}
+      </h3>
 
-     
-      </div>
+      <p style="font-size: 0.95rem; color: #555; margin-bottom: 1rem;">
+        {{ event.detalle }}
+      </p>
+
+    </div>
+  </div>
+</section>
+<footer style="background-color: #cdd4db; padding: 2.5rem 1rem; margin-top: 4rem; border-top: 1px solid #d0e0ef;">
+  <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: left;">
+
+    <!-- Sección Institucional -->
+    <div>
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 1rem;">Sobre Nosotros</h4>
+      <p style="color: #555; font-size: 0.95rem;">
+        Plataforma académica dedicada a promover eventos de investigación, desarrollo y tecnología en Iberoamérica.
+      </p>
+    </div>
+
+    <!-- Sección de Enlaces -->
+    <div>
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 1rem;">Enlaces Rápidos</h4>
+      <ul style="list-style: none; padding: 0; margin: 0;">
+        <li><a href="#" style="text-decoration: none; color: #007bff; font-size: 0.95rem;">Inicio</a></li>
+        <li><a href="#" style="text-decoration: none; color: #007bff; font-size: 0.95rem;">Eventos</a></li>
+        <li><a href="#" style="text-decoration: none; color: #007bff; font-size: 0.95rem;">Contacto</a></li>
+      </ul>
+    </div>
+
+    <!-- Sección de Contacto -->
+    <div>
+      <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 1rem;">Contacto</h4>
+      <p style="color: #4c4747; font-size: 0.95rem;">
+        Antonio nariño – Pasto<br>
+        Correo: info.edu.co<br>
+        Teléfono: +57 1 234 5678
+      </p>
     </div>
   </div>
 
-  
-</section>
+  <div style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #888;">
+    © 2025 Institución educativa antonio nariño· Todos los derechos reservados
+  </div>
+</footer>
+</div>
+
+
+
+
+
 
 
 

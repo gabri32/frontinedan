@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef ,ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BackendService } from '../backend.service';
@@ -9,7 +9,8 @@ import { RegistroDialogComponent } from '../registro-dialog/registro-dialog.comp
   standalone: true,
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  imports: [CommonModule]
+  imports: [CommonModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class LandingPageComponent implements OnInit {
   @ViewChild('slider', { static: false }) sliderRef!: ElementRef;
