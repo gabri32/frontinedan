@@ -31,6 +31,29 @@ export class LandingPageComponent implements OnInit {
   slideInterval: any;
   visibleCards = 5;
   toggleZoom = false;
+bannerImages = [
+  { image: '/baner1.jpeg', titulo: 'Bienvenidos', descripcion: 'Conoce nuestra institución' },
+  { image: '/banner3.jpeg', titulo: 'Formación de calidad', descripcion: 'Comprometidos con la educación' },
+  { image: '/banner2.jpeg', titulo: 'Eventos académicos', descripcion: 'Participa en nuestras actividades' }
+];
+
+currentBannerIndex = 0;
+
+nextBanner() {
+  const total = this.bannerImages.length;
+  this.currentBannerIndex = (this.currentBannerIndex + 1) % total;
+  const offset = -this.currentBannerIndex * 100;
+  const slider = document.querySelector('.banner-track') as HTMLElement;
+  if (slider) slider.style.transform = `translateX(${offset}%)`;
+}
+
+prevBanner() {
+  const total = this.bannerImages.length;
+  this.currentBannerIndex = (this.currentBannerIndex - 1 + total) % total;
+  const offset = -this.currentBannerIndex * 100;
+  const slider = document.querySelector('.banner-track') as HTMLElement;
+  if (slider) slider.style.transform = `translateX(${offset}%)`;
+}
 
   ngOnInit(): void {
     swal.showLoading();
@@ -38,7 +61,9 @@ export class LandingPageComponent implements OnInit {
     this.getEventos()
     this.startAutoSlide();
    swal.close(); 
-
+  setInterval(() => {
+    this.nextBanner();
+  }, 5000); 
      this.isMobile = window.innerWidth <= 768;
   }
 
@@ -108,7 +133,23 @@ abrirEnlace(url: string): void {
   ngAfterViewInit(): void {
     this.startAutoSlide();
   }
+currentBannerIndex1 = 0;
 
+nextBanner1() {
+  const total = this.bannerImages.length;
+  this.currentBannerIndex = (this.currentBannerIndex + 1) % total;
+  const offset = -this.currentBannerIndex * 100;
+  const slider = document.querySelector('.banner-track') as HTMLElement;
+  if (slider) slider.style.transform = `translateX(${offset}%)`;
+}
+
+prevBanner1() {
+  const total = this.bannerImages.length;
+  this.currentBannerIndex = (this.currentBannerIndex - 1 + total) % total;
+  const offset = -this.currentBannerIndex * 100;
+  const slider = document.querySelector('.banner-track') as HTMLElement;
+  if (slider) slider.style.transform = `translateX(${offset}%)`;
+}
   nextSlide(): void {
     const totalItems = this.eventCards.length;
     const maxIndex = totalItems - this.visibleCards;
