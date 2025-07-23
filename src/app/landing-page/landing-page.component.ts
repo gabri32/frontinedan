@@ -30,10 +30,15 @@ export class LandingPageComponent implements OnInit {
   currentIndex = 0;
   slideInterval: any;
   visibleCards = 5;
+  toggleZoom = false;
+
   ngOnInit(): void {
+    swal.showLoading();
     this.getInfoheaders();
     this.getEventos()
     this.startAutoSlide();
+   swal.close(); 
+
      this.isMobile = window.innerWidth <= 768;
   }
 
@@ -41,6 +46,8 @@ export class LandingPageComponent implements OnInit {
     try {
       const data = await this.backendService.getheaders();
       this.eventCards = data;
+
+
     } catch (error) {
       console.error('Error al obtener la información de landing:', error);
       swal.fire({ title: 'Error', text: 'No se pudo cargar la información.', icon: 'error' });
@@ -48,7 +55,12 @@ export class LandingPageComponent implements OnInit {
   }
   async getEventos() {
     try {
-      this.events = await this.backendService.getLandingEventos();
+   this.events = await this.backendService.getLandingEventos();
+this.events = this.events.map((event: { fecha: string | number | Date; }) => ({
+  ...event,
+  fecha: new Date(event.fecha).toLocaleDateString('es-ES') // formato DD/MM/AAAA
+}));
+
     } catch (error) {
       console.error("Error al cargar los eventos:", error);
       swal.fire({
@@ -59,6 +71,15 @@ export class LandingPageComponent implements OnInit {
       });
     }
   }
+imagenAmpliada: string | null = null;
+
+ampliarImagen(src: string): void {
+  this.imagenAmpliada = src;
+}
+
+cerrarImagen(): void {
+  this.imagenAmpliada = null;
+}
 
   goToLogin() {
     this.router.navigate(['/login']);

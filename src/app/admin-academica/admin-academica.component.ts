@@ -57,7 +57,7 @@ export class AdminAcademicaComponent implements OnInit {
   sedes: any[] = []
   displayedColumns: string[] = ['Numero', 'imagen', 'Opciones'];
   displayedColumns2: string[] = ['Detalle del evento', 'url', 'imagen', 'Opciones'];
-    displayedColumns3: string[] = ['Detalle del evento', 'imagen', 'Opciones'];
+    displayedColumns3: string[] = ['Titulo','Detalle del evento', 'imagen', 'Opciones'];
  selectedFile!: File | null;
 previewImage: string | ArrayBuffer | null = null;
 
@@ -86,6 +86,8 @@ previewImage: string | ArrayBuffer | null = null;
     });
       this.eventosForm = this.fb.group({
       detalle: ['', Validators.required],
+      titulo: ['', Validators.required],
+
     });
   }
   grupoEstudiantes: any[] = [];
@@ -366,6 +368,7 @@ async crearEvento() {
 
 if (this.eventosForm.valid && this.previewImage) {
     const formData = new FormData();
+    formData.append('titulo',this.eventosForm.value.titulo)
     formData.append('detalle', this.eventosForm.value.detalle);
     formData.append('imagen', this.selectedFile as Blob);
 

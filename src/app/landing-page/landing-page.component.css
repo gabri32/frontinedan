@@ -12,18 +12,7 @@ header {
 .card-evento:hover img {
   transform: scale(1.05);
 }
-/* En styles.scss */
-.animated-bg {
-  margin: 0;
-  padding: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  background: linear-gradient(135deg, #FFF5BA, #A8D5BA, #ffffff, #0033A0);
-  background-size: 400% 400%;
-  animation: fondoAnimado 20s ease infinite;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
+
 
 .animated-bg::before {
   content: "";

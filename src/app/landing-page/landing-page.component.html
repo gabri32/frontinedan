@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     font-family: Helvetica, Arial, sans-serif;
-    background: linear-gradient(135deg, #FFF5BA, #A8D5BA, #ffffff, #0033A0);
+    background: linear-gradient(13deg, #dcc22f, #30c56c, #d6e416, #0033A0);
     background-size: 400% 400%;
     animation: fondoAnimado 20s ease infinite;
     min-height: 100vh;
@@ -252,6 +252,15 @@
     </button>
   </div>
 </section>
+<!-- Imagen ampliada en modal -->
+<div *ngIf="imagenAmpliada" (click)="cerrarImagen()"
+     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8); display: flex;
+            align-items: center; justify-content: center; z-index: 9999;">
+  <img [src]="imagenAmpliada"
+       alt="imagen ampliada"
+       style="max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 20px #fff;">
+</div>
 
 <section *ngIf="events && events.length > 0"
          style="margin: 3rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
@@ -259,7 +268,7 @@
 
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
 
-    <div *ngFor="let event of mostrarTodos ? events : events.slice(0, 4)"
+    <div *ngFor="let event of mostrarTodos ? events : events.slice(0, 10)"
          style="
            background-color: #f2f9ff;
            border-radius: 20px;
@@ -274,18 +283,23 @@
          (mouseleave)="hovering = false"
          [style.transform]="hovering ? 'translateY(-5px)' : 'none'">
 
-      <img [src]="event.imagen"
-           alt="evento"
-           style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;">
+    <img [src]="event.imagen"
+     alt="evento"
+     (click)="ampliarImagen(event.imagen)"
+     style="cursor: zoom-in; width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;">
 
-      <h3 style="font-size: 1.2rem; font-weight: 700; color: #222; margin-bottom: 0.5rem;">
+
+
+      
+<p style="font-size: 1.2rem; color: #000000; margin-bottom: 1rem;font-family: Arial, Helvetica, sans-serif;font-weight: 600;">
         {{ event.titulo }}
-      </h3>
-
+      </p>
       <p style="font-size: 0.95rem; color: #555; margin-bottom: 1rem;">
         {{ event.detalle }}
       </p>
-
+<h3 style="font-size: 1rem; font-weight: 500; color: #222; margin-bottom: 0.5rem;">
+        {{ event.fecha }}
+      </h3>
     </div>
   </div>
 </section>
@@ -296,7 +310,7 @@
     <div>
       <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 1rem;">Sobre Nosotros</h4>
       <p style="color: #555; font-size: 0.95rem;">
-        Plataforma académica dedicada a promover eventos de investigación, desarrollo y tecnología en Iberoamérica.
+        Plataforma académica institucional.
       </p>
     </div>
 
