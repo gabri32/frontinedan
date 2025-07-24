@@ -47,7 +47,7 @@
 
     <!-- Paginador de cursos -->
     <div class="d-flex justify-content-end mt-3" *ngIf="paginasTotales > 1">
-      <button mat-icon-button (click)="paginaActual = paginaActual - 1" [disabled]="paginaActual === 0">
+      <button mat-icon-button (click)="paginaActual = paginaActual " [disabled]="paginaActual === 0">
         <mat-icon>chevron_left</mat-icon>
       </button>
 

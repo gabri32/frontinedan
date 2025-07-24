@@ -285,6 +285,7 @@ export class AdministracionComponent implements OnInit {
 
       swal.close(); // Cierra el loading antes de mostrar el éxito
      await this.getcursos();
+  await this.getasignaturas()
       swal.fire({
         title: "Éxito",
         text: "Curso creado correctamente.",
@@ -343,7 +344,6 @@ export class AdministracionComponent implements OnInit {
 
   async abrirModalEstudiantes(grupo: any) {
     try {
-      console.log(grupo)
       this.grupo = grupo;
       swal.fire({
         title: 'Cargando',
@@ -354,9 +354,18 @@ export class AdministracionComponent implements OnInit {
           swal.showLoading();
         }
       });
+      console.log(grupo.estudiantes_asignados)
       const estudiantes = await this.backendService.getEstudiantesPorGrado(grupo.tipo_grado, grupo.sede, grupo.id);
+      
       this.estudiantesCurso = estudiantes;
-      this.estudiantesSeleccionados = [];
+      if(grupo.estudiantes_asignados){
+this.estudiantesSeleccionados = [...grupo.estudiantes_asignados];
+      }else {
+        this.estudiantesSeleccionados=[]
+      }
+
+
+console.log(this.estudiantesSeleccionados)
       this.modalEstudiantesVisible = true;
       swal.close(); // Cierra el loading al finalizar la carga
     } catch (error) {
@@ -408,7 +417,11 @@ console.log(this.grupo.id, this.estudiantesSeleccionados)
       const response = await this.backendService.actualizarEstudiantesAsignados(this.grupo.id, this.estudiantesSeleccionados);
       console.log(response)
       swal.close(); // Cierra el loading al finalizar la carga
-
+ await this.backendService.gettotalcursos().then(data => {
+     console.log(data)
+        this.cursosCreados = data;
+     
+    });
       swal.fire({
         title: "Éxito",
         text: "Estudiantes asignados correctamente.",

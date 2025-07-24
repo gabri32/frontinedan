@@ -18,7 +18,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-docentes',
   imports: [
@@ -33,6 +33,7 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
     MatCardModule,
     NgxChartsModule,
     FormsModule,
+
   ],
   templateUrl: './estudiantes.component.html',
   styleUrl: './estudiantes.component.css'
@@ -60,7 +61,7 @@ talleresPorPeriodo: any
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 Object: any;
-  constructor(private backendService: BackendService, private fb: FormBuilder) { }
+  constructor(private backendService: BackendService, private fb: FormBuilder,private router: Router) { }
 
   ngOnInit(): void {
     //carga inicial
@@ -102,7 +103,9 @@ Object: any;
 
   }
 
-
+verDetalleTaller(id: number) {
+  this.router.navigate([`/layout/estudiantes/taller`, id]);
+}
 volverAlListado() {
   this.componenteActivo = 'lista';
   this.asignaturaSeleccionada = null;
@@ -127,8 +130,8 @@ async abrirModuloAsignatura(asignatura: any) {
 
   try {
     const id = asignatura.id_asignatura;
-   this.talleresPorPeriodo =await this.backendService.getTalleresPorAsignatura(id); // 👈 solo enviar petición
-    console.log('Petición enviada para asignatura ID:', id);
+   this.talleresPorPeriodo =await this.backendService.getTalleresPorAsignatura(id); 
+   console.log(this.talleresPorPeriodo)
   } catch (error) {
     console.error('Error al hacer la petición:', error);
   }

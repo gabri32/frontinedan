@@ -54,9 +54,11 @@
             <td>{{ taller.fecha_fin | date:'shortDate' }}</td>
 
             <td>
-              <button class="btn btn-sm btn-primary">
-                <i class="bi bi-eye"></i> Ver
-              </button>
+             <button class="btn btn-sm btn-primary"
+        (click)="verDetalleTaller(taller.id_taller)">
+  <i class="bi bi-eye"></i> Ver
+</button>
+
             </td>
           </tr>
         </tbody>

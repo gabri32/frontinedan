@@ -22,23 +22,34 @@ import { DocentesComponent } from './docentes/docentes.component';
 import { EstudiantesComponent } from './estudiantes/estudiantes.component';
 import { AdminAcademicaComponent } from './admin-academica/admin-academica.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+import { DetalleTallerComponentComponent } from './detalle-taller-component/detalle-taller-component.component';
 export const routes: Routes = [
-  { path: '', component: LandingPageComponent }, // 👈 ahora esta es la raíz
+  { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginComponent },
   {
-    path: 'layout', component: LayoutComponent, canActivate: [AuthGuard],
+    path: 'layout',
+    component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: 'vote', component: VoteComponent }, 
       { path: 'inventario', component: InventarioComponent },
       { path: 'administracion', component: AdministracionComponent },
-      {path:'adminacademica',component: AdminAcademicaComponent },
-      {path:'profesores',component: DocentesComponent },
-      {path:'estudiantes',component: EstudiantesComponent },
-     {path:'usuarios',component: UsuariosComponent },
+      { path: 'adminacademica', component: AdminAcademicaComponent },
+      { path: 'profesores', component: DocentesComponent },
+      { path: 'estudiantes', component: EstudiantesComponent },
+
+
+      {
+        path: 'estudiantes/taller/:id',
+        component: DetalleTallerComponentComponent
+      },
+
+      { path: 'usuarios', component: UsuariosComponent }
     ]
   },
-  { path: '**', redirectTo: '' } 
+  { path: '**', redirectTo: '' }
 ];
+
 
 
 export const appRoutingProviders = [provideRouter(routes)];

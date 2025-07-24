@@ -64,7 +64,7 @@
  <tbody>
   <tr *ngFor="let grupo of grupoEstudiantes">
     <td>{{ grupo.sede }}</td>
-    <td>{{ grupo.grado - 1 }}</td>
+    <td>{{ grupo.grado }}</td>
     <td>
       {{ grupo.cantidad }}
       <span *ngIf="grupo.cantidad > 37" class="text-primary  ms-2">
@@ -89,6 +89,10 @@
 </mat-tab>
 <mat-tab label="Asignación de estudiantes a grados">
     <mat-divider></mat-divider>
+    <br>
+       <div class="text-center">
+        <h3>Asignación de estudiantes a cursos</h3>
+    </div>
     <div class="text-center">
     </div>
     <table class="table table-bordered">
@@ -102,7 +106,7 @@
 <tbody>
   <tr *ngFor="let grupo of cursosCreados">
     <td>{{ grupo.nombre }}</td>
-    <td>{{ grupo.tipo_grado - 1 }}</td>
+    <td>{{ grupo.tipo_grado  }}</td>
     <td>
       <button class="btn btn-outline-primary btn-sm"
               (click)="abrirModalEstudiantes(grupo)">
@@ -113,9 +117,7 @@
 </tbody>
     </table>
   <mat-divider></mat-divider>
-    <div class="text-center">
-        <h3>Asignación de estudiantes a cursos</h3>
-    </div>
+ 
 </mat-tab>
 <mat-tab label="Listado de estudiantes inscritos">
   <mat-divider></mat-divider>
@@ -214,9 +216,10 @@
       <tbody>
         <tr *ngFor="let estudiante of estudiantesCurso">
           <td>
-            <input type="checkbox"
-                   [checked]="estudiantesSeleccionados.includes(estudiante.id)"
-                   (change)="toggleSeleccionado(estudiante.id, $event)">
+         <input type="checkbox"
+       [checked]="estudiantesSeleccionados.includes(estudiante.id)"
+       (change)="toggleSeleccionado(estudiante.id, $event)">
+
           </td>
           <td>{{ estudiante.nombre }}</td>
           <td>{{ estudiante.num_identificacion }}</td>
