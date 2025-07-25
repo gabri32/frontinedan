@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../app/auth/enviroments';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -224,6 +224,9 @@ async consultarEstudianteCursoAsignaturas(identificacion:number):Promise<any>{
 async getTalleresPorAsignatura(id: number): Promise<any[]> {
   return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/talleres/asignatura/${id}`));
 }
+async getdetailTaller(id: number): Promise<any[]> {
+  return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/getdetailTaller/${id}`));
+}
 async createuser(data: any): Promise<any> {
   return firstValueFrom(this.http.post(`${this.apiUrl}/user`, data)); 
 }
@@ -241,5 +244,11 @@ async getInscritos(): Promise<any> {
 }
 async getLandingEventos(): Promise<any> {
   return firstValueFrom(this.http.get(`${this.apiUrl}/landing/getLandingEventos`));
+}
+TallerPendiente(data: FormData): Promise<any> {
+  return firstValueFrom(this.http.post(`${this.apiUrl}/TallerPendiente`, data)); // Asegúrate que la ruta coincida
+}
+getTallerPendiente(id_taller:number,num_identificacion:Number):Promise<any>{
+  return firstValueFrom(this.http.get(`${this.apiUrl}/getTallerPendiente/${id_taller}/${num_identificacion}`))
 }
 }

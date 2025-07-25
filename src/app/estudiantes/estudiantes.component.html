@@ -11,12 +11,12 @@
       <mat-card-content>
         <small><strong>Horas por semana:</strong> {{ asignatura.cantidad_horas_week }}</small>
       </mat-card-content>
-        <mat-card-actions class="mt-2">
-            <button mat-button color="primary" (click)="abrirModuloAsignatura(asignatura)">
-            <i class="bi bi-eye"></i> Ver Detalles
-            </button>
-    </mat-card-actions>
-  </mat-card>
+      <mat-card-actions class="mt-2">
+        <button mat-button color="primary" (click)="abrirModuloAsignatura(asignatura)">
+          <i class="bi bi-eye"></i> Ver Detalles
+        </button>
+      </mat-card-actions>
+    </mat-card>
   </div>
 </div>
 
@@ -29,66 +29,125 @@
   <h4><i [ngClass]="iconoAsignatura(asignaturaSeleccionada.descripcion)" class="bi me-2"></i>{{ asignaturaSeleccionada.descripcion }}</h4>
   <hr>
 
-  <!-- Aquí puedes cargar lo que necesites (talleres, actividades, notas...) -->
   <p><strong>ID Asignatura:</strong> {{ asignaturaSeleccionada.id_asignatura }}</p>
   <p><strong>Horas semanales:</strong> {{ asignaturaSeleccionada.cantidad_horas_week }}</p>
-<mat-tab-group mat-stretch-tabs *ngIf="!loadingTalleres">
-  <mat-tab label="Periodo 1">
-    <ng-container *ngIf="talleresPorPeriodo.periodo_1.length > 0; else sinTalleres1">
-      <table class="table table-bordered table-striped mt-3">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Título</th>
-            <th>Descripción</th>
-            <th>Fecha</th>
-            <th>Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let taller of talleresPorPeriodo.periodo_1; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ taller.competencia }}</td>
-            <td>{{ taller.detalle_taller }}</td>
-            <td>{{ taller.fecha_ini | date:'shortDate' }}</td>
-            <td>{{ taller.fecha_fin | date:'shortDate' }}</td>
 
-            <td>
-             <button class="btn btn-sm btn-primary"
-        (click)="verDetalleTaller(taller.id_taller)">
-  <i class="bi bi-eye"></i> Ver
-</button>
+  <mat-tab-group mat-stretch-tabs *ngIf="!loadingTalleres">
+    <!-- PERIODO 1 -->
+    <mat-tab label="Periodo 1">
+      <ng-container *ngIf="talleresPorPeriodo.periodo_1.length > 0; else sinTalleres1">
+        <table class="table table-bordered table-striped mt-3">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Descripción</th>
+              <th>Fecha de apertura</th>
+              <th>Fecha de cierre</th>
+              <th>Estado</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let taller of talleresPorPeriodo.periodo_1; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ taller.detalle_taller }}</td>
+              <td>{{ taller.fecha_ini | date:'shortDate' }}</td>
+              <td>{{ taller.fecha_fin | date:'shortDate' }}</td>
+              <td>
+                <span [ngClass]="getEstadoTaller(taller).clase">
+                  {{ getEstadoTaller(taller).estado }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-primary" (click)="verDetalleTaller(taller.id_taller)">
+                  <i class="bi bi-eye"></i> Detalle del taller
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      <ng-template #sinTalleres1>
+        <p class="text-muted mt-3">No hay talleres para este periodo.</p>
+      </ng-template>
+    </mat-tab>
 
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </ng-container>
-    <ng-template #sinTalleres1>
-      <p class="text-muted mt-3">No hay talleres para este periodo.</p>
-    </ng-template>
-  </mat-tab>
+    <!-- PERIODO 2 -->
+    <mat-tab label="Periodo 2">
+      <ng-container *ngIf="talleresPorPeriodo.periodo_2.length > 0; else sinTalleres2">
+     <table class="table table-bordered table-striped mt-3">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Descripción</th>
+              <th>Fecha de apertura</th>
+              <th>Fecha de cierre</th>
+              <th>Estado</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let taller of talleresPorPeriodo.periodo_2; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ taller.detalle_taller }}</td>
+              <td>{{ taller.fecha_ini | date:'shortDate' }}</td>
+              <td>{{ taller.fecha_fin | date:'shortDate' }}</td>
+              <td>
+                <span [ngClass]="getEstadoTaller(taller).clase">
+                  {{ getEstadoTaller(taller).estado }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-primary" (click)="verDetalleTaller(taller)">
+                  <i class="bi bi-eye"></i> Detalle del taller
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      <ng-template #sinTalleres2>
+        <p class="text-muted mt-3">No hay talleres para este periodo.</p>
+      </ng-template>
+    </mat-tab>
 
-  <mat-tab label="Periodo 2">
-    <ng-container *ngIf="talleresPorPeriodo.periodo_2.length > 0; else sinTalleres2">
-      <!-- tabla igual que la de periodo_1 pero con periodo_2 -->
-    </ng-container>
-    <ng-template #sinTalleres2>
-      <p class="text-muted mt-3">No hay talleres para este periodo.</p>
-    </ng-template>
-  </mat-tab>
-
-  <mat-tab label="Periodo 3">
-    <ng-container *ngIf="talleresPorPeriodo.periodo_3.length > 0; else sinTalleres3">
-      <!-- tabla igual que la de periodo_1 pero con periodo_3 -->
-    </ng-container>
-    <ng-template #sinTalleres3>
-      <p class="text-muted mt-3">No hay talleres para este periodo.</p>
-    </ng-template>
-  </mat-tab>
-</mat-tab-group>
-
-
-
+    <!-- PERIODO 3 -->
+    <mat-tab label="Periodo 3">
+      <ng-container *ngIf="talleresPorPeriodo.periodo_3.length > 0; else sinTalleres3">
+       <table class="table table-bordered table-striped mt-3">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Descripción</th>
+              <th>Fecha de apertura</th>
+              <th>Fecha de cierre</th>
+              <th>Estado</th>
+              <th>Opciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let taller of talleresPorPeriodo.periodo_3; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ taller.detalle_taller }}</td>
+              <td>{{ taller.fecha_ini | date:'shortDate' }}</td>
+              <td>{{ taller.fecha_fin | date:'shortDate' }}</td>
+              <td>
+                <span [ngClass]="getEstadoTaller(taller).clase">
+                  {{ getEstadoTaller(taller).estado }}
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-primary" (click)="verDetalleTaller(taller.id_taller)">
+                  <i class="bi bi-eye"></i> Detalle del taller
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+      <ng-template #sinTalleres3>
+        <p class="text-muted mt-3">No hay talleres para este periodo.</p>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
 </div>
-

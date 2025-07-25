@@ -1,1 +1,53 @@
-<p>detalle-taller-component works!</p>
+<div class="card mt-4" *ngIf="tallerSeleccionado">
+  <div class="card-header bg-primary text-white">
+    <i class="bi bi-journal-text me-2"></i> Detalle del taller
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <label class="form-label"><strong>Descripción del taller:</strong></label>
+      <textarea class="form-control" rows="5" [value]="tallerSeleccionado.detalle_taller" readonly></textarea>
+    </div>
+
+ 
+      <label class="form-label"><strong>Enlaces relacionados:</strong></label>
+      <ul class="list-group">
+        <li class="list-group-item" >
+          <a [href]="tallerSeleccionado.doc" target="_blank">{{ tallerSeleccionado.doc }}</a>
+
+        </li>
+          <li class="list-group-item" >
+          <a [href]="tallerSeleccionado.doc" target="_blank">{{ tallerSeleccionado.doc2 }}</a>
+
+        </li>
+      </ul>
+   
+
+    <form (ngSubmit)="confirmarEnvio()" [formGroup]="formRespuesta">
+      <div class="mb-3">
+        <label class="form-label"><strong>Subir respuesta en PDF (máx. 2MB):</strong></label>
+        <input type="file" class="form-control" accept="application/pdf" (change)="onFileSelected($event)">
+        <div class="form-text text-muted">Solo se acepta archivo PDF de máximo 2MB.</div>
+        <div *ngIf="archivoError" class="text-danger mt-1">{{ archivoError }}</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label"><strong>Observaciones (opcional, máx. 500 caracteres):</strong></label>
+        <textarea class="form-control"
+                  formControlName="observaciones"
+                  rows="3"
+                  maxlength="600"
+                  placeholder="Escribe aquí tus observaciones..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-success">
+        <i class="bi bi-send-check me-1"></i> Enviar respuesta
+      </button>
+<h4>
+  <span *ngIf="pendiente.length > 0" class="badge text-bg-warning">
+    Atención: ya se envió una respuesta a este taller. Si lo vuelve a enviar, la anterior será reemplazada.
+  </span>
+</h4>
+
+    </form>
+  </div>
+</div>

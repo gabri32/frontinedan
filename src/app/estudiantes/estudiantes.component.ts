@@ -136,6 +136,19 @@ async abrirModuloAsignatura(asignatura: any) {
     console.error('Error al hacer la petición:', error);
   }
 }
+getEstadoTaller(taller: any): { estado: string, clase: string } {
+  const hoy = new Date();
+  const inicio = new Date(taller.fecha_ini);
+  const fin = new Date(taller.fecha_fin);
+
+  if (hoy < inicio) {
+    return { estado: 'Por iniciar', clase: 'text-secondary' }; // Gris
+  } else if (hoy >= inicio && hoy <= fin) {
+    return { estado: 'Activo', clase: 'text-success fw-bold' }; // Verde
+  } else {
+    return { estado: 'Finalizado', clase: 'text-danger fw-bold' }; // Rojo
+  }
+}
 
 talleresVacios(): boolean {
   return (
