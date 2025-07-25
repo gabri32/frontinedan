@@ -23,6 +23,8 @@ import { EstudiantesComponent } from './estudiantes/estudiantes.component';
 import { AdminAcademicaComponent } from './admin-academica/admin-academica.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { DetalleTallerComponentComponent } from './detalle-taller-component/detalle-taller-component.component';
+import { RespuestasTallerComponent } from './docentes/respuestas-taller/respuestas-taller.component';
+
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
   { path: 'login', component: LoginComponent },
@@ -43,6 +45,10 @@ export const routes: Routes = [
         path: 'estudiantes/taller/:id',
         component: DetalleTallerComponentComponent
       },
+{
+  path: 'profesores/taller/:id/respuestas',
+  component: RespuestasTallerComponent
+},
 
       { path: 'usuarios', component: UsuariosComponent }
     ]

@@ -251,4 +251,17 @@ TallerPendiente(data: FormData): Promise<any> {
 getTallerPendiente(id_taller:number,num_identificacion:Number):Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/getTallerPendiente/${id_taller}/${num_identificacion}`))
 }
+actualizarTaller(data: any): Promise<any> {
+  return firstValueFrom(
+    this.http.put(`${this.apiUrl}/updateTaller/${data.id_taller}`, data)
+  );
+}
+getRespuestasPorTaller(id: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/talleres/${id}/respuestas`);
+}
+
+calificarTaller(data: any): Observable<any> {
+  return this.http.put(`${this.apiUrl}/calificar-taller`, data);
+}
+
 }

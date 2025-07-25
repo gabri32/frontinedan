@@ -169,7 +169,7 @@ prevBanner1() {
   updateSlider(): void {
     const slideWidth = 160 + 32;
     const offset = this.currentIndex * slideWidth;
-    this.sliderRef.nativeElement.style.transform = `translateX(-${offset}px)`;
+  
   }
 
   startAutoSlide(): void {

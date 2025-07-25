@@ -141,15 +141,24 @@ export class DetalleTallerComponentComponent implements OnInit {
       this.router.navigate(['/layout/estudiantes']);
     }
   }
-  async getTallerPendiente(id: number, num_identificacion: number) {
-    try {
-      const id_taller = id
-      const tienePendiente = await this.backendService.getTallerPendiente(id_taller, num_identificacion)
-      this.pendiente = tienePendiente.respuesta
-      console.log(this.pendiente)
-    } catch (error) {
-      alertify.error('No se pudo cargar el taller');
+async getTallerPendiente(id: number, num_identificacion: number) {
+  try {
+    const resultado = await this.backendService.getTallerPendiente(id, num_identificacion);
+
+    // Validar que resultado y respuesta existen y es un array
+    if (resultado?.respuesta && Array.isArray(resultado.respuesta) && resultado.respuesta.length >= 1) {
+      this.pendiente = true;
+    } else {
+      this.pendiente = false;
     }
+
+    console.log('¿Ya tiene pendiente?', this.pendiente);
+  } catch (error) {
+    console.error('Error al obtener taller pendiente:', error);
+    alertify.error('No se pudo cargar el taller pendiente');
+    this.pendiente = false;
   }
+}
+
 
 }
