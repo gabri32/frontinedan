@@ -2,10 +2,30 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { BackendService } from '../../backend.service';
-
+import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
+import * as alertify from 'alertifyjs';
+import { MatCardModule } from '@angular/material/card';
+import swal from 'sweetalert2';
+import { FormsModule } from "@angular/forms";
+import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-respuestas-taller',
+    imports: [
+      ReactiveFormsModule,
+      CommonModule,
+      MatDividerModule,
+      MatCardModule,
+      NgxChartsModule,
+      FormsModule,
+    ],
   templateUrl: './respuestas-taller.component.html'
 })
 export class RespuestasTallerComponent implements OnInit {
@@ -24,6 +44,7 @@ export class RespuestasTallerComponent implements OnInit {
     this.backendService.getRespuestasPorTaller(this.tallerId).subscribe({
       next: (res) => {
         this.respuestas = res;
+        console.log(this.respuestas)
         if (res.length > 0) this.taller = res[0].Taller;
       },
       error: () => {

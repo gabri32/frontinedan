@@ -21,8 +21,6 @@ export class BackendService {
     return firstValueFrom(this.http.post(`${this.apiUrl}/students`, data));
   }
 
-
-
   // 🟢 Obtener todos los estudiantes
   async getAllStudents(): Promise<any> {
     return firstValueFrom(this.http.get(`${this.apiUrl}/searchStudent`));

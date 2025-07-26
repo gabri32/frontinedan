@@ -1,1 +1,39 @@
-<p>respuestas-taller works!</p>
+<div class="container mt-4">
+  <h2 *ngIf="taller">Respuestas del Taller: {{ taller.titulo }}</h2>
+  <p *ngIf="!taller">Cargando información del taller...</p>
+
+  <table class="table table-bordered mt-3" *ngIf="respuestas.length > 0">
+    <thead class="table-dark">
+      <tr>
+        <th>Estudiante</th>
+         <th>Respuesta del estudiante</th>
+        <th>Archivo PDF</th>
+        <th>Nota</th>
+        <th>Observación</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let respuesta of respuestas">
+        <td>{{ respuesta.num_identificacion }}</td>
+        <td>{{ respuesta.comentario_res }}</td>
+        <td>
+          <a [href]="getPdfUrl(respuesta.doc)" target="_blank">Ver PDF</a>
+        </td>
+        <td>
+          <input type="number"  class="form-control" min="0" max="5" step="0.1">
+        </td>
+        <td>
+          <input type="text" class="form-control" placeholder="Observación...">
+        </td>
+        <td>
+          <button class="btn btn-success" (click)="guardarCalificacion(respuesta)">Guardar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="respuestas.length === 0" class="alert alert-info">
+    No hay respuestas para este taller.
+  </div>
+</div>
