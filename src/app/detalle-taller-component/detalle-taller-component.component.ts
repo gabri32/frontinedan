@@ -45,6 +45,7 @@ export class DetalleTallerComponentComponent implements OnInit {
   tallerSeleccionado: any = {};
   usuario: any = {};
   pendiente: any;
+  calificado:any;
   ngOnInit(): void {
     this.usuario = JSON.parse(sessionStorage.getItem('usuario') || '{}');
     const num_identificacion = this.usuario.num_identificacion
@@ -141,24 +142,30 @@ export class DetalleTallerComponentComponent implements OnInit {
       this.router.navigate(['/layout/estudiantes']);
     }
   }
-async getTallerPendiente(id: number, num_identificacion: number) {
-  try {
-    const resultado = await this.backendService.getTallerPendiente(id, num_identificacion);
+  async getTallerPendiente(id: number, num_identificacion: number) {
+    try {
+      const resultado = await this.backendService.getTallerPendiente(id, num_identificacion);
+      console.log(resultado)
+if(resultado.respuesta[0].calificado==true){
+  this.calificado=true
+}else (
+  this.calificado=false
+)
+      // Validar que resultado y respuesta existen y es un array
+      if (resultado?.respuesta && Array.isArray(resultado.respuesta) && resultado.respuesta.length >= 1) {
+        this.pendiente = true;
+        
+      } else {
+        this.pendiente = false;
+      }
 
-    // Validar que resultado y respuesta existen y es un array
-    if (resultado?.respuesta && Array.isArray(resultado.respuesta) && resultado.respuesta.length >= 1) {
-      this.pendiente = true;
-    } else {
+      console.log('¿Ya tiene pendiente?', this.pendiente);
+    } catch (error) {
+      console.error('Error al obtener taller pendiente:', error);
+      alertify.error('No se pudo cargar el taller pendiente');
       this.pendiente = false;
     }
-
-    console.log('¿Ya tiene pendiente?', this.pendiente);
-  } catch (error) {
-    console.error('Error al obtener taller pendiente:', error);
-    alertify.error('No se pudo cargar el taller pendiente');
-    this.pendiente = false;
   }
-}
 
 
 }

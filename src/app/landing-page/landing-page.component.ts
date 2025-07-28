@@ -153,7 +153,6 @@ prevBanner1() {
   nextSlide(): void {
     const totalItems = this.eventCards.length;
     const maxIndex = totalItems - this.visibleCards;
-
     this.currentIndex = (this.currentIndex + 1) > maxIndex ? 0 : this.currentIndex + 1;
     this.updateSlider();
   }
@@ -169,7 +168,7 @@ prevBanner1() {
   updateSlider(): void {
     const slideWidth = 160 + 32;
     const offset = this.currentIndex * slideWidth;
-  
+     this.sliderRef.nativeElement.style.transform = `translateX(-${offset}px)`;
   }
 
   startAutoSlide(): void {

@@ -6,7 +6,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
-
+import { RoleGuard } from './Role.Guard'; 
 //importacion de la landing
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
@@ -33,24 +33,56 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'vote', component: VoteComponent }, 
-      { path: 'inventario', component: InventarioComponent },
-      { path: 'administracion', component: AdministracionComponent },
-      { path: 'adminacademica', component: AdminAcademicaComponent },
-      { path: 'profesores', component: DocentesComponent },
-      { path: 'estudiantes', component: EstudiantesComponent },
-
+      { path: 'vote', component: VoteComponent },
 
       {
-        path: 'estudiantes/taller/:id',
-        component: DetalleTallerComponentComponent
+        path: 'inventario',
+        component: InventarioComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [3] } // Solo rol 3 puede acceder
       },
-{
-  path: 'profesores/taller/:id/respuestas',
-  component: RespuestasTallerComponent
-},
-
-      { path: 'usuarios', component: UsuariosComponent }
+      {
+        path: 'administracion',
+        component: AdministracionComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [3] }
+      },
+      {
+        path: 'adminacademica',
+        component: AdminAcademicaComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [3] }
+      },
+      {
+        path: 'profesores',
+        component: DocentesComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [1] } // Solo profesores
+      },
+      {
+        path: 'estudiantes',
+        component: EstudiantesComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [2] } // Solo estudiantes
+      },
+      {
+        path: 'estudiantes/taller/:id',
+        component: DetalleTallerComponentComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [2] }
+      },
+      {
+        path: 'profesores/taller/:id/respuestas',
+        component: RespuestasTallerComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [1] }
+      },
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        canActivate: [RoleGuard],
+        data: { roles: [3] }
+      },
     ]
   },
   { path: '**', redirectTo: '' }

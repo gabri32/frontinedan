@@ -18,22 +18,23 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-respuestas-taller',
-    imports: [
-      ReactiveFormsModule,
-      CommonModule,
-      MatDividerModule,
-      MatCardModule,
-      NgxChartsModule,
-      FormsModule,
-    ],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    MatDividerModule,
+    MatCardModule,
+    NgxChartsModule,
+    FormsModule,
+  ],
   templateUrl: './respuestas-taller.component.html'
 })
 export class RespuestasTallerComponent implements OnInit {
   tallerId!: number;
   respuestas: any[] = [];
   taller: any = null;
-
-  constructor(private route: ActivatedRoute, private backendService: BackendService) {}
+  nota: number | undefined;
+  observacion: string | undefined;
+  constructor(private route: ActivatedRoute, private backendService: BackendService) { }
 
   ngOnInit(): void {
     this.tallerId = Number(this.route.snapshot.paramMap.get('id'));
@@ -44,8 +45,13 @@ export class RespuestasTallerComponent implements OnInit {
     this.backendService.getRespuestasPorTaller(this.tallerId).subscribe({
       next: (res) => {
         this.respuestas = res;
+        this.respuestas = this.respuestas.map(r => ({
+          ...r,
+          pdfUrl: this.getPdfUrl(r.doc)
+        }));
+
         console.log(this.respuestas)
-        if (res.length > 0) this.taller = res[0].Taller;
+        if (res.length > 0) this.taller = res[0].id_taller;
       },
       error: () => {
         Swal.fire('Error', 'No se pudieron cargar las respuestas', 'error');
@@ -59,11 +65,20 @@ export class RespuestasTallerComponent implements OnInit {
   }
 
   guardarCalificacion(respuesta: any): void {
+    // Validar que la nota esté entre 0 y 5
+    if (respuesta.nota === undefined || respuesta.nota < 0 || respuesta.nota > 5) {
+      Swal.fire('Nota inválida', 'La nota debe estar entre 0 y 5', 'warning');
+      return;
+    }
+    if (respuesta.descripcion === null) {
+      Swal.fire(' Inválida', 'No puede ir vacia la observación', 'warning');
+      return;
+    }
     const payload = {
-      estudiante_id: respuesta.num_identificacion,
-      taller_id: this.tallerId,
+      num_estudiantes: respuesta.num_identificacion,
+      id_taller: respuesta.id_pendientes,
       nota: respuesta.nota,
-      descripcion: respuesta.observacion || ''
+      descripcion: respuesta.descripcion || ''
     };
 
     this.backendService.calificarTaller(payload).subscribe({
@@ -71,4 +86,5 @@ export class RespuestasTallerComponent implements OnInit {
       error: () => Swal.fire('Error', 'No se pudo guardar la calificación', 'error')
     });
   }
+
 }

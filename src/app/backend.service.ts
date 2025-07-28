@@ -259,7 +259,7 @@ getRespuestasPorTaller(id: number): Observable<any> {
 }
 
 calificarTaller(data: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/calificar-taller`, data);
+  return this.http.post(`${this.apiUrl}/notas/insertNotafromTaller`, data);
 }
 
 }
