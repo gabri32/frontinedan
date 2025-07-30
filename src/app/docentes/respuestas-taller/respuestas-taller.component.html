@@ -1,6 +1,9 @@
 <div class="container mt-4">
   <h2 *ngIf="taller">Respuestas del Taller: {{ taller }}</h2>
   <p *ngIf="!taller">Cargando información del taller...</p>
+<button class="btn btn-outline-primary mb-3" (click)="volver()">
+  <i class="bi bi-arrow-left"></i> Volver a Talleres
+</button>
 
   <table class="table table-bordered mt-3" *ngIf="respuestas.length > 0">
     <thead class="table-dark">

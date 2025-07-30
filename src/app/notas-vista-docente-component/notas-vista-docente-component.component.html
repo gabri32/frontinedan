@@ -1,0 +1,38 @@
+<div class="container mt-6">
+  <h2 class="text-center mb-4">Notas por Taller</h2>
+
+  <div *ngIf="tabla && tabla.length > 0">
+    <table class="table table-bordered table-responsive">
+      <thead>
+        <tr>
+          <th>Estudiante</th>
+          <th>Identificación</th>
+          <th *ngFor="let taller of talleres">{{ taller.detalle_taller }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fila of tabla">
+          <td>{{ fila.nombre }}</td>
+          <td>{{ fila.num_identificacion }}</td>
+          <td *ngFor="let taller of talleres">
+            <input
+              type="text"
+              [(ngModel)]="fila.notas[taller.id_taller]"
+              class="form-control"
+              placeholder="--"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Botón para enviar todas las notas modificadas -->
+    <div class="text-center mt-4">
+      <button class="btn btn-primary" >Guardar Notas</button>
+    </div>
+  </div>
+
+  <div *ngIf="!tabla || tabla.length === 0" class="alert alert-info text-center mt-4">
+    No hay estudiantes o talleres disponibles.
+  </div>
+</div>

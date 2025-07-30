@@ -146,11 +146,12 @@ export class DetalleTallerComponentComponent implements OnInit {
     try {
       const resultado = await this.backendService.getTallerPendiente(id, num_identificacion);
       console.log(resultado)
-if(resultado.respuesta[0].calificado==true){
-  this.calificado=true
-}else (
-  this.calificado=false
-)
+if (resultado.respuesta && resultado.respuesta.length > 0 && resultado.respuesta[0].calificado === true) {
+  this.calificado = true;
+} else {
+  this.calificado = false;
+}
+
       // Validar que resultado y respuesta existen y es un array
       if (resultado?.respuesta && Array.isArray(resultado.respuesta) && resultado.respuesta.length >= 1) {
         this.pendiente = true;

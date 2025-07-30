@@ -19,6 +19,8 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
+import { VerNotaDialogComponent } from './../ver-nota-dialog/ver-nota-dialog.component'; 
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-docentes',
   imports: [
@@ -61,7 +63,7 @@ talleresPorPeriodo: any
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 Object: any;
-  constructor(private backendService: BackendService, private fb: FormBuilder,private router: Router) { }
+  constructor(private backendService: BackendService, private fb: FormBuilder,private router: Router,private dialog: MatDialog) { }
 
   ngOnInit(): void {
     //carga inicial
@@ -142,17 +144,21 @@ getEstadoTaller(taller: any): { estado: string, clase: string } {
   const fin = new Date(taller.fecha_fin);
 
   if (hoy < inicio) {
-    return { estado: 'Por iniciar', clase: 'text-secondary' }; // Gris
+    return { estado: 'Calificado', clase: 'text-secondary' }; // Gris
   } else if (hoy >= inicio && hoy <= fin) {
     return { estado: 'Activo', clase: 'text-success fw-bold' }; // Verde
   } else {
     return { estado: 'Finalizado', clase: 'text-danger fw-bold' }; // Rojo
   }
 }
-
+verNota(asignatura: any) {
+  this.dialog.open(VerNotaDialogComponent, {
+    data: asignatura,
+    width: '1400px'
+  });}
 talleresVacios(): boolean {
   return (
-    !this.talleresPorPeriodo.periodo_1.length &&
+    this.talleresPorPeriodo?.periodo_1?.length&&
     !this.talleresPorPeriodo.periodo_2.length &&
     !this.talleresPorPeriodo.periodo_3.length
   );

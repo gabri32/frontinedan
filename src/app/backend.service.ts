@@ -261,5 +261,13 @@ getRespuestasPorTaller(id: number): Observable<any> {
 calificarTaller(data: any): Observable<any> {
   return this.http.post(`${this.apiUrl}/notas/insertNotafromTaller`, data);
 }
+vistaNotasDocente(data: any): Promise<any> {
+  return firstValueFrom(this.http.post(`${this.apiUrl}/vista-notas-docente`, data
+  ));
+}
+notasPorEstudiantes(id: number, num_identificacion: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/notas/${id}/${num_identificacion}`);
+}
+
 
 }

@@ -1,24 +1,39 @@
 <!-- Vista Lista -->
-<div *ngIf="componenteActivo === 'lista'" class="row g-3">
-  <div class="col-md-4" *ngFor="let asignatura of listaAsing.asignaturas">
-    <mat-card class="h-100 text-truncate" 
-              style="cursor: pointer;" 
-              (click)="abrirModuloAsignatura(asignatura)">
+<div *ngIf="componenteActivo === 'lista'" class="row g-3" >
+  <div class="col-12">
+    <h4 class="mb-3">Materias asignadas</h4>
+  </div>
+
+  <div class="col-md-4" *ngFor="let asignatura of listaAsing.asignaturas" >
+    <mat-card class="h-100 text-truncate" style="cursor: pointer;" style="padding:2rem;">
       <mat-card-title class="d-flex align-items-center gap-2">
         <i [ngClass]="iconoAsignatura(asignatura.descripcion)" class="bi fs-4"></i>
         <span class="text-truncate" style="max-width: 85%;">{{ asignatura.descripcion }}</span>
+        
+        <!-- Botón de ver nota con tooltip -->
+    
       </mat-card-title>
+
       <mat-card-content>
         <small><strong>Horas por semana:</strong> {{ asignatura.cantidad_horas_week }}</small>
       </mat-card-content>
+
       <mat-card-actions class="mt-2">
+            <button mat-icon-button
+                matTooltip="Ver nota"
+                (click)="verNota(asignatura)"
+                class="ms-auto">
+          <i class="bi bi-eye-fill"></i>Ver notas
+        </button>
+        &nbsp;
         <button mat-button color="primary" (click)="abrirModuloAsignatura(asignatura)">
-          <i class="bi bi-eye"></i> Ver Detalles
+          <i class="bi bi-eye"></i> Ver Talleres
         </button>
       </mat-card-actions>
     </mat-card>
   </div>
 </div>
+
 
 <!-- Vista Detalle -->
 <div *ngIf="componenteActivo === 'detalle'" class="container mt-3">

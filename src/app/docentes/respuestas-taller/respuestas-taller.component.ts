@@ -34,7 +34,7 @@ export class RespuestasTallerComponent implements OnInit {
   taller: any = null;
   nota: number | undefined;
   observacion: string | undefined;
-  constructor(private route: ActivatedRoute, private backendService: BackendService) { }
+  constructor(private route: ActivatedRoute, private backendService: BackendService,private router: Router) { }
 
   ngOnInit(): void {
     this.tallerId = Number(this.route.snapshot.paramMap.get('id'));
@@ -86,5 +86,7 @@ export class RespuestasTallerComponent implements OnInit {
       error: () => Swal.fire('Error', 'No se pudo guardar la calificación', 'error')
     });
   }
-
+  volver() {
+    this.router.navigate(['/layout/profesores']);
+  }
 }

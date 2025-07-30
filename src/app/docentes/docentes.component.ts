@@ -161,13 +161,7 @@ export class DocentesComponent implements OnInit {
       doc2: taller.value.doc2,
       id_asignatura: this.idAsignaturaActual
     }
-    // formData.append('detalle_taller', taller.value.detalle_taller);
-    // formData.append('fecha_ini', taller.value.fecha_ini);
-    // formData.append('fecha_fin',taller.value.fecha_fin);
-    // formData.append('periodo', taller.value.periodo);
-    // formData.append('vigencia', );
-    // if (taller.value.doc) formData.append('doc', taller.value.doc);
-    // if (taller.value.doc2) formData.append('doc2', taller.value.doc2);
+
     try {
       console.log("datale", formData)
       await this.backendService.createWorks(formData);
@@ -187,6 +181,9 @@ export class DocentesComponent implements OnInit {
     delete taller.backup;
     taller.editando = false;
   }
+
+
+
 
   async guardarEdicion(taller: any) {
     try {
@@ -245,4 +242,14 @@ irACalificar(id: number) {
   console.log(id)
   this.router.navigate([`/layout/profesores/taller/${id}/respuestas`]);
 }
+getInfoNotas(id_asignatura: number, id_curso: number): void {
+  console.log(id_curso)
+  this.router.navigate(['/layout/profesores/NotasDocentes'], {
+    queryParams: {
+      id_asignatura: id_asignatura,
+      id_curso: id_curso
+    }
+  });
 }
+}
+
