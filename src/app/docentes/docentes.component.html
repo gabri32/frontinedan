@@ -77,6 +77,15 @@
             <label for="detalle_taller">Detalle</label>
             <input type="text" class="form-control" formControlName="detalle_taller" [readonly]="!modoEdicion">
           </div>
+<div class="form-group form-check mb-3">
+  <input
+    type="checkbox"
+    class="form-check-input"
+    id="taller_activo"
+    formControlName="taller_activo"
+    [disabled]="!modoEdicion">
+  <label class="form-check-label" for="taller_activo">No es un taller</label>
+</div>
 
           <div class="form-group mb-3">
             <label for="fecha_ini">Fecha Inicio</label>
@@ -220,7 +229,7 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="Ver notas">
+  <mat-tab label="Ver listado de notas">
 <div class="container mt-4">
 
       <h2 class="mb-4 text-center">Asignaturas del Docente</h2>
@@ -266,7 +275,7 @@
             <td mat-cell *matCellDef="let element">
              
               <button mat-button color="accent" (click)="getInfoNotas(element.id_asignatura,element.id_grado)">
-                Ver notas
+                Ver listado de notas
               </button>
 
             </td>

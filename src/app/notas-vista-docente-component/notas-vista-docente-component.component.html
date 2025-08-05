@@ -1,13 +1,30 @@
 <div class="container mt-6">
-  <h2 class="text-center mb-4">Notas por Taller</h2>
+  <h2 class="text-center mb-4">Notas por periodo</h2>
 
-  <div *ngIf="tabla && tabla.length > 0">
+  <!-- Filtro de Período -->
+  <div class="form-group mb-4 text-center">
+    <label for="periodo">Selecciona el período:</label>
+    <select
+      id="periodo"
+      [(ngModel)]="periodo"
+      (change)="filtrarPorPeriodo()"
+      class="form-control w-auto d-inline-block mx-2"
+    >
+      <option [ngValue]="undefined">-- Selecciona --</option>
+      <option *ngFor="let p of [1, 2, 3]" [value]="p">{{ p }}</option>
+    </select>
+  </div>
+
+  <!-- Tabla de Notas -->
+  <div *ngIf="tabla && tabla.length > 0 && talleres.length > 0">
     <table class="table table-bordered table-responsive">
       <thead>
         <tr>
           <th>Estudiante</th>
           <th>Identificación</th>
-          <th *ngFor="let taller of talleres">{{ taller.detalle_taller }}</th>
+          <th *ngFor="let taller of talleres">
+            {{ taller.detalle_taller }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -26,13 +43,10 @@
       </tbody>
     </table>
 
-    <!-- Botón para enviar todas las notas modificadas -->
-    <div class="text-center mt-4">
-      <button class="btn btn-primary" >Guardar Notas</button>
-    </div>
+  
   </div>
 
-  <div *ngIf="!tabla || tabla.length === 0" class="alert alert-info text-center mt-4">
-    No hay estudiantes o talleres disponibles.
+  <div *ngIf="periodo && (!tabla || tabla.length === 0)" class="alert alert-info text-center mt-4">
+    No hay estudiantes o talleres para el período seleccionado.
   </div>
 </div>

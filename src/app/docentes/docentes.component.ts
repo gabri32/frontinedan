@@ -51,6 +51,7 @@ export class DocentesComponent implements OnInit {
   talleres: any[] = [];
   displayedColumns: string[] = ['Sede', 'Descripción', 'Nombre', 'Horas', 'Opciones'];
   dataSource = new MatTableDataSource<any>();
+  tipoTaller=false
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(private backendService: BackendService, private fb: FormBuilder,private router: Router,) { }
@@ -67,7 +68,8 @@ export class DocentesComponent implements OnInit {
       periodo: [''],
       doc: [''],
       doc2: [''],
-      archivo_pdf: [null]
+      archivo_pdf: [null],
+      taller_activo:[false]
     });
 
 
@@ -159,12 +161,12 @@ export class DocentesComponent implements OnInit {
       vigencia: new Date().getFullYear().toString(),
       doc: taller.value.doc,
       doc2: taller.value.doc2,
-      id_asignatura: this.idAsignaturaActual
+      id_asignatura: this.idAsignaturaActual,
+      otro:taller.value.taller_activo
     }
 
     try {
-      console.log("datale", formData)
-      await this.backendService.createWorks(formData);
+     await this.backendService.createWorks(formData);
       swal.fire("Guardado", "Taller registrado correctamente.", "success");
       this.cerrarModal();
     } catch (error) {

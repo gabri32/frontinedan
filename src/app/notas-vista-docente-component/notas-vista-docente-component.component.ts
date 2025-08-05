@@ -43,6 +43,7 @@ export class NotasVistaDocenteComponentComponent implements OnInit{
   id_curso: number | undefined;
   talleres: any[] = [];
 tabla: any[] = [];
+periodo:number|undefined;
  constructor(private route: ActivatedRoute,private backendService: BackendService) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -50,10 +51,17 @@ tabla: any[] = [];
       this.id_curso = +params['id_curso'];
 
      
-      this.cargarDatosNotas(  this.id_curso,this.id_asignatura,);
     });
   }
 
+filtrarPorPeriodo() {
+  if (this.periodo && this.id_curso && this.id_asignatura) {
+    this.cargarDatosNotas(this.id_curso, this.id_asignatura, this.periodo);
+  } else {
+    this.talleres = [];
+    this.tabla = [];
+  }
+}
 
 async  construirTabla(estudiantes:any, talleres:any, notas:any) {
   return estudiantes.map((estudiante: { estudiante_id: any; nombre: any; num_identificacion: any; }) => {
@@ -77,11 +85,12 @@ async  construirTabla(estudiantes:any, talleres:any, notas:any) {
   });
 }
 
-async cargarDatosNotas(curso: number, asignatura: number) {
+async cargarDatosNotas(curso: number, asignatura: number, periodo: number) {
   try {
     const data = {
       id_asignatura: asignatura,
-      id_curso: curso
+      id_curso: curso,
+      periodo: periodo
     };
 
     const datos = await this.backendService.vistaNotasDocente(data);
@@ -91,4 +100,5 @@ async cargarDatosNotas(curso: number, asignatura: number) {
     console.error(error);
   }
 }
+
 }
