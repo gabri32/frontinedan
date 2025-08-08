@@ -11,19 +11,22 @@
         <th>Estudiante</th>
          <th>Respuesta del estudiante</th>
         <th>Archivo PDF</th>
-        <th>Nota</th>
+        <th>Nota actual</th>
+        <th>Nota nueva</th>
+
         <th>Observación</th>
         <th>Acciones</th>
       </tr>
     </thead>
 <tbody>
   <tr *ngFor="let respuesta of respuestas">
-    <td>{{ respuesta.num_identificacion }}</td>
+    <td>{{ respuesta.nombre_estudiante }}-{{ respuesta.num_identificacion }}</td>
     <td>{{ respuesta.comentario_res }}</td>
     <td>
   <a [href]="respuesta.pdfUrl" target="_blank">Ver PDF</a>
 
     </td>
+    <td>{{respuesta.nota}}</td>
     <td>
       <input
         type="number"

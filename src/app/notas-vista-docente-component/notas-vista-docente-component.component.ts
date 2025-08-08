@@ -63,14 +63,18 @@ filtrarPorPeriodo() {
   }
 }
 
-async  construirTabla(estudiantes:any, talleres:any, notas:any) {
+async construirTabla(estudiantes: any, talleres: any, notas: any) {
   return estudiantes.map((estudiante: { estudiante_id: any; nombre: any; num_identificacion: any; }) => {
     const fila = {
       estudiante_id: estudiante.estudiante_id,
       nombre: estudiante.nombre,
       num_identificacion: estudiante.num_identificacion,
-      notas: {} as { [key: string]: any }
+      notas: {} as { [key: string]: any },
+      promedio: 0
     };
+
+    let suma = 0;
+    let cantidad = 0;
 
     talleres.forEach((taller: { id_taller: string | number; }) => {
       const nota = notas.find((n: { estudiante_id: any; id_taller: string | number; }) =>
@@ -78,12 +82,25 @@ async  construirTabla(estudiantes:any, talleres:any, notas:any) {
         n.id_taller === taller.id_taller
       );
 
-      fila.notas[taller.id_taller] = nota ? nota.nota : '';
+      const valorNota = nota ? Number(nota.nota) : '';
+
+      // Guardar la nota en la fila
+      fila.notas[taller.id_taller] = valorNota;
+
+      // Calcular suma y cantidad solo si la nota es válida
+      if (valorNota !== '' && !isNaN(valorNota)) {
+        suma += valorNota;
+        cantidad++;
+      }
     });
+
+ fila.promedio = cantidad > 0 ? parseFloat((suma / cantidad).toFixed(2)) : 0;
+
 
     return fila;
   });
 }
+
 
 async cargarDatosNotas(curso: number, asignatura: number, periodo: number) {
   try {
@@ -96,6 +113,7 @@ async cargarDatosNotas(curso: number, asignatura: number, periodo: number) {
     const datos = await this.backendService.vistaNotasDocente(data);
     this.talleres = datos.talleres;
     this.tabla = await this.construirTabla(datos.estudiantes, datos.talleres, datos.notas);
+    console.log(this.tabla)
   } catch (error) {
     console.error(error);
   }

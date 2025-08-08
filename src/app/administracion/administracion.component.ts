@@ -24,8 +24,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ModalAsignarGradoComponent } from './modales/dir_grado/modal-asignar-grado/modal-asignar-grado.component';
 import { environment } from '../../app/auth/enviroments';
-
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-administracion',
   imports: [
@@ -51,6 +51,66 @@ import { environment } from '../../app/auth/enviroments';
 })
 
 export class AdministracionComponent implements OnInit {
+ estudiante = {
+  nombre: 'PEREZ MELO SHIRLEY ALEJANDRA',
+  codigo: '1080043724',
+  promedio: 3.66,
+  puesto: 19,
+  curso: '11-01',
+  jornada: 'MAÑANA',
+  periodo: 3,
+  fechaPeriodo: '2024-06-17',
+  fechaFinal: '2024-09-14',
+  componentes: [
+    {
+      nombre: 'Ciencia tecnología y ambiente',
+      asignaturas: [
+        {
+          nombre: 'FISICA (FIS)',
+          profesor: 'GUERRERO PAREDES JESUS HUMBERTO',
+          intensidad: 1,
+          notas: [3.2, 3.6, 3.6],
+          actual: 3.6,
+          valoracion: 'B. BÁSICO',
+          observacion: 'FNJ'
+        },
+        {
+          nombre: 'QUIMICA (QUIM)',
+          profesor: 'MURIEL GRAJALES NOHORA ISABEL',
+          intensidad: 2,
+          notas: [3.0, 3.4, 3.7],
+          actual: 3.7,
+          valoracion: 'B. BÁSICO',
+          observacion: 'FNJ'
+        }
+      ]
+    },
+     {
+      nombre: 'Ciencia tecnología y ambiente',
+      asignaturas: [
+        {
+          nombre: 'FISICA (FIS)',
+          profesor: 'GUERRERO PAREDES JESUS HUMBERTO',
+          intensidad: 1,
+          notas: [3.2, 3.6, 3.6],
+          actual: 3.6,
+          valoracion: 'B. BÁSICO',
+          observacion: 'FNJ'
+        },
+        {
+          nombre: 'QUIMICA (QUIM)',
+          profesor: 'MURIEL GRAJALES NOHORA ISABEL',
+          intensidad: 2,
+          notas: [3.0, 3.4, 3.7],
+          actual: 3.7,
+          valoracion: 'B. BÁSICO',
+          observacion: 'FNJ'
+        }
+      ]
+    }
+  ]
+};
+
 
   images: any;
   docentes: any;
@@ -71,7 +131,7 @@ export class AdministracionComponent implements OnInit {
   rol_id = 0;
   cursosCreados: any[] = [];
   inscripciones: any[] = []; // cargada desde tu servicio
-  url:any
+  url: any
 
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -94,21 +154,21 @@ export class AdministracionComponent implements OnInit {
   grupoEstudiantes: any[] = [];
 
   ngOnInit(): void {
-    this.url=environment.apiAuthUrl + '/'
+    this.url = environment.apiAuthUrl + '/'
     this.verificarPermisos()
     this.getimages()
     this.getprofesores()
     this.getSedes()
     this.getcursos()
     this.getasignaturas()
-      this.getInscritos();
+    this.getInscritos();
     this.backendService.getNumberStudents().then(data => {
       this.grupoEstudiantes = data;
     });
     this.backendService.gettotalcursos().then(data => {
-     console.log(data)
-        this.cursosCreados = data;
-     
+      console.log(data)
+      this.cursosCreados = data;
+
     });
   }
 
@@ -284,8 +344,8 @@ export class AdministracionComponent implements OnInit {
       const curso = await this.backendService.createCurses();
 
       swal.close(); // Cierra el loading antes de mostrar el éxito
-     await this.getcursos();
-  await this.getasignaturas()
+      await this.getcursos();
+      await this.getasignaturas()
       swal.fire({
         title: "Éxito",
         text: "Curso creado correctamente.",
@@ -324,9 +384,9 @@ export class AdministracionComponent implements OnInit {
     }
   }
 
-  async getEstudiantesPorCurso(id_curso: number, sede: number,id: number) {
+  async getEstudiantesPorCurso(id_curso: number, sede: number, id: number) {
     try {
-      const estudiantes = await this.backendService.getEstudiantesPorGrado(id_curso, sede,id);
+      const estudiantes = await this.backendService.getEstudiantesPorGrado(id_curso, sede, id);
       console.log(estudiantes)
     } catch (error) {
       console.error("Error al obtener estudiantes por curso:", error);
@@ -356,16 +416,16 @@ export class AdministracionComponent implements OnInit {
       });
       console.log(grupo.estudiantes_asignados)
       const estudiantes = await this.backendService.getEstudiantesPorGrado(grupo.tipo_grado, grupo.sede, grupo.id);
-      
+
       this.estudiantesCurso = estudiantes;
-      if(grupo.estudiantes_asignados){
-this.estudiantesSeleccionados = [...grupo.estudiantes_asignados];
-      }else {
-        this.estudiantesSeleccionados=[]
+      if (grupo.estudiantes_asignados) {
+        this.estudiantesSeleccionados = [...grupo.estudiantes_asignados];
+      } else {
+        this.estudiantesSeleccionados = []
       }
 
 
-console.log(this.estudiantesSeleccionados)
+      console.log(this.estudiantesSeleccionados)
       this.modalEstudiantesVisible = true;
       swal.close(); // Cierra el loading al finalizar la carga
     } catch (error) {
@@ -413,15 +473,15 @@ console.log(this.estudiantesSeleccionados)
           swal.showLoading();
         }
       });
-console.log(this.grupo.id, this.estudiantesSeleccionados)
+      console.log(this.grupo.id, this.estudiantesSeleccionados)
       const response = await this.backendService.actualizarEstudiantesAsignados(this.grupo.id, this.estudiantesSeleccionados);
       console.log(response)
       swal.close(); // Cierra el loading al finalizar la carga
- await this.backendService.gettotalcursos().then(data => {
-     console.log(data)
+      await this.backendService.gettotalcursos().then(data => {
+        console.log(data)
         this.cursosCreados = data;
-     
-    });
+
+      });
       swal.fire({
         title: "Éxito",
         text: "Estudiantes asignados correctamente.",
@@ -441,25 +501,136 @@ console.log(this.grupo.id, this.estudiantesSeleccionados)
     }
   }
   // Limpia slashes incorrectos en Windows
-limpiarRuta(ruta: string): string {
-  return ruta?.replace(/\\/g, '/');
+  limpiarRuta(ruta: string): string {
+    return ruta?.replace(/\\/g, '/');
+  }
+
+  // Convierte texto tipo '[]' a array real
+  boletinesArray(boletines: string): string[] {
+    try {
+      const parsed = JSON.parse(boletines);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  async getInscritos() {
+    try {
+      this.inscripciones = await this.backendService.getInscritos()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+async loadImageBase64(path: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.src = path;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return reject('No se pudo cargar el contexto del canvas');
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = (err) => reject(err);
+  });
 }
 
-// Convierte texto tipo '[]' a array real
-boletinesArray(boletines: string): string[] {
-  try {
-    const parsed = JSON.parse(boletines);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
+
+valoracionCualitativa(nota: number): string {
+    if (nota < 3) return 'Bajo';
+    if (nota < 4) return 'Básico';
+    if (nota < 4.5) return 'Alto';
+    return 'Excelente';
+  }
+
+    async generarPDF() {
+
+    const doc = new jsPDF();
+    const e = this.estudiante;
+  const logoBase64 = await this.loadImageBase64('/favicon.ico');
+
+
+doc.rect(10, 10, 190, 25); // Marco general del encabezado
+doc.addImage(logoBase64, 'PNG', 12, 12, 15, 15); // Izquierda
+doc.addImage(logoBase64, 'PNG', 183, 12, 15, 15); // Derecha
+
+doc.setFontSize(10);
+doc.text('INSTITUCIÓN EDUCATIVA MUNICIPAL ANTONIO NARIÑO', 105, 18, { align: 'center' });
+doc.text('INFORME ESCOLAR DE VALORACIÓN', 105, 23, { align: 'center' });
+doc.text('Año Escolar: 2024', 160, 27);
+
+
+
+    // Datos del estudiante
+   doc.rect(10, 37, 190, 20); // Marco de los datos del estudiante
+
+doc.setFontSize(9);
+doc.text(`ESTUDIANTE: ${e.nombre}`, 12, 43);
+doc.text(`CÓDIGO: ${e.codigo}`, 12, 48);
+doc.text(`P.GRAL: ${e.promedio}`, 70, 48);
+doc.text(`PUESTO: ${e.puesto}`, 105, 48);
+doc.text(`CURSO: ${e.curso}`, 140, 48);
+doc.text(`JORNADA: ${e.jornada}`, 12, 53);
+doc.text(`PERIODO: TERCER PERIODO`, 70, 53);
+doc.text(`F. PERIODO: ${e.fechaPeriodo}`, 130, 53);
+doc.text(`F. FINAL: ${e.fechaFinal}`, 165, 53);
+
+
+    let y = 60;
+
+    // Recorrido por componentes
+    for (const componente of e.componentes) {
+      doc.setFontSize(11);
+      doc.text(componente.nombre, 14, y);
+      y += 2;
+
+      const tabla = componente.asignaturas.map(a => [
+        a.intensidad.toString(),
+        `${a.nombre}\nPROFESOR: ${a.profesor}`,
+        a.notas[0].toFixed(1),
+        a.notas[1].toFixed(1),
+        a.notas[2].toFixed(1),
+        a.actual.toFixed(1),
+        this.valoracionCualitativa(a.actual),
+        a.observacion
+      ]);
+
+autoTable(doc, {
+  startY: y + 3,
+  head: [['IHS', 'ASIGNATURA', 'PER 1', 'PER 2', 'PER 3', 'ACTUAL PER', 'VALORACIÓN', 'OBS']],
+  body: tabla,
+  margin: { left: 14, right: 14 },
+
+  styles: {
+    fontSize: 9,
+    textColor: [0, 0, 0],         // letras negras
+    fillColor: [255, 255, 255],   // fondo blanco
+    lineColor: [0, 0, 0],         // bordes negros
+    lineWidth: 0.2,               // grosor de línea
+    cellPadding: 2
+  },
+
+  headStyles: {
+    fillColor: [255, 255, 255],   // fondo blanco
+    textColor: [0, 0, 0],         // texto negro
+    fontStyle: 'bold',
+    lineColor: [0, 0, 0],
+    lineWidth: 0.5
+  },
+
+  theme: 'grid'
+});
+
+
+      y = (doc as any).lastAutoTable.finalY + 10;
+    }
+
+    doc.save(`${e.nombre.replace(/\s+/g, '_')}_Periodo3.pdf`);
   }
 }
-async getInscritos(){
-  try {
-    this.inscripciones=await this.backendService.getInscritos()
-  } catch (error) {
-    console.log(error)
-  }
-}
-}
+
 

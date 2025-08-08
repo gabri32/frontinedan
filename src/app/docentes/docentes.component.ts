@@ -11,10 +11,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import * as alertify from 'alertifyjs';
 import { MatCardModule } from '@angular/material/card';
 import swal from 'sweetalert2';
+import { FormBuilder, Validators } from '@angular/forms';
 import { FormsModule } from "@angular/forms";
 import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
@@ -66,10 +67,11 @@ export class DocentesComponent implements OnInit {
       fecha_ini: [''],
       fecha_fin: [''],
       periodo: [''],
-      doc: [''],
-      doc2: [''],
+   doc: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=.]+)?$/)]],
+  doc2: ['', [Validators.required, Validators.pattern(/^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=.]+)?$/)]],
       archivo_pdf: [null],
-      taller_activo:[false]
+      taller_activo:[false],
+      competencia:['']
     });
 
 
@@ -88,31 +90,43 @@ export class DocentesComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
-  async getAsingDocente() {
-    const token = sessionStorage.getItem('token');
+async getAsingDocente() {
+  const token = sessionStorage.getItem('token');
+  this.token = token !== null ? token : undefined;
 
-    this.token = token !== null ? token : undefined;
-    // Obtener los datos (recuerdar que `response` era un objeto, así que debes hacer parse)
-    const dataString = sessionStorage.getItem('usuario');
-    const data = dataString ? JSON.parse(dataString) : null;
-    this.docente = data.num_identificacion
-    try {
-      if (this.docente) {
-        this.listaAsing = await this.backendService.getAsingDocente(this.docente);
-      } else {
-        throw new Error("docente is undefined");
+  const dataString = sessionStorage.getItem('usuario');
+  const data = dataString ? JSON.parse(dataString) : null;
+  this.docente = data?.num_identificacion;
+
+  try {
+    if (!this.docente) throw new Error("docente is undefined");
+
+    // Mostrar carga
+    swal.fire({
+      title: "Cargando asignaturas...",
+      text: "Por favor espere un momento",
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
       }
-      this.dataSource.data = this.listaAsing
-      console.log(this.listaAsing)
-    } catch (error) {
-      console.error("Error :", error);
-      swal.fire({
-        title: "Error",
-        text: "Hubo un problema.",
-        icon: "error"
-      });
-    }
+    });
+
+    this.listaAsing = await this.backendService.getAsingDocente(this.docente);
+    this.dataSource.data = this.listaAsing;
+    console.log(this.listaAsing);
+
+    swal.close(); // Cerrar el loading si todo salió bien
+
+  } catch (error) {
+    console.error("Error:", error);
+    swal.fire({
+      title: "Error",
+      text: "Hubo un problema al obtener las asignaturas.",
+      icon: "error"
+    });
   }
+}
+
   async abrirModal(id_asignatura: number, editar: boolean = false) {
     this.modoEdicion = editar;
     this.idAsignaturaActual = id_asignatura;
@@ -132,14 +146,29 @@ export class DocentesComponent implements OnInit {
     }
   }
 
-  async verLista(id_asignatura: number) {
-    try {
-      this.modalVisible2 = true;
-      this.talleres = await this.backendService.getTalleres(id_asignatura)
-    } catch (error) {
-      swal.fire("Error", "No se pudo cargar el taller.", "error");
-    }
+async verLista(id_asignatura: number) {
+  try {
+    // Mostrar el loading
+    swal.fire({
+      title: "Cargando talleres...",
+      text: "Por favor espere un momento",
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+    this.modalVisible2 = true;
+    this.talleres = await this.backendService.getTalleres(id_asignatura);
+
+    swal.close(); // Cerrar el loading cuando finaliza
+
+  } catch (error) {
+    console.error("Error al cargar talleres:", error);
+    swal.fire("Error", "No se pudo cargar el taller.", "error");
   }
+}
+
   cerrarModal() {
     this.modalVisible = false;
     this.modalVisible2 = false;
@@ -150,29 +179,45 @@ export class DocentesComponent implements OnInit {
   }
 
 
-  async guardarTaller(taller: any) {
-    console.log(taller.value.detalle_taller)
-    if (!this.idAsignaturaActual) return;
-    const formData = {
-      detalle_taller: taller.value.detalle_taller,
-      fecha_ini: taller.value.fecha_ini,
-      fecha_fin: taller.value.fecha_fin,
-      periodo: taller.value.periodo,
-      vigencia: new Date().getFullYear().toString(),
-      doc: taller.value.doc,
-      doc2: taller.value.doc2,
-      id_asignatura: this.idAsignaturaActual,
-      otro:taller.value.taller_activo
-    }
+async guardarTaller(taller: any) {
+  if (!this.idAsignaturaActual) return;
 
-    try {
-     await this.backendService.createWorks(formData);
-      swal.fire("Guardado", "Taller registrado correctamente.", "success");
-      this.cerrarModal();
-    } catch (error) {
-      swal.fire("Error", "No se pudo guardar el taller.", "error");
-    }
+  const formData = {
+    detalle_taller: taller.value.detalle_taller,
+    fecha_ini: taller.value.fecha_ini,
+    fecha_fin: taller.value.fecha_fin,
+    periodo: taller.value.periodo,
+    vigencia: new Date().getFullYear().toString(),
+    doc: taller.value.doc,
+    doc2: taller.value.doc2,
+    id_asignatura: this.idAsignaturaActual,
+    otro: taller.value.taller_activo,
+    competencia: taller.value.competencia
+  };
+
+  try {
+    // Mostrar loading
+    swal.fire({
+      title: "Guardando taller...",
+      text: "Por favor espere un momento",
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+    await this.backendService.createWorks(formData);
+
+    swal.close(); // Cerrar loading
+    swal.fire("Guardado", "Taller registrado correctamente.", "success");
+
+    this.cerrarModal();
+  } catch (error) {
+    console.error("Error al guardar taller:", error);
+    swal.fire("Error", "No se pudo guardar el taller.", "error");
   }
+}
+
   editarTaller(taller: any) {
     taller.editando = true;
     taller.backup = { ...taller }; // Guardamos copia original por si cancela
@@ -187,65 +232,76 @@ export class DocentesComponent implements OnInit {
 
 
 
-  async guardarEdicion(taller: any) {
-    try {
-      // Opcional: confirmar antes de guardar
-      const confirmacion = await swal.fire({
-        title: '¿Desea guardar los cambios?',
-        text: 'Se actualizarán los datos de este taller.',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, guardar',
-        cancelButtonText: 'Cancelar'
-      });
+async guardarEdicion(taller: any) {
+  try {
+    // Confirmación antes de guardar
+    const confirmacion = await swal.fire({
+      title: '¿Desea guardar los cambios?',
+      text: 'Se actualizarán los datos de este taller.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, guardar',
+      cancelButtonText: 'Cancelar'
+    });
 
-      if (!confirmacion.isConfirmed) {
-        return;
+    if (!confirmacion.isConfirmed) return;
+
+    // Mostrar loading mientras se guarda
+    swal.fire({
+      title: 'Guardando cambios...',
+      text: 'Por favor espere un momento',
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
       }
+    });
 
-      // Preparamos datos
-      delete taller.backup;
-      taller.editando = false;
+    // Preparar datos
+    delete taller.backup;
+    taller.editando = false;
 
-      const datosActualizados = {
-        id_taller: taller.id_taller,
-        detalle_taller: taller.detalle_taller,
-        periodo: taller.periodo,
-        fecha_ini: taller.fecha_ini,
-        fecha_fin: taller.fecha_fin,
-        doc: taller.doc,
-        doc2: taller.doc2
-      };
+    const datosActualizados = {
+      id_taller: taller.id_taller,
+      detalle_taller: taller.detalle_taller,
+      periodo: taller.periodo,
+      fecha_ini: taller.fecha_ini,
+      fecha_fin: taller.fecha_fin,
+      doc: taller.doc,
+      doc2: taller.doc2,
+      competencia: taller.competencia
+    };
 
-      console.log('[Taller actualizado]', datosActualizados);
+    console.log('[Taller actualizado]', datosActualizados);
 
-      // Llamada al backend
-      await this.backendService.actualizarTaller(datosActualizados);
+    // Llamada al backend
+    await this.backendService.actualizarTaller(datosActualizados);
 
-      // Éxito
-      await swal.fire({
-        icon: 'success',
-        title: '¡Guardado!',
-        text: 'El taller fue actualizado correctamente.',
-        confirmButtonText: 'Aceptar'
-      });
+    swal.close(); // Cierra el loading
 
-    } catch (error) {
-      console.error('Error al actualizar taller:', error);
-      await swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Ocurrió un problema al guardar los cambios. Intenta nuevamente.',
-        confirmButtonText: 'Cerrar'
-      });
-    }
+    // Éxito
+    await swal.fire({
+      icon: 'success',
+      title: '¡Guardado!',
+      text: 'El taller fue actualizado correctamente.',
+      confirmButtonText: 'Aceptar'
+    });
+
+  } catch (error) {
+    console.error('Error al actualizar taller:', error);
+    swal.close(); // Asegúrate de cerrar el loading en caso de error también
+    await swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Ocurrió un problema al guardar los cambios. Intenta nuevamente.',
+      confirmButtonText: 'Cerrar'
+    });
   }
+}
+
 irACalificar(id: number) {
-  console.log(id)
   this.router.navigate([`/layout/profesores/taller/${id}/respuestas`]);
 }
 getInfoNotas(id_asignatura: number, id_curso: number): void {
-  console.log(id_curso)
   this.router.navigate(['/layout/profesores/NotasDocentes'], {
     queryParams: {
       id_asignatura: id_asignatura,
@@ -253,5 +309,7 @@ getInfoNotas(id_asignatura: number, id_curso: number): void {
     }
   });
 }
+
+
 }
 

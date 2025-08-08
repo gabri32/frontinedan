@@ -25,6 +25,7 @@
           <th *ngFor="let taller of talleres">
             {{ taller.detalle_taller }}
           </th>
+          <th>Promedio</th>
         </tr>
       </thead>
       <tbody>
@@ -39,6 +40,7 @@
               placeholder="--"
             />
           </td>
+          <td>{{fila.promedio}}</td>
         </tr>
       </tbody>
     </table>

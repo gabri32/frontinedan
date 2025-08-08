@@ -34,7 +34,7 @@ export class RespuestasTallerComponent implements OnInit {
   taller: any = null;
   nota: number | undefined;
   observacion: string | undefined;
-  constructor(private route: ActivatedRoute, private backendService: BackendService,private router: Router) { }
+  constructor(private route: ActivatedRoute, private backendService: BackendService, private router: Router) { }
 
   ngOnInit(): void {
     this.tallerId = Number(this.route.snapshot.paramMap.get('id'));
@@ -42,50 +42,93 @@ export class RespuestasTallerComponent implements OnInit {
   }
 
   cargarRespuestas(): void {
+    // Mostrar loading
+    Swal.fire({
+      title: 'Cargando respuestas...',
+      text: 'Por favor espere un momento',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     this.backendService.getRespuestasPorTaller(this.tallerId).subscribe({
       next: (res) => {
-        this.respuestas = res;
-        this.respuestas = this.respuestas.map(r => ({
+        this.respuestas = res.map((r: { doc: any; }) => ({
           ...r,
-          pdfUrl: this.getPdfUrl(r.doc)
+          pdfUrl: r.doc ? this.getPdfUrl(r.doc) : null
         }));
 
-        console.log(this.respuestas)
+        console.log(this.respuestas);
         if (res.length > 0) this.taller = res[0].id_taller;
+
+        Swal.close(); // Cerrar loading si todo salió bien
       },
       error: () => {
+        Swal.close(); // Cerrar loading también si hay error
         Swal.fire('Error', 'No se pudieron cargar las respuestas', 'error');
       }
     });
   }
+
 
   getPdfUrl(blob: any): string {
     const blobData = new Blob([new Uint8Array(blob.data)], { type: 'application/pdf' });
     return URL.createObjectURL(blobData);
   }
 
-  guardarCalificacion(respuesta: any): void {
-    // Validar que la nota esté entre 0 y 5
-    if (respuesta.nota === undefined || respuesta.nota < 0 || respuesta.nota > 5) {
-      Swal.fire('Nota inválida', 'La nota debe estar entre 0 y 5', 'warning');
-      return;
-    }
-    if (respuesta.descripcion === null) {
-      Swal.fire(' Inválida', 'No puede ir vacia la observación', 'warning');
-      return;
-    }
-    const payload = {
-      num_estudiantes: respuesta.num_identificacion,
-      id_taller: respuesta.id_pendientes,
-      nota: respuesta.nota,
-      descripcion: respuesta.descripcion || ''
-    };
-
-    this.backendService.calificarTaller(payload).subscribe({
-      next: () => Swal.fire('Guardado', 'Calificación registrada con éxito', 'success'),
-      error: () => Swal.fire('Error', 'No se pudo guardar la calificación', 'error')
-    });
+guardarCalificacion(respuesta: any): void {
+  // Validar que la nota esté entre 0 y 5
+  if (respuesta.nota === undefined || respuesta.nota < 0 || respuesta.nota > 5) {
+    Swal.fire('Nota inválida', 'La nota debe estar entre 0 y 5', 'warning');
+    return;
   }
+
+  if (respuesta.descripcion === null || respuesta.descripcion.trim() === '') {
+    Swal.fire('Inválida', 'No puede ir vacía la observación', 'warning');
+    return;
+  }
+
+  Swal.fire({
+    title: '¿Guardar calificación?',
+    text: '¿Estás seguro de que deseas registrar esta calificación?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, guardar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Mostrar loading mientras se guarda
+      Swal.fire({
+        title: 'Guardando...',
+        text: 'Por favor espera mientras se registra la calificación',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      const payload = {
+        num_estudiantes: respuesta.num_identificacion,
+        id_taller: respuesta.id_pendientes,
+        nota: respuesta.nota,
+        descripcion: respuesta.descripcion || ''
+      };
+
+      this.backendService.calificarTaller(payload).subscribe({
+        next: () => {
+          Swal.fire('Guardado', 'Calificación registrada con éxito', 'success');
+        },
+        error: () => {
+          Swal.fire('Error', 'No se pudo guardar la calificación', 'error');
+        }
+      });
+    }
+  });
+}
+
+
   volver() {
     this.router.navigate(['/layout/profesores']);
   }
