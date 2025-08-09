@@ -27,19 +27,34 @@
             </span>
 
             <!-- Botones para asignar o eliminar docente -->
-            <span style="display: flex; gap: 0.5rem;">
-              <a mat-button class="btn btn-success btn-sm"
-                 *ngIf="!asignatura.profesor"
-                 (click)="asignarDocente(asignatura)">
-                <i class="fa fa-user-graduate"></i>
-              </a>
+      <span style="display: flex; gap: 0.5rem;">
 
-              <a mat-button class="btn btn-danger btn-sm"
-                 *ngIf="asignatura.profesor"
-                 (click)="deleteDocente(asignatura)">
-                <i class="fa fa-trash"></i>
-              </a>
-            </span>
+  <!-- Botón asignar docente -->
+  <a mat-button
+     matTooltip="Asignar docente"
+     matTooltipPosition="above"
+     matTooltipShowDelay="400"
+     matTooltipHideDelay="200"
+     class="btn btn-success btn-sm"
+     *ngIf="!asignatura.profesor"
+     (click)="asignarDocente(asignatura)">
+    <i class="fa fa-user-graduate"></i>
+  </a>
+
+  <!-- Botón eliminar docente -->
+  <a mat-button
+     matTooltip="Eliminar docente"
+     matTooltipPosition="above"
+     matTooltipShowDelay="400"
+     matTooltipHideDelay="200"
+     class="btn btn-danger btn-sm"
+     *ngIf="asignatura.profesor"
+     (click)="deleteDocente(asignatura)">
+    <i class="fa fa-trash"></i>
+  </a>
+
+</span>
+
           </li>
         </ul>
       </mat-expansion-panel>

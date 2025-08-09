@@ -17,6 +17,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialogModule } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-modal-asignar-grado',
@@ -30,7 +31,8 @@ import { Inject } from '@angular/core';
     MatCardModule,
     NgxChartsModule,
     FormsModule,
-  MatDialogModule],
+  MatDialogModule,
+MatTooltipModule],
   templateUrl: './modal-asignar-grado.component.html',
   styleUrl: './modal-asignar-grado.component.css'
 })

@@ -22,6 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-modal-asignar-asignaturas',
@@ -42,6 +43,7 @@ import { Inject } from '@angular/core';
       MatIconModule,
       MatSelectModule,
        MatExpansionModule,
+       MatTooltipModule
   ],
   templateUrl: './modal-asignar-asignaturas.component.html',
   styleUrl: './modal-asignar-asignaturas.component.css'

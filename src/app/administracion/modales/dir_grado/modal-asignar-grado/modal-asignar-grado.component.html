@@ -41,17 +41,30 @@
           <ng-container matColumnDef="Opciones">
             <th mat-header-cell *matHeaderCellDef> Opciones </th>
             <td mat-cell *matCellDef="let profesor">
-              <span style="display: flex; gap: 0.5rem;">
+         <span style="display: flex; gap: 0.5rem;">
 
-                <a mat-button class="btn btn-success btn-sm"*ngIf="!profesor.profesor_id"  (click)="asignarSede_Director(profesor)">
-                  <i class="fa fa-user-graduate"></i>
-                </a>
+  <!-- Botón asignar -->
+  <a mat-button 
+     matTooltip="Asignar sede/director" 
+     matTooltipPosition="above"
+     class="btn btn-success btn-sm" 
+     *ngIf="!profesor.profesor_id"  
+     (click)="asignarSede_Director(profesor)">
+    <i class="fa fa-user-graduate"></i>
+  </a>
 
+  <!-- Botón eliminar -->
+  <a mat-button 
+     matTooltip="Eliminar sede/director" 
+     matTooltipPosition="above"
+     class="btn btn-danger btn-sm" 
+     *ngIf="profesor.profesor_id"
+     (click)="deleteSede_Director(profesor)">
+    <i class="fa fa-trash"></i>
+  </a>
 
-                <a mat-button class="btn btn-danger btn-sm" *ngIf="profesor.profesor_id"(click)="deleteSede_Director(profesor)">
-                  <i class="fa fa-trash"></i>
-                </a>
-              </span>
+</span>
+
             </td>
 
           </ng-container>

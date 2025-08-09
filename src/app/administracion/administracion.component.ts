@@ -51,6 +51,34 @@ import autoTable from 'jspdf-autotable';
 })
 
 export class AdministracionComponent implements OnInit {
+  aniosDisponibles: number[] = [2023, 2024, 2025];
+sedes = [
+  { id: 1, detalle: 'Centro JM' },
+  { id: 2, detalle: 'Capusigra JT' },
+  { id: 3, detalle: 'Capusigra JM' }
+];
+
+grados = [
+  'Grado 0',
+  'Grado 1',
+  'Grado 2',
+  'Grado 3',
+  'Grado 4',
+  'Grado 5',
+  'Grado 6',
+  'Grado 7',
+  'Grado 8',
+  'Grado 9',
+  'Grado 10',
+  'Grado 11'
+];
+
+periodos: string[] = ['Periodo 1', 'Periodo 2', 'Periodo 3'];
+
+sedeSeleccionada: number = this.sedes[0].id;
+gradoSeleccionado: string = this.grados[0];
+anioSeleccionado: number = new Date().getFullYear();
+periodoSeleccionado: string = this.periodos[0];
  estudiante = {
   nombre: 'PEREZ MELO SHIRLEY ALEJANDRA',
   codigo: '1080043724',
@@ -86,10 +114,10 @@ export class AdministracionComponent implements OnInit {
       ]
     },
      {
-      nombre: 'Ciencia tecnología y ambiente',
+      nombre: 'Desarrollo personal, fisico y social',
       asignaturas: [
         {
-          nombre: 'FISICA (FIS)',
+          nombre: 'EDUCACIÓN FISICA(EDUFI)',
           profesor: 'GUERRERO PAREDES JESUS HUMBERTO',
           intensidad: 1,
           notas: [3.2, 3.6, 3.6],
@@ -98,7 +126,30 @@ export class AdministracionComponent implements OnInit {
           observacion: 'FNJ'
         },
         {
-          nombre: 'QUIMICA (QUIM)',
+          nombre: 'RELIGION Y ETICA Y VALORES(RELI)',
+          profesor: 'MURIEL GRAJALES NOHORA ISABEL',
+          intensidad: 2,
+          notas: [3.0, 3.4, 3.7],
+          actual: 3.7,
+          valoracion: 'B. BÁSICO',
+          observacion: 'FNJ'
+        }
+      ]
+    },
+        {
+      nombre: 'Pensamiento y comunicación',
+      asignaturas: [
+        {
+          nombre: 'CASTELLANO(CAST)',
+          profesor: 'GUERRERO PAREDES JESUS HUMBERTO',
+          intensidad: 1,
+          notas: [3.2, 3.6, 3.6],
+          actual: 3.6,
+          valoracion: 'B. BÁSICO',
+          observacion: 'FNJ'
+        },
+        {
+          nombre: 'FILOSOFIA (FILO)',
           profesor: 'MURIEL GRAJALES NOHORA ISABEL',
           intensidad: 2,
           notas: [3.0, 3.4, 3.7],
@@ -116,7 +167,6 @@ export class AdministracionComponent implements OnInit {
   docentes: any;
   cursoForm: FormGroup;
   cursos: any[] = []
-  sedes: any[] = []
   displayedColumns: string[] = ['Numero', 'imagen', 'Opciones'];
   displayedColumnsdocentes: string[] = ['Identificacion del docente', 'Nombre completo', 'Sede', 'Vigencia', 'Opciones'];
   displayedColumnscursos: string[] = ['Grado', 'Curso', 'Director de grado', 'Sede', 'Opciones'];
