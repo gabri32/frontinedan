@@ -101,13 +101,19 @@
     
       <h5 class="warning">Ya has registrado candidatos para esta elección</h5>
     <br>
-      <label for="">Reactivar votaciones</label> 
+      <label for="">Inactivar votaciones</label> 
       &nbsp;
-    
+    <button type="button" class="btn btn-success" ><i class="fa fa-check" (click)="inactivarcadidatos()"
+            style="font-size:18px"></i></button>
     </div>
-  
+    <div *ngIf="!hascandidates" class="text-center">
+      <label for="">Inactivar votaciones</label> 
+      &nbsp;
       <button type="button" class="btn btn-success" ><i class="fa fa-check" (click)="reactivarCandidatos()"
             style="font-size:18px"></i></button>
+    </div>
+  
+      
     <!-- Formulario para registrar candidatos -->
     <div>
       <div class="text-center" *ngIf="!hascandidates">
