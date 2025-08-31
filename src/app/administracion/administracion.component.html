@@ -1,7 +1,12 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
   <mat-tab label="Creación de cursos y asignaturas">
     <mat-divider></mat-divider>
+       <div class="text-begin mt-3" *ngIf="!validarCurso">
+      <button class="btn btn-success" (click)="crearCursos()">Crear Cursos</button>
+    </div>
+    <br>
     <table class="table table-bordered">
+      
       <thead>
         <tr>
           <th>Sede</th>
@@ -30,9 +35,7 @@
         Ya se creó los cursos para este año
       </div>
     </div>
-    <div class="text-end mt-3" *ngIf="!validarCurso">
-      <button class="btn btn-success" (click)="crearCursos()">Crear Cursos</button>
-    </div>
+ 
 
   </mat-tab>
   <mat-tab label="Aignación de carga academica">
