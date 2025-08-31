@@ -53,6 +53,12 @@ async deleteHeader(id: number): Promise<any> {
   async createVote(params: any): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/createvotes`, params));
   }
+async inactivarTodosCandidatos(): Promise<any> {
+  return firstValueFrom(this.http.post(`${this.apiUrl}/candidatos/inactivar`, {}));
+}
+async activarTodosCandidatos(): Promise<any> {
+  return firstValueFrom(this.http.post(`${this.apiUrl}/candidatos/activar`, {}));
+}
 async searchVotes(estudiante_id: number): Promise<any> {
   const params = new HttpParams().set('estudiante_id', estudiante_id.toString());
   return firstValueFrom(this.http.get(`${this.apiUrl}/getvotes`, { params }));
