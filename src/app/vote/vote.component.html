@@ -364,14 +364,13 @@
           </p>
         </footer>
       </div>
-    </div>
+    </div> 
   </mat-tab>
-<mat-tab label="Parámetros votaciones" *ngIf="mostrarTab3 === true">
+<!-- <mat-tab label="Parámetros votaciones" *ngIf="mostrarTab3 === true">
   <div style="text-align: center;">
     <strong style="display: block; margin-bottom: 10px; font-size: 18px;">Configuración de eventos</strong>
   </div>
 
-  <!-- Sección 1: Formulario de creación de evento -->
 <mat-card>
   <br>
   <mat-card-title>&nbsp;Nuevo evento</mat-card-title>
@@ -416,7 +415,7 @@
 
   <br>
 
-  <!-- Sección 2: Tabla de eventos -->
+
   <mat-card>
     <br>
     <mat-card-title>&nbsp; Lista de eventos</mat-card-title>
@@ -424,19 +423,19 @@
     <mat-card-content>
       <table mat-table [dataSource]="eventos" class="mat-elevation-z8" style="width: 100%;">
 
-        <!-- Descripción Column -->
+        
         <ng-container matColumnDef="descripcion">
           <th mat-header-cell *matHeaderCellDef>Descripción</th>
           <td mat-cell *matCellDef="let evento"> {{evento.detalle_del_evento}} </td>
         </ng-container>
 
-        <!-- Fecha Inicio Column -->
+ 
         <ng-container matColumnDef="fechaInicio">
           <th mat-header-cell *matHeaderCellDef>Fecha Inicio</th>
           <td mat-cell *matCellDef="let evento"> {{evento.fecha_ini | date}} </td>
         </ng-container>
 
-        <!-- Fecha Fin Column -->
+ 
         <ng-container matColumnDef="fechaFin">
           <th mat-header-cell *matHeaderCellDef>Fecha Final</th>
           <td mat-cell *matCellDef="let evento"> {{evento.fecha_fin | date}} </td>
@@ -447,7 +446,7 @@
       </table>
     </mat-card-content>
   </mat-card>
-</mat-tab>
+</mat-tab> -->
 
 
 </mat-tab-group>

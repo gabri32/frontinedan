@@ -38,7 +38,7 @@ import { MatNativeDateModule } from '@angular/material/core'; // o MatMomentDate
     MatCardModule,
     NgxChartsModule,
     FormsModule,
-    MatError,
+    // MatError,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -55,7 +55,7 @@ export class VoteComponent implements OnInit {
 
   //variables iniciales del componente ------------------------
   displayedColumns: string[] = ['selecciona', 'id', 'nombre', 'edad', 'grado', 'num_identificacion', 'Seleccionado', 'Opciones'];
-  displayedColumns2: string[] = ['descripcion', 'fechaInicio', 'fechaFin'];
+  // displayedColumns2: string[] = ['descripcion', 'fechaInicio', 'fechaFin'];
 
   dataSource = new MatTableDataSource<any>();
   selectedStudents: Array<any> = []
