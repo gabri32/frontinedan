@@ -651,42 +651,66 @@ export class VoteComponent implements OnInit {
     }
   }
 
-  async reactivarCandidatos(){
-    try {
-      const activar = await this.backendService.activarTodosCandidatos()
-   await   this.obtenerEstudiantes();
-    await  this.searchCandidates();
-  await  this.searchVotes();
-  await  this.getEventos();
-        swal.fire({
-          title: '¡Éxito!',
-          text: 'Actualizado con exito',
-          icon: 'success',
-          timer: 500,
-          timerProgressBar: true,
-          showConfirmButton: false
-        })
-    } catch (error) {
-      console.log(error)
-    }
+async reactivarCandidatos() {
+  try {
+    swal.fire({
+      title: 'Procesando...',
+      text: 'Reactivando candidatos',
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+    await this.backendService.activarTodosCandidatos();
+    await this.obtenerEstudiantes();
+    await this.searchCandidates();
+    await this.searchVotes();
+    await this.getEventos();
+
+    swal.fire({
+      title: '¡Éxito!',
+      text: 'Actualizado con éxito',
+      icon: 'success',
+      timer: 500,
+      timerProgressBar: true,
+      showConfirmButton: false
+    });
+  } catch (error) {
+    console.log(error);
+    swal.fire('Error', 'Ocurrió un error al reactivar candidatos', 'error');
   }
-    async inactivarcadidatos(){
-    try {
-      const activar = await this.backendService.inactivarTodosCandidatos()
-    await  this.obtenerEstudiantes();
-  await  this.searchCandidates();
-  await    this.searchVotes();
-   await this.getEventos();
-        swal.fire({
-          title: '¡Éxito!',
-          text: 'Actualizado con exito',
-          icon: 'success',
-          timer: 500,
-          timerProgressBar: true,
-          showConfirmButton: false
-        })
-    } catch (error) {
-      console.log(error)
-    }
+}
+
+async inactivarcadidatos() {
+  try {
+    swal.fire({
+      title: 'Procesando...',
+      text: 'Inactivando candidatos',
+      allowOutsideClick: false,
+      didOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+    await this.backendService.inactivarTodosCandidatos();
+    await this.obtenerEstudiantes();
+    await this.searchCandidates();
+    await this.searchVotes();
+    await this.getEventos();
+
+    swal.fire({
+      title: '¡Éxito!',
+      text: 'Actualizado con éxito',
+      icon: 'success',
+      timer: 500,
+      timerProgressBar: true,
+      showConfirmButton: false
+    });
+  } catch (error) {
+    console.log(error);
+    swal.fire('Error', 'Ocurrió un error al inactivar candidatos', 'error');
   }
+}
+
 }
