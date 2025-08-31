@@ -103,10 +103,11 @@
     <br>
       <label for="">Reactivar votaciones</label> 
       &nbsp;
-      <button type="button" class="btn btn-success" (click)="generatePDF()"><i class="fa fa-save"
-            style="font-size:18px"></i></button>
+    
     </div>
-
+  
+      <button type="button" class="btn btn-success" ><i class="fa fa-check" (click)="reactivarCandidatos()"
+            style="font-size:18px"></i></button>
     <!-- Formulario para registrar candidatos -->
     <div>
       <div class="text-center" *ngIf="!hascandidates">

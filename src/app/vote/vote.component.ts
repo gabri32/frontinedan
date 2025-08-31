@@ -650,4 +650,20 @@ export class VoteComponent implements OnInit {
       alertify.error('❌ Error al registrar el evento ❌');
     }
   }
+
+  async reactivarCandidatos(){
+    try {
+      const activar = this.backendService.activarTodosCandidatos()
+        swal.fire({
+          title: '¡Éxito!',
+          text: 'Actualizado con exito',
+          icon: 'success',
+          timer: 500,
+          timerProgressBar: true,
+          showConfirmButton: false
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
