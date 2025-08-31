@@ -131,7 +131,7 @@
       <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Buscar" class="global-filter">
 
       <!-- Botón para guardar candidatos -->
-      <button class="button-save" *ngIf="selectedStudents.length > 0&&!hascandidates" mat-flat-button
+      <button class="button-save" *ngIf="selectedStudents.length" mat-flat-button
         matTooltip="Guardar candidatos" matTooltipPosition="above" style="border-radius: 20px;"
         (click)="createCandidates()">
         <i class="fa fa-save" style="color: black;"></i>
