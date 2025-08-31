@@ -213,16 +213,16 @@
               *ngIf="student.seleccionado === 'Sí'">
 
             <!-- Botón para subir la imagen -->
-            <button *ngIf="student.selectedFile&&student.lema&&student.numero" mat-button color="primary"
+            <button class="btn btn-success delete-btn"*ngIf="student.selectedFile&&student.lema&&student.numero" 
               (click)="uploadImage(student)">
-              Subir imagen/lema/num_candidato
+          <i class="fa fa-save small-icon"> &nbsp;<span style="font-family: Arial, Helvetica, sans-serif;">Guardar la información del candidato</span></i>
             </button>
 
             <!-- Mostrar la imagen subida -->
             <img *ngIf="student.uploadedImageUrl" [src]="student.uploadedImageUrl" alt="Imagen subida"
               style="max-width: 200px; display: block; margin-top: 10px;">
 
-            <a class="btn btn-danger delete-btn" *ngIf="student.seleccionado === 'Sí'" mat-icon-button
+            <a class="btn btn-danger delete-btn" *ngIf="student.seleccionado === 'Sí'&&!student.selectedFile&&!student.lema&&!student.numero " mat-icon-button
               (click)="removeCandidate(student)">
               <i class="fa fa-trash small-icon"> &nbsp;<span style="font-family: Arial, Helvetica, sans-serif;">Eliminar candidato</span></i>
             </a>
