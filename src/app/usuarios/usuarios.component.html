@@ -1,78 +1,75 @@
 <!-- NOMBRE -->
 <div class="mb-3">
   <label for="nombre" class="form-label">Nombre</label>
-  <input
-    type="text"
-    class="form-control"
-    id="nombre"
-    name="nombre"
-    [(ngModel)]="nombre"
-    required
-  />
+  <input type="text" class="form-control" id="nombre" [(ngModel)]="nombre" required />
 </div>
 
 <!-- CONTRASEÑA -->
 <div class="mb-3">
   <label for="contraseña" class="form-label">Contraseña</label>
-  <input
-    type="password"
-    class="form-control"
-    id="contraseña"
-    name="contraseña"
-    [(ngModel)]="contrasena"
-    required
-  />
+  <input type="password" class="form-control" id="contraseña" [(ngModel)]="contrasena" required />
 </div>
 
 <!-- CORREO -->
 <div class="mb-3">
   <label for="correo" class="form-label">Correo electrónico</label>
-  <input
-    type="email"
-    class="form-control"
-    id="correo"
-    name="correo"
-    [(ngModel)]="correo"
-    required
-  />
+  <input type="email" class="form-control" id="correo" [(ngModel)]="correo" required />
 </div>
 
 <!-- NÚMERO DE IDENTIFICACIÓN -->
 <div class="mb-3">
   <label for="numIdentificacion" class="form-label">Número de identificación</label>
-  <input
-    type="text"
-    class="form-control"
-    id="numIdentificacion"
-    name="numIdentificacion"
-    [(ngModel)]="num_identificacion"
-    required
-  />
+  <input type="text" class="form-control" id="numIdentificacion" [(ngModel)]="num_identificacion" required />
 </div>
 
-<!-- ROL / TIPO DE USUARIO -->
+<!-- ROL -->
 <div class="mb-3">
   <label for="tipoUsuario" class="form-label">Tipo de usuario</label>
-  <select
-    class="form-select"
-    id="tipoUsuario"
-    name="tipoUsuario"
-    [(ngModel)]="rol_id"
-    required
-  >
+  <select class="form-select" id="tipoUsuario" [(ngModel)]="rol_id" required>
     <option value="" disabled>Seleccione un tipo</option>
-    <option *ngFor="let type of roles" [value]="type.id">
-      {{ type.nombre }}
-    </option>
+    <option *ngFor="let type of roles" [value]="type.id">{{ type.nombre }}</option>
   </select>
 </div>
-<div >
-  <button
-    type="submit"
-    class="btn btn-success"
-    (click)="guardarUsuario()"
-   
-  >
+
+<!-- CAMPOS ADICIONALES SEGÚN ROL -->
+
+<!-- Estudiante -->
+<div *ngIf="rol_id == 2">
+  <div class="mb-3">
+    <label class="form-label">Edad</label>
+    <input type="number" class="form-control" [(ngModel)]="edad" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Grado</label>
+    <input type="text" class="form-control" [(ngModel)]="grado" />
+  </div>
+</div>
+
+<!-- Profesor -->
+<div *ngIf="rol_id == 1">
+  <div class="mb-3">
+    <label class="form-label">Especialidad</label>
+    <input type="text" class="form-control" [(ngModel)]="especialidad" />
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Vigencia</label>
+    <select class="form-select" [(ngModel)]="vigencia">
+      <option [ngValue]="true">Activo</option>
+      <option [ngValue]="false">Inactivo</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Sede</label>
+    <select class="form-select" [(ngModel)]="sede">
+      <option value="" disabled>Seleccione sede</option>
+      <option *ngFor="let s of sedes" [value]="s.id">{{ s.detalle }}</option>
+    </select>
+  </div>
+</div>
+
+<!-- BOTÓN -->
+<div>
+  <button type="submit" class="btn btn-success" (click)="guardarUsuario()">
     Guardar Usuario
-  </button>&nbsp;
+  </button>
 </div>

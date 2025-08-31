@@ -1,21 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableDataSource } from '@angular/material/table';
-import { BackendService } from '../backend.service';
 import { MatDividerModule } from '@angular/material/divider';
-import * as alertify from 'alertifyjs';
 import { MatCardModule } from '@angular/material/card';
 import swal from 'sweetalert2';
-import { FormsModule, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from "@angular/forms";
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { BackendService } from '../backend.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -35,7 +30,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatCardModule,
     NgxChartsModule,
     FormsModule,
-    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
@@ -46,18 +40,29 @@ import { MatExpansionModule } from '@angular/material/expansion';
   styleUrl: './usuarios.component.css'
 })
 export class UsuariosComponent implements OnInit {
+  // Datos básicos
   nombre: string = '';
   contrasena: string = '';
   correo: string = '';
   rol_id: number = 0;
-  roles: any[] = [];
   num_identificacion: string = '';
 
+  // Datos extra según rol
+  edad: number | null = null;
+  grado: string = '';
+  especialidad: string = '';
+  vigencia: boolean = true;
+  sede: number | null = null;
+
+  roles: any[] = [];
+  sedes: any[] = []; // si tu backend ya expone sedes
+
   constructor(private backendService: BackendService) { }
+
   ngOnInit(): void {
     this.getroles();
+    this.getSedes();
   }
-
 
   async getroles() {
     try {
@@ -70,54 +75,102 @@ export class UsuariosComponent implements OnInit {
       console.error('Error al obtener los roles:', error);
     }
   }
-async guardarUsuario() {
-  // Validación de campos vacíos
-  if (!this.nombre || !this.contrasena || !this.correo || !this.num_identificacion || !this.rol_id) {
-    swal.fire({
-      title: "Campos incompletos",
-      text: "Por favor, completa todos los campos antes de guardar.",
-      icon: "warning",
-      confirmButtonText: "Aceptar"
-    });
-    return;
+
+  async getSedes() {
+    try {
+      const response: any = await this.backendService.getsedes();
+      if (response && response.length > 0) {
+        this.sedes = response;
+      }
+    } catch (error) {
+      console.error('Error al obtener sedes:', error);
+    }
   }
-  try {
-    const data = {
+
+  async guardarUsuario() {
+    // Validación básica
+    if (!this.nombre || !this.contrasena || !this.correo || !this.num_identificacion || !this.rol_id) {
+      swal.fire({
+        title: "Campos incompletos",
+        text: "Por favor, completa todos los campos básicos antes de guardar.",
+        icon: "warning",
+        confirmButtonText: "Aceptar"
+      });
+      return;
+    }
+
+    // Construir payload según rol
+    const data: any = {
       nombre: this.nombre,
       contrasena: this.contrasena,
       correo: this.correo,
       rol_id: this.rol_id,
       num_identificacion: this.num_identificacion
-    }
-    swal.fire({
-      title: 'Cargando',
-      text: 'Por favor espera...',
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen: () => {
-        swal.showLoading();
+    };
+
+    if (this.rol_id === 2) { // Estudiante
+      if (!this.edad || !this.grado) {
+        swal.fire("Atención", "Edad y grado son obligatorios para estudiantes", "warning");
+        return;
       }
-    });
-    const response: any = await this.backendService.createuser({ data })
-    swal.close();
+      data.edad = this.edad;
+      data.grado = this.grado;
+    }
 
-    swal.fire({
-      title: "Éxito",
-      text: "Usuario creado correctamente.",
-      icon: "success",
-      timer: 1500,
-      showConfirmButton: false
-    });
+    if (this.rol_id === 1) { // Profesor
+      if (!this.especialidad || !this.sede) {
+        swal.fire("Atención", "Especialidad y sede son obligatorios para profesores", "warning");
+        return;
+      }
+      data.especialidad = this.especialidad;
+      data.vigencia = this.vigencia;
+      data.sede = this.sede;
+    }
 
-  } catch (error) {
-    swal.close();
-    swal.fire({
-      title: "Error",
-      text: "Hubo un problema al crear el usuario.",
-      icon: "error",
-      confirmButtonText: "Aceptar"
-    });
+    // Admin (rol 3) no necesita extra, solo los datos básicos
+
+    try {
+      swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
+
+      const response: any = await this.backendService.createuser({ data });
+
+      swal.close();
+      swal.fire({
+        title: "Éxito",
+        text: "Usuario creado correctamente.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false
+      });
+
+      // Reset form
+      this.nombre = '';
+      this.contrasena = '';
+      this.correo = '';
+      this.num_identificacion = '';
+      this.rol_id = 0;
+      this.edad = null;
+      this.grado = '';
+      this.especialidad = '';
+      this.vigencia = true;
+      this.sede = null;
+
+    } catch (error) {
+      swal.close();
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al crear el usuario.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }
   }
-}
-
 }
