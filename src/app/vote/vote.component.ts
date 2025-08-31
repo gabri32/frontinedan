@@ -653,7 +653,11 @@ export class VoteComponent implements OnInit {
 
   async reactivarCandidatos(){
     try {
-      const activar = this.backendService.activarTodosCandidatos()
+      const activar = await this.backendService.activarTodosCandidatos()
+   await   this.obtenerEstudiantes();
+    await  this.searchCandidates();
+  await  this.searchVotes();
+  await  this.getEventos();
         swal.fire({
           title: '¡Éxito!',
           text: 'Actualizado con exito',
@@ -668,7 +672,11 @@ export class VoteComponent implements OnInit {
   }
     async inactivarcadidatos(){
     try {
-      const activar = this.backendService.inactivarTodosCandidatos()
+      const activar = await this.backendService.inactivarTodosCandidatos()
+    await  this.obtenerEstudiantes();
+  await  this.searchCandidates();
+  await    this.searchVotes();
+   await this.getEventos();
         swal.fire({
           title: '¡Éxito!',
           text: 'Actualizado con exito',
