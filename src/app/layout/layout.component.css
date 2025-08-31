@@ -42,6 +42,8 @@
 /* Estilos del sidebar */
 .w3-sidebar {
   width: 15%; /* Ancho fijo del sidebar */
+ font-family: "Poppins", sans-serif;
+ font-weight: 600;
 }
 .w3-sidebar {
   border: 2px solid rgba(133, 129, 129, 0);

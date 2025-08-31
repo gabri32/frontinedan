@@ -151,7 +151,7 @@ export class VoteComponent implements OnInit {
     try {
 
       const data = await this.backendService.getAllStudents();
-      console.log(data)
+      console.log("datos de los estudiantes reales ",data)
       this.dataSource.data = data.students.map((student: any) => ({ ...student, seleccionado: "No" }));
       this.searchCandidates()
     } catch (error) {

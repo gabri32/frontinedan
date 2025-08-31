@@ -73,10 +73,11 @@
         <h4 class="mb-3 text-center">{{'Detalle del Taller' }} - {{now}}</h4>
 
         <form [formGroup]="tallerForm" (ngSubmit)="guardarTaller(tallerForm)">
-          <div class="form-group mb-3">
-            <label for="detalle_taller">Detalle</label>
-            <input type="text" class="form-control" formControlName="detalle_taller" [readonly]="!modoEdicion">
-          </div>
+      <div class="form-group mb-3">
+  <label for="detalle_taller">Detalle</label>
+  <textarea class="form-control" id="detalle_taller" formControlName="detalle_taller" [readonly]="!modoEdicion"></textarea>
+</div>
+
               <div class="form-group mb-3">
             <label for="competencia">Competencia</label>
             <input type="text" class="form-control" formControlName="competencia" [readonly]="!modoEdicion">
