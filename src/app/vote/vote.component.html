@@ -21,7 +21,7 @@
             <mat-card-content>
               <p>{{candidate.lema}}</p>
               &nbsp;
-              <i type="button" class="btn btn btn-circle"><strong>{{0}}-{{candidate.numero}}</strong></i>
+              <i type="label" ><strong>{{0}}-{{candidate.numero}}</strong></i>
             </mat-card-content>
             <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
               <button class="btn btn-success btn-circle" mat-button (click)="vote(candidate)"> <h6 style="font-family: Arial, Helvetica, sans-serif; color: white;">Votar</h6></button>
