@@ -199,54 +199,66 @@
 <mat-tab label="Generar reportes de notas">
   <mat-divider></mat-divider>
 
-  <div style="padding: 20px; max-width: 500px; margin: auto; text-align: center;">
+  <div style="padding: 20px; max-width: 700px; margin: auto; text-align: center;">
     <h3 class="text-center mb-4">Generar reportes de notas</h3>
     <p class="text-center mb-4">Seleccione la sede, el grado, el año y el periodo para generar el reporte.</p>
 
-    <!-- Selector de Sede -->
+    <!-- Sede (opcional) -->
     <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
       <mat-label>Sede</mat-label>
       <mat-select [(ngModel)]="sedeSeleccionada">
-        <mat-option *ngFor="let sede of sedes" [value]="sede.id">
-          {{ sede.detalle }}
-        </mat-option>
+        <mat-option *ngFor="let sede of sedes" [value]="sede.id">{{ sede.detalle }}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <!-- Selector de Grado -->
+    <!-- Grado (tipo_grado) -->
     <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
       <mat-label>Grado</mat-label>
       <mat-select [(ngModel)]="gradoSeleccionado">
-        <mat-option *ngFor="let grado of grados" [value]="grado">
-          {{ grado }}
-        </mat-option>
+        <mat-option *ngFor="let g of grados" [value]="g">{{ g }}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <!-- Selector de Año -->
+    <!-- Año -->
     <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
       <mat-label>Año</mat-label>
       <mat-select [(ngModel)]="anioSeleccionado">
-        <mat-option *ngFor="let anio of aniosDisponibles" [value]="anio">
-          {{ anio }}
-        </mat-option>
+        <mat-option *ngFor="let a of aniosDisponibles" [value]="a">{{ a }}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <!-- Selector de Periodo -->
+    <!-- Periodo -->
     <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 15px;">
       <mat-label>Periodo</mat-label>
       <mat-select [(ngModel)]="periodoSeleccionado">
-        <mat-option *ngFor="let periodo of periodos" [value]="periodo">
-          {{ periodo }}
-        </mat-option>
+        <mat-option *ngFor="let p of periodos" [value]="p">{{ p }}</mat-option>
       </mat-select>
     </mat-form-field>
 
-    <!-- Botón -->
-    <button mat-raised-button color="primary" (click)="generarPDF()">
-      Generar reporte de notas
-    </button>
+    <!-- Botones -->
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button mat-raised-button color="primary" (click)="cargarReporte()">Cargar datos</button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" style="margin-top:15px;">Cargando…</div>
+
+    <!-- Lista de estudiantes -->
+    <div *ngIf="!isLoading && estudiantes?.length" style="margin-top:20px; text-align:left;">
+      <h4>Estudiantes ({{estudiantes.length}})</h4>
+      <div *ngFor="let est of estudiantes" style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid #eee;">
+        <div>
+          <div><strong>{{ est.nombre }}</strong></div>
+          <div style="font-size:12px;">Código: {{ est.codigo }} • Curso: {{ est.curso }} • Prom.: {{ est.promedio }}</div>
+        </div>
+        <button mat-stroked-button color="primary" (click)="generarPDF(est)">PDF</button>
+      </div>
+    </div>
+
+    <!-- Sin resultados -->
+    <div *ngIf="!isLoading && reporte && (!estudiantes || !estudiantes.length)" style="margin-top:20px;">
+      No se encontraron datos para esos filtros.
+    </div>
   </div>
 </mat-tab>
 

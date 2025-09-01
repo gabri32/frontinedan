@@ -130,6 +130,12 @@ async searchVotes(estudiante_id: number): Promise<any> {
 async getsedes ():Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/getsedes`,))
 }
+  async reporte(tipo_grado: string | number, periodo: number): Promise<any> {
+    const params = new HttpParams()
+      .set('tipo_grado', String(tipo_grado))
+      .set('periodo', String(periodo));
+    return firstValueFrom(this.http.get(`${this.apiUrl}/reportes/tipo-grado`, { params }));
+  }
 async createCurso(event:any):Promise<any>{
   return firstValueFrom(this.http.post(`${this.apiUrl}/createCurso`,event))
 }

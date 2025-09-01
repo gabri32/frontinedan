@@ -51,116 +51,7 @@ import autoTable from 'jspdf-autotable';
 })
 
 export class AdministracionComponent implements OnInit {
-  aniosDisponibles: number[] = [2023, 2024, 2025];
-sedes = [
-  { id: 1, detalle: 'Centro JM' },
-  { id: 2, detalle: 'Capusigra JT' },
-  { id: 3, detalle: 'Capusigra JM' }
-];
 
-grados = [
-  'Grado 0',
-  'Grado 1',
-  'Grado 2',
-  'Grado 3',
-  'Grado 4',
-  'Grado 5',
-  'Grado 6',
-  'Grado 7',
-  'Grado 8',
-  'Grado 9',
-  'Grado 10',
-  'Grado 11'
-];
-
-periodos: string[] = ['Periodo 1', 'Periodo 2', 'Periodo 3'];
-
-sedeSeleccionada: number = this.sedes[0].id;
-gradoSeleccionado: string = this.grados[0];
-anioSeleccionado: number = new Date().getFullYear();
-periodoSeleccionado: string = this.periodos[0];
- estudiante = {
-  nombre: 'PEREZ MELO SHIRLEY ALEJANDRA',
-  codigo: '1080043724',
-  promedio: 3.66,
-  puesto: 19,
-  curso: '11-01',
-  jornada: 'MAÑANA',
-  periodo: 3,
-  fechaPeriodo: '2024-06-17',
-  fechaFinal: '2024-09-14',
-  componentes: [
-    {
-      nombre: 'Ciencia tecnología y ambiente',
-      asignaturas: [
-        {
-          nombre: 'FISICA (FIS)',
-          profesor: 'GUERRERO PAREDES JESUS HUMBERTO',
-          intensidad: 1,
-          notas: [3.2, 3.6, 3.6],
-          actual: 3.6,
-          valoracion: 'B. BÁSICO',
-          observacion: 'FNJ'
-        },
-        {
-          nombre: 'QUIMICA (QUIM)',
-          profesor: 'MURIEL GRAJALES NOHORA ISABEL',
-          intensidad: 2,
-          notas: [3.0, 3.4, 3.7],
-          actual: 3.7,
-          valoracion: 'B. BÁSICO',
-          observacion: 'FNJ'
-        }
-      ]
-    },
-     {
-      nombre: 'Desarrollo personal, fisico y social',
-      asignaturas: [
-        {
-          nombre: 'EDUCACIÓN FISICA(EDUFI)',
-          profesor: 'GUERRERO PAREDES JESUS HUMBERTO',
-          intensidad: 1,
-          notas: [3.2, 3.6, 3.6],
-          actual: 3.6,
-          valoracion: 'B. BÁSICO',
-          observacion: 'FNJ'
-        },
-        {
-          nombre: 'RELIGION Y ETICA Y VALORES(RELI)',
-          profesor: 'MURIEL GRAJALES NOHORA ISABEL',
-          intensidad: 2,
-          notas: [3.0, 3.4, 3.7],
-          actual: 3.7,
-          valoracion: 'B. BÁSICO',
-          observacion: 'FNJ'
-        }
-      ]
-    },
-        {
-      nombre: 'Pensamiento y comunicación',
-      asignaturas: [
-        {
-          nombre: 'CASTELLANO(CAST)',
-          profesor: 'GUERRERO PAREDES JESUS HUMBERTO',
-          intensidad: 1,
-          notas: [3.2, 3.6, 3.6],
-          actual: 3.6,
-          valoracion: 'B. BÁSICO',
-          observacion: 'FNJ'
-        },
-        {
-          nombre: 'FILOSOFIA (FILO)',
-          profesor: 'MURIEL GRAJALES NOHORA ISABEL',
-          intensidad: 2,
-          notas: [3.0, 3.4, 3.7],
-          actual: 3.7,
-          valoracion: 'B. BÁSICO',
-          observacion: 'FNJ'
-        }
-      ]
-    }
-  ]
-};
 
 
   images: any;
@@ -182,7 +73,21 @@ periodoSeleccionado: string = this.periodos[0];
   cursosCreados: any[] = [];
   inscripciones: any[] = []; // cargada desde tu servicio
   url: any
+  // Selectores
+  sedes: any[] = [];              // si quieres usarlas en el futuro
+  grados: (string|number)[] = ['6','7','8','9','10','11']; // ejemplo
+  aniosDisponibles: number[] = [2023, 2024, 2025];
+  periodos: number[] = [1,2,3,4];
 
+  sedeSeleccionada!: number;
+  gradoSeleccionado!: string | number;
+  anioSeleccionado: number = new Date().getFullYear();
+  periodoSeleccionado!: number;
+
+  // Datos del reporte
+  isLoading = false;
+  reporte: any = null;
+  estudiantes: any[] = [];
   //paginadores de la tabla ------------------------
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -204,6 +109,7 @@ periodoSeleccionado: string = this.periodos[0];
   grupoEstudiantes: any[] = [];
 
   ngOnInit(): void {
+    
     this.url = environment.apiAuthUrl + '/'
     this.verificarPermisos()
     this.getimages()
@@ -571,23 +477,6 @@ periodoSeleccionado: string = this.periodos[0];
       console.log(error)
     }
   }
-async loadImageBase64(path: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.src = path;
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return reject('No se pudo cargar el contexto del canvas');
-      ctx.drawImage(img, 0, 0);
-      resolve(canvas.toDataURL('image/png'));
-    };
-    img.onerror = (err) => reject(err);
-  });
-}
 
 
 valoracionCualitativa(nota: number): string {
@@ -597,90 +486,130 @@ valoracionCualitativa(nota: number): string {
     return 'Excelente';
   }
 
-    async generarPDF() {
+   async cargarReporte() {
+    if (!this.gradoSeleccionado || !this.periodoSeleccionado) {
+      alert('Selecciona grado y periodo'); return;
+    }
+    this.isLoading = true;
+    try {
+      const data = await this.backendService.reporte(this.gradoSeleccionado, this.periodoSeleccionado);
+      this.reporte = data;
+      this.estudiantes = Array.isArray(data?.estudiantes) ? data.estudiantes : [];
+      if (!this.estudiantes.length) {
+        alert('No se encontraron estudiantes/notas para esos filtros.');
+      }
+    } catch (e) {
+      console.error(e);
+      alert('Error obteniendo el reporte.');
+    } finally {
+      this.isLoading = false;
+    }
+  }
 
+  // ====== PDF ======
+  private fmt(n: any): string {
+    const num = Number(n);
+    return Number.isFinite(num) ? num.toFixed(1) : '-';
+  }
+
+
+
+  private async loadImageBase64(path: string): Promise<string> {
+    const res = await fetch(path);
+    const blob = await res.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  async generarPDF(estudiante: any) {
+    const e = estudiante;
+    const periodo = this.periodoSeleccionado;
+    const anio = this.anioSeleccionado;
     const doc = new jsPDF();
-    const e = this.estudiante;
-  const logoBase64 = await this.loadImageBase64('/favicon.ico');
 
+ 
 
-doc.rect(10, 10, 190, 25); // Marco general del encabezado
-doc.addImage(logoBase64, 'PNG', 12, 12, 15, 15); // Izquierda
-doc.addImage(logoBase64, 'PNG', 183, 12, 15, 15); // Derecha
+    // Encabezado
+ 
+    doc.setFontSize(10);
+    doc.text('INSTITUCIÓN EDUCATIVA MUNICIPAL ANTONIO NARIÑO', 105, 18, { align: 'center' });
+    doc.text('INFORME ESCOLAR DE VALORACIÓN', 105, 23, { align: 'center' });
+    doc.text(`Año Escolar: ${anio}`, 160, 27);
 
-doc.setFontSize(10);
-doc.text('INSTITUCIÓN EDUCATIVA MUNICIPAL ANTONIO NARIÑO', 105, 18, { align: 'center' });
-doc.text('INFORME ESCOLAR DE VALORACIÓN', 105, 23, { align: 'center' });
-doc.text('Año Escolar: 2024', 160, 27);
+    // Datos del estudiante (sin jornada)
+    doc.rect(10, 37, 190, 20);
+    doc.setFontSize(9);
+    doc.text(`ESTUDIANTE: ${e?.nombre ?? ''}`, 12, 43);
+    doc.text(`CÓDIGO: ${e?.codigo ?? ''}`, 12, 48);
+    doc.text(`P.GRAL: ${this.fmt(e?.promedio)}`, 70, 48);
+    doc.text(`PUESTO: ${e?.puesto ?? ''}`, 105, 48);
+    doc.text(`CURSO: ${e?.curso ?? ''}`, 140, 48);
+    doc.text(`PERIODO: ${periodo}`, 12, 53);
 
-
-
-    // Datos del estudiante
-   doc.rect(10, 37, 190, 20); // Marco de los datos del estudiante
-
-doc.setFontSize(9);
-doc.text(`ESTUDIANTE: ${e.nombre}`, 12, 43);
-doc.text(`CÓDIGO: ${e.codigo}`, 12, 48);
-doc.text(`P.GRAL: ${e.promedio}`, 70, 48);
-doc.text(`PUESTO: ${e.puesto}`, 105, 48);
-doc.text(`CURSO: ${e.curso}`, 140, 48);
-doc.text(`JORNADA: ${e.jornada}`, 12, 53);
-doc.text(`PERIODO: TERCER PERIODO`, 70, 53);
-doc.text(`F. PERIODO: ${e.fechaPeriodo}`, 130, 53);
-doc.text(`F. FINAL: ${e.fechaFinal}`, 165, 53);
-
+    // Si el backend trae fechas, muéstralas; si no, deja guion
+    const fIni = e?.fechaPeriodo ?? '-';
+    const fFin = e?.fechaFinal ?? '-';
+    doc.text(`F. PERIODO: ${fIni}`, 70, 53);
+    doc.text(`F. FINAL: ${fFin}`, 130, 53);
 
     let y = 60;
 
-    // Recorrido por componentes
-    for (const componente of e.componentes) {
+    // Componentes
+    const componentes = Array.isArray(e?.componentes) ? e.componentes : [];
+    for (const comp of componentes) {
       doc.setFontSize(11);
-      doc.text(componente.nombre, 14, y);
+      doc.text(comp?.nombre ?? 'Componente', 14, y);
       y += 2;
 
-      const tabla = componente.asignaturas.map(a => [
-        a.intensidad.toString(),
-        `${a.nombre}\nPROFESOR: ${a.profesor}`,
-        a.notas[0].toFixed(1),
-        a.notas[1].toFixed(1),
-        a.notas[2].toFixed(1),
-        a.actual.toFixed(1),
-        this.valoracionCualitativa(a.actual),
-        a.observacion
-      ]);
+      const filas = (comp?.asignaturas ?? []).map((a: any) => {
+        const notas = Array.isArray(a?.notas) ? a.notas : [];
+        const p1 = this.fmt(notas[0]);
+        const p2 = this.fmt(notas[1]);
+        const p3 = this.fmt(notas[2]);
+        const actual = this.fmt(a?.actual);
+        const valor = a?.valoracion ?? this.valoracionCualitativa(a?.actual);
+        const obs = a?.observacion ?? '';
+        const nombreProf = a?.profesor ? `\nPROFESOR: ${a.profesor}` : '';
+        return [
+          String(a?.intensidad ?? 1),
+          `${a?.nombre ?? ''}${nombreProf}`,
+          p1, p2, p3, actual, valor, obs
+        ];
+      });
 
-autoTable(doc, {
-  startY: y + 3,
-  head: [['IHS', 'ASIGNATURA', 'PER 1', 'PER 2', 'PER 3', 'ACTUAL PER', 'VALORACIÓN', 'OBS']],
-  body: tabla,
-  margin: { left: 14, right: 14 },
-
-  styles: {
-    fontSize: 9,
-    textColor: [0, 0, 0],         // letras negras
-    fillColor: [255, 255, 255],   // fondo blanco
-    lineColor: [0, 0, 0],         // bordes negros
-    lineWidth: 0.2,               // grosor de línea
-    cellPadding: 2
-  },
-
-  headStyles: {
-    fillColor: [255, 255, 255],   // fondo blanco
-    textColor: [0, 0, 0],         // texto negro
-    fontStyle: 'bold',
-    lineColor: [0, 0, 0],
-    lineWidth: 0.5
-  },
-
-  theme: 'grid'
-});
-
+      autoTable(doc, {
+        startY: y + 3,
+        head: [['IHS', 'ASIGNATURA', 'PER 1', 'PER 2', 'PER 3', 'ACTUAL PER', 'VALORACIÓN', 'OBS']],
+        body: filas,
+        margin: { left: 14, right: 14 },
+        styles: {
+          fontSize: 9,
+          textColor: [0, 0, 0],
+          fillColor: [255, 255, 255],
+          lineColor: [0, 0, 0],
+          lineWidth: 0.2,
+          cellPadding: 2
+        },
+        headStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontStyle: 'bold',
+          lineColor: [0, 0, 0],
+          lineWidth: 0.5
+        },
+        theme: 'grid'
+      });
 
       y = (doc as any).lastAutoTable.finalY + 10;
     }
 
-    doc.save(`${e.nombre.replace(/\s+/g, '_')}_Periodo3.pdf`);
+    const filename = `${(e?.nombre ?? 'reporte').replace(/\s+/g, '_')}_P${periodo}_${anio}.pdf`;
+    doc.save(filename);
   }
 }
+
 
 
