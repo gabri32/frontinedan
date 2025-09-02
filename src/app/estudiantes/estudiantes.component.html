@@ -73,7 +73,7 @@
                   {{ getEstadoTaller(taller).estado }}
                 </span>
               </td>
-              <td>
+              <td *ngIf="getEstadoTaller(taller).estado=='Activo'">
                 <button class="btn btn-sm btn-primary" (click)="verDetalleTaller(taller.id_taller)">
                   <i class="bi bi-eye"></i> Detalle del taller
                 </button>
