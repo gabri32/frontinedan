@@ -33,10 +33,10 @@
                         <input type="file" (change)="onFileSelected($event, student)" accept="image/*">
                         &nbsp;
                         <a mat-button class="btn btn-success btn-sm" (click)="uploadImage(student)">
-                            <i class="fa fa-save"></i>
+                            <i class="fa fa-save">Guardar</i>
                         </a> &nbsp;
                         <a mat-button class="btn btn-danger btn-sm" (click)="uploadImage(student)">
-                            <i class="fa fa-trash"></i>
+                            <i class="fa fa-trash">Eliminar</i>
                         </a>
                         <!-- Mostrar la imagen subida -->
                         <img *ngIf="student.uploadedImageUrl" [src]="student.uploadedImageUrl" alt="Imagen subida"

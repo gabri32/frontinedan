@@ -87,90 +87,98 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
-  async guardarUsuario() {
-    // Validación básica
-    if (!this.nombre || !this.contrasena || !this.correo || !this.num_identificacion || !this.rol_id) {
-      swal.fire({
-        title: "Campos incompletos",
-        text: "Por favor, completa todos los campos básicos antes de guardar.",
-        icon: "warning",
-        confirmButtonText: "Aceptar"
-      });
+async guardarUsuario() {
+  // Validación básica
+  if (!this.nombre || !this.contrasena || !this.correo || !this.num_identificacion || !this.rol_id) {
+    swal.fire({
+      title: "Campos incompletos",
+      text: "Por favor, completa todos los campos básicos antes de guardar.",
+      icon: "warning",
+      confirmButtonText: "Aceptar"
+    });
+    return;
+  }
+
+  // Construir payload según rol
+  const data: any = {
+    nombre: this.nombre,
+    contrasena: this.contrasena,
+    correo: this.correo,
+     rol_id: Number(this.rol_id), 
+    num_identificacion: this.num_identificacion,
+    edad : this.edad,
+    grado : this.grado,
+    especialidad : this.especialidad,
+    sede : this.sede
+  };
+
+  if (this.rol_id === 2) { // Estudiante
+    if (!this.edad || !this.grado) {
+      swal.fire("Atención", "Edad y grado son obligatorios para estudiantes", "warning");
       return;
     }
-
-    // Construir payload según rol
-    const data: any = {
-      nombre: this.nombre,
-      contrasena: this.contrasena,
-      correo: this.correo,
-      rol_id: this.rol_id,
-      num_identificacion: this.num_identificacion
-    };
-
-    if (this.rol_id === 2) { // Estudiante
-      if (!this.edad || !this.grado) {
-        swal.fire("Atención", "Edad y grado son obligatorios para estudiantes", "warning");
-        return;
-      }
-      data.edad = this.edad;
-      data.grado = this.grado;
-    }
-
-    if (this.rol_id === 1) { // Profesor
-      if (!this.especialidad || !this.sede) {
-        swal.fire("Atención", "Especialidad y sede son obligatorios para profesores", "warning");
-        return;
-      }
-      data.especialidad = this.especialidad;
-      data.vigencia = this.vigencia;
-      data.sede = this.sede;
-    }
-
-    // Admin (rol 3) no necesita extra, solo los datos básicos
-
-    try {
-      swal.fire({
-        title: 'Cargando',
-        text: 'Por favor espera...',
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        didOpen: () => {
-          swal.showLoading();
-        }
-      });
-
-      const response: any = await this.backendService.createuser({ data });
-
-      swal.close();
-      swal.fire({
-        title: "Éxito",
-        text: "Usuario creado correctamente.",
-        icon: "success",
-        timer: 1500,
-        showConfirmButton: false
-      });
-
-      // Reset form
-      this.nombre = '';
-      this.contrasena = '';
-      this.correo = '';
-      this.num_identificacion = '';
-      this.rol_id = 0;
-      this.edad = null;
-      this.grado = '';
-      this.especialidad = '';
-      this.vigencia = true;
-      this.sede = null;
-
-    } catch (error) {
-      swal.close();
-      swal.fire({
-        title: "Error",
-        text: "Hubo un problema al crear el usuario.",
-        icon: "error",
-        confirmButtonText: "Aceptar"
-      });
-    }
+    data.edad = this.edad;
+    data.grado = this.grado;
   }
+
+  if (this.rol_id === 1) { // Profesor
+    if (!this.especialidad || !this.sede) {
+      swal.fire("Atención", "Especialidad y sede son obligatorios para profesores", "warning");
+      return;
+    }
+    data.especialidad = this.especialidad;
+ 
+    data.sede = this.sede;
+  }
+
+  // Admin (rol 3) no necesita extra
+
+  try {
+    swal.fire({
+      title: 'Cargando',
+      text: 'Por favor espera...',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        swal.showLoading();
+      }
+    });
+
+    console.log("Payload final a enviar:", data);
+
+    // 🔥 Enviar directamente el objeto, no { data }
+    const response: any = await this.backendService.createuser(data);
+
+    swal.close();
+    swal.fire({
+      title: "Éxito",
+      text: "Usuario creado correctamente.",
+      icon: "success",
+      timer: 1500,
+      showConfirmButton: false
+    });
+
+    // Reset form
+    this.nombre = '';
+    this.contrasena = '';
+    this.correo = '';
+    this.num_identificacion = '';
+    this.rol_id = 0;
+    this.edad = null;
+    this.grado = '';
+    this.especialidad = '';
+    this.vigencia = true;
+    this.sede = null;
+
+  } catch (error) {
+    swal.close();
+    swal.fire({
+      title: "Error",
+      text: "Hubo un problema al crear el usuario.",
+      icon: "error",
+      confirmButtonText: "Aceptar"
+    });
+  }
+}
+
 }
