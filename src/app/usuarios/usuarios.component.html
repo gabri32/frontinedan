@@ -30,7 +30,13 @@
     <option *ngFor="let type of roles" [value]="type.id">{{ type.nombre }}</option>
   </select>
 </div>
-
+  <div class="mb-3">
+    <label class="form-label">Sede</label>
+    <select class="form-select" [(ngModel)]="sede">
+      <option value="" disabled>Seleccione sede</option>
+      <option *ngFor="let s of sedes" [value]="s.id">{{ s.detalle }}</option>
+    </select>
+  </div>
 <!-- CAMPOS ADICIONALES SEGÚN ROL -->
 
 <!-- Estudiante -->
@@ -58,13 +64,7 @@
       <option [ngValue]="false">Inactivo</option>
     </select>
   </div>
-  <div class="mb-3">
-    <label class="form-label">Sede</label>
-    <select class="form-select" [(ngModel)]="sede">
-      <option value="" disabled>Seleccione sede</option>
-      <option *ngFor="let s of sedes" [value]="s.id">{{ s.detalle }}</option>
-    </select>
-  </div>
+
 </div>
 
 <!-- BOTÓN -->
