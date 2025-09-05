@@ -40,14 +40,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
   styleUrl: './usuarios.component.css'
 })
 export class UsuariosComponent implements OnInit {
-  // Datos básicos
   nombre: string = '';
   contrasena: string = '';
   correo: string = '';
   rol_id: number = 0;
   num_identificacion: string = '';
-
-  // Datos extra según rol
   edad: number | null = null;
   grado: string = '';
   especialidad: string = '';
@@ -55,13 +52,18 @@ export class UsuariosComponent implements OnInit {
   sede: number | null = null;
 
   roles: any[] = [];
-  sedes: any[] = []; // si tu backend ya expone sedes
+  sedes: any[] = [];
+  usuarios: any[] = [];
 
-  constructor(private backendService: BackendService) { }
+  editando: boolean = false;
+  usuarioEditandoId: number | null = null;
+
+  constructor(private backendService: BackendService) {}
 
   ngOnInit(): void {
     this.getroles();
     this.getSedes();
+    this.traerUsuarios();
   }
 
   async getroles() {
@@ -70,7 +72,6 @@ export class UsuariosComponent implements OnInit {
       if (response && response.length > 0) {
         this.roles = response;
       }
-      console.log('Roles obtenidos:', this.roles);
     } catch (error) {
       console.error('Error al obtener los roles:', error);
     }
@@ -87,98 +88,119 @@ export class UsuariosComponent implements OnInit {
     }
   }
 
-async guardarUsuario() {
-  // Validación básica
-  if (!this.nombre || !this.contrasena || !this.correo || !this.num_identificacion || !this.rol_id) {
-    swal.fire({
-      title: "Campos incompletos",
-      text: "Por favor, completa todos los campos básicos antes de guardar.",
-      icon: "warning",
-      confirmButtonText: "Aceptar"
-    });
-    return;
+  async traerUsuarios() {
+    try {
+      const response = await this.backendService.getusers();
+      this.usuarios = response;
+    } catch (error) {
+      console.error('Error al traer usuarios:', error);
+    }
   }
 
-  // Construir payload según rol
-  const data: any = {
-    nombre: this.nombre,
-    contrasena: this.contrasena,
-    correo: this.correo,
-     rol_id: Number(this.rol_id), 
-    num_identificacion: this.num_identificacion,
-    edad : this.edad,
-    grado : this.grado,
-    especialidad : this.especialidad,
-    sede : this.sede
-  };
-
-  if (this.rol_id === 2) { // Estudiante
-    if (!this.edad || !this.grado) {
-      swal.fire("Atención", "Edad y grado son obligatorios para estudiantes", "warning");
+  async guardarUsuario() {
+    if (!this.nombre || !this.contrasena || !this.correo || !this.num_identificacion || !this.rol_id) {
+      swal.fire("Campos incompletos", "Completa todos los campos requeridos", "warning");
       return;
     }
-    data.edad = this.edad;
-    data.grado = this.grado;
-  }
 
-  if (this.rol_id === 1) { // Profesor
-    if (!this.especialidad || !this.sede) {
-      swal.fire("Atención", "Especialidad y sede son obligatorios para profesores", "warning");
-      return;
+    const data: any = {
+      nombre: this.nombre,
+      contrasena: this.contrasena,
+      correo: this.correo,
+      rol_id: Number(this.rol_id),
+      num_identificacion: this.num_identificacion,
+      edad: this.edad,
+      grado: this.grado,
+      especialidad: this.especialidad,
+      sede: this.sede
+    };
+
+    try {
+      await this.backendService.createuser(data);
+      await this.traerUsuarios();
+      swal.fire("Éxito", "Usuario creado correctamente.", "success");
+      this.limpiarFormulario();
+    } catch (error) {
+      swal.fire("Error", "No se pudo crear el usuario.", "error");
     }
-    data.especialidad = this.especialidad;
- 
-    data.sede = this.sede;
   }
 
-  // Admin (rol 3) no necesita extra
+  editarUsuario(user: any) {
+    this.nombre = user.nombre;
+    this.correo = user.correo;
+    this.rol_id = user.rol_id;
+    this.num_identificacion = user.num_identificacion;
+    this.vigencia = user.vigencia ?? true;
+    this.sede = user.sede ?? null;
+    this.edad = user.edad ?? null;
+    this.grado = user.grado ?? '';
+    this.especialidad = user.especialidad ?? '';
+    this.editando = true;
+    this.usuarioEditandoId = user.id;
+  }
 
-  try {
-    swal.fire({
-      title: 'Cargando',
-      text: 'Por favor espera...',
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen: () => {
-        swal.showLoading();
-      }
-    });
+  async actualizarUsuario() {
+    if (!this.usuarioEditandoId) return;
 
-    console.log("Payload final a enviar:", data);
+    const payload = {
+      nombre: this.nombre,
+      correo: this.correo,
+      rol_id: this.rol_id,
+      num_identificacion: this.num_identificacion,
+      vigencia: this.vigencia,
+      sede: this.sede,
+      edad: this.edad,
+      grado: this.grado,
+      especialidad: this.especialidad
+    };
 
-    // 🔥 Enviar directamente el objeto, no { data }
-    const response: any = await this.backendService.createuser(data);
+    try {
+      await this.backendService.actualizarUsuario(this.usuarioEditandoId, payload);
+      await this.traerUsuarios();
+      this.cancelarEdicion();
+      swal.fire("Actualizado", "Usuario actualizado correctamente", "success");
+    } catch (error) {
+      swal.fire("Error", "Error al actualizar usuario", "error");
+    }
+  }
 
-    swal.close();
-    swal.fire({
-      title: "Éxito",
-      text: "Usuario creado correctamente.",
-      icon: "success",
-      timer: 1500,
-      showConfirmButton: false
-    });
+  cancelarEdicion() {
+    this.editando = false;
+    this.usuarioEditandoId = null;
+    this.limpiarFormulario();
+  }
 
-    // Reset form
+  limpiarFormulario() {
     this.nombre = '';
     this.contrasena = '';
     this.correo = '';
-    this.num_identificacion = '';
     this.rol_id = 0;
+    this.num_identificacion = '';
     this.edad = null;
     this.grado = '';
     this.especialidad = '';
     this.vigencia = true;
     this.sede = null;
-
-  } catch (error) {
-    swal.close();
-    swal.fire({
-      title: "Error",
-      text: "Hubo un problema al crear el usuario.",
-      icon: "error",
-      confirmButtonText: "Aceptar"
-    });
   }
-}
 
+  async eliminarUsuario(id: number) {
+    const confirm = await swal.fire({
+      title: '¿Eliminar usuario?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        await this.backendService.eliminarUsuario(id);
+        this.traerUsuarios();
+        swal.fire("Eliminado", "Usuario eliminado correctamente", "success");
+      } catch (error) {
+        swal.fire("Error", "No se pudo eliminar el usuario", "error");
+      }
+    }
+  }
 }

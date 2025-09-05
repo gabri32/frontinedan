@@ -1,19 +1,25 @@
 <header class="header">
-  <img src="favicon.ico" alt="" style="max-width: 5.5%;">
-  <h4>I.E.M Antonio Nariño</h4>
-  <nav class="nav flex-column">
+  <div class="header-left">
+    <img src="favicon.ico" alt="Logo">
+    <div>
+      <h4>I.E.M Antonio Nariño</h4>
+      <h5 style="margin: 0; font-weight: normal; font-size: 0.95rem; color: #f0f0f0;">
+        Sistema de gestión académica
+      </h5>
+    </div>
+  </div>
+  <nav class="nav">
     <ul>
-      <br>
-      <li> <strong>{{ nombre }}</strong>  </li> 
-      <li>
+      <li><strong>{{ nombre }}</strong></li>
+      <li class="header-buttons">
         <a href="#" routerLinkActive="active" data-bs-toggle="tooltip" title="Inicio">
-          <i class="fas fa-home" style="font-size:20px"></i>
+          <i class="fas fa-home"></i><span>Inicio</span>
         </a>
-        &nbsp;
         <a href="#" (click)="logout()" data-bs-toggle="tooltip" title="Cerrar sesión">
-          <i class="fa fa-sign-out-alt" style="font-size:20px"></i>
+          <i class="fa fa-sign-out-alt"></i><span>Salir</span>
         </a>
       </li>
     </ul>
   </nav>
 </header>
+

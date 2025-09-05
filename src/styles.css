@@ -8,6 +8,31 @@ html, body {
   display: inline-block;
   border-bottom: 1px dotted black;
 }
+.custom-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mat-header-cell {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  color: #333;
+}
+
+.mat-row:hover {
+  background-color: #e8f5e9 !important;
+  transition: background 0.3s;
+}
+
+.mat-stroked-button {
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+}
+
 .btn-circle {
   display: inline-flex;
   align-items: center;

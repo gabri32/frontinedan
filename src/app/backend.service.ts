@@ -228,11 +228,30 @@ async actualizarEstudiantesAsignados(cursoId: number, estudiantes: number[]): Pr
     this.http.patch(`${this.apiUrl}/actualizarEstudiantesAsignados/${cursoId}`, { estudiantes })
   );
 }
+async promoverEstudiantes(cursoId: number, estudiantes: number[]): Promise<any> {
+  return firstValueFrom(
+    this.http.patch(`${this.apiUrl}/promoverEstudiantes/${cursoId}`, { estudiantes })
+  );
+}
 async consultarEstudianteCursoAsignaturas(identificacion:number):Promise<any>{
   return firstValueFrom(this.http.get(`${this.apiUrl}/consultarEstudianteCursoAsignaturas?identificacion=${identificacion}`))
 }
 async getTalleresPorAsignatura(id: number): Promise<any[]> {
   return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/talleres/asignatura/${id}`));
+}
+async actualizarUsuario(id: number, datos: any): Promise<any> {
+  return firstValueFrom(
+    this.http.put<any>(`${this.apiUrl}/usuarios/${id}`, datos)
+  );
+}
+async eliminarUsuario(id: number): Promise<any> {
+  return firstValueFrom(
+    this.http.delete<any>(`${this.apiUrl}/usuarios/${id}`)
+  );
+}
+
+async getusers(): Promise<any[]> {
+  return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/getusers`));
 }
 async getdetailTaller(id: number): Promise<any[]> {
   return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/getdetailTaller/${id}`));

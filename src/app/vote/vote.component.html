@@ -97,21 +97,26 @@
     <mat-divider></mat-divider>
 
     <!-- Mensaje si ya hay candidatos registrados -->
-    <div *ngIf="hascandidates" class="text-center">
-    
-      <h5 class="warning">Ya has registrado candidatos para esta elección</h5>
-    <br>
-      <label for="">Inactivar votaciones</label> 
-      &nbsp;
-    <button type="button" class="btn btn-success" ><i class="fa fa-times" (click)="inactivarcadidatos()"
-            style="font-size:18px"></i></button>
-    </div>
-    <div *ngIf="!hascandidates" class="text-center">
-      <label for="">Inactivar votaciones</label> 
-      &nbsp;
-      <button type="button" class="btn btn-success" ><i class="fa fa-check" (click)="reactivarCandidatos()"
-            style="font-size:18px"></i></button>
-    </div>
+ <!-- Activar votaciones -->
+<div *ngIf="!hascandidates" class="text-center">
+  <h5 class="warning">Ya has registrado candidatos para esta elección</h5>
+  <br>
+  <label>Activar votaciones</label> 
+  &nbsp;
+  <button type="button" class="btn btn-success" (click)="reactivarCandidatos()">
+    <i class="fa fa-check" style="font-size:18px"></i>
+  </button>
+</div>
+
+<!-- Inactivar votaciones -->
+<div *ngIf="hascandidates" class="text-center">
+  <label>Inactivar votaciones</label> 
+  &nbsp;
+  <button type="button" class="btn btn-success" (click)="inactivarcadidatos()">
+    <i class="fa fa-times" style="font-size:18px"></i>
+  </button>
+</div>
+
   
       
     <!-- Formulario para registrar candidatos -->
@@ -366,7 +371,7 @@
       </div>
     </div>
   </mat-tab>
-<mat-tab label="Parámetros votaciones" *ngIf="mostrarTab3 === true">
+<!-- <mat-tab label="Parámetros votaciones" *ngIf="mostrarTab3 === true">
   <div style="text-align: center;">
     <strong style="display: block; margin-bottom: 10px; font-size: 18px;">Configuración de eventos</strong>
   </div>
@@ -446,7 +451,7 @@
       </table>
     </mat-card-content>
   </mat-card>
-</mat-tab>
+</mat-tab> -->
 
 
 </mat-tab-group>

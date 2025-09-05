@@ -38,7 +38,7 @@ import { MatNativeDateModule } from '@angular/material/core'; // o MatMomentDate
     MatCardModule,
     NgxChartsModule,
     FormsModule,
-    MatError,
+    //MatError,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -666,7 +666,6 @@ async reactivarCandidatos() {
     await this.obtenerEstudiantes();
     await this.searchCandidates();
     await this.searchVotes();
-    await this.getEventos();
 
     swal.fire({
       title: '¡Éxito!',
@@ -697,7 +696,6 @@ async inactivarcadidatos() {
     await this.obtenerEstudiantes();
     await this.searchCandidates();
     await this.searchVotes();
-    await this.getEventos();
 
     swal.fire({
       title: '¡Éxito!',

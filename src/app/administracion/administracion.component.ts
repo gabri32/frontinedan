@@ -408,6 +408,7 @@ export class AdministracionComponent implements OnInit {
       this.estudiantesSeleccionados = this.estudiantesSeleccionados.filter(eid => eid !== id);
     }
   }
+
   async guardarSeleccionados() {
     //this.cursos
     if (this.estudiantesSeleccionados.length === 0) {
@@ -455,6 +456,54 @@ export class AdministracionComponent implements OnInit {
         confirmButtonText: "Aceptar"
       });
     }
+  }
+  async promovergrado(){
+     if (this.estudiantesSeleccionados.length === 0) {
+      swal.fire({
+        title: "Advertencia",
+        text: "No has seleccionado ningún estudiante.",
+        icon: "warning",
+        confirmButtonText: "Aceptar"
+      });
+      return;
+        }
+            try {
+      swal.fire({
+        title: 'Cargando',
+        text: 'Por favor espera...',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+          swal.showLoading();
+        }
+      });
+      console.log(this.grupo.id, this.estudiantesSeleccionados)
+      const response = await this.backendService.promoverEstudiantes(this.grupo.id, this.estudiantesSeleccionados);
+      console.log(response)
+      swal.close(); // Cierra el loading al finalizar la carga
+      // await this.backendService.gettotalcursos().then(data => {
+      //   console.log(data)
+      //   this.cursosCreados = data;
+
+      // });
+      swal.fire({
+        title: "Éxito",
+        text: "Estudiantes asignados correctamente.",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false
+      });
+      this.modalEstudiantesVisible = false;
+    } catch (error) {
+      console.error("Error al asignar estudiantes:", error);
+      swal.fire({
+        title: "Error",
+        text: "Hubo un problema al asignar los estudiantes.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }
+
   }
   // Limpia slashes incorrectos en Windows
   limpiarRuta(ruta: string): string {

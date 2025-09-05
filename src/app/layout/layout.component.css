@@ -1,50 +1,80 @@
-.container {
-    display: flex;
-    height: 100%;
-  }
-
-  .sidebar a:hover {
-    background: #0056b3;
-  }
-  
-
-  /* Cuando el sidebar está abierto */
-.w3-container.open {
-  margin-left: 15%; /* Ajusta el margen para empujar el contenido */
-  transition: margin-left 0.3s ease;
-
+/* Sidebar general */
+.w3-sidebar {
+  width: 15%;
+  background: linear-gradient(180deg, #4caf50, #388e3c);
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  padding-top: 20px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Cuando el sidebar está cerrado */
-.w3-container {
-  margin-left: 0;
-  transition: margin-left 0.3s ease;
-}
-#mySidebar {
-  background-color: #ffffcb !important;
- 
+/* Enlaces del sidebar */
+.w3-sidebar a.w3-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  margin: 6px 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  transition: background 0.3s, transform 0.2s;
 }
 
+.w3-sidebar a.w3-bar-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(4px);
+  cursor: pointer;
+}
+
+/* Íconos dentro del sidebar */
+.w3-sidebar a.w3-bar-item i,
+.w3-sidebar a.w3-bar-item svg {
+  font-size: 18px;
+  color: white;
+}
+
+/* Botones de abrir/cerrar */
+.w3-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  font-size: 18px;
+  margin: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  transition: background 0.3s;
+}
+
+.w3-button:hover {
+  background-color: #388e3c;
+}
+
+/* Contenido principal */
 .content {
   padding: 20px;
   margin-left: 2%;
   margin-right: 2%;
   width: 96%;
-  height: 80vh; /* Ajusta el alto para que no se desborde */
-  background: white; /* Fondo blanco */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra gris */
-  background-color: #efefef;
-  overflow: hidden; /* Evita desbordamiento lateral */
-  overflow-y: auto; /* Permite scroll vertical si el contenido es grande */
+  height: 80vh;
+  background-color: #f5f5f5;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  overflow-y: auto;
+  border-radius: 12px;
 }
 
-
-/* Estilos del sidebar */
-.w3-sidebar {
-  width: 15%; /* Ancho fijo del sidebar */
- font-family: "Poppins", sans-serif;
- font-weight: 600;
+/* Cuando el sidebar está abierto */
+.w3-container.open {
+  margin-left: 15%;
+  transition: margin-left 0.3s ease;
 }
-.w3-sidebar {
-  border: 2px solid rgba(133, 129, 129, 0);
+
+.w3-container {
+  margin-left: 0;
+  transition: margin-left 0.3s ease;
 }
