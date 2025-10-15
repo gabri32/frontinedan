@@ -26,6 +26,7 @@ import { ModalAsignarGradoComponent } from './modales/dir_grado/modal-asignar-gr
 import { environment } from '../../app/auth/enviroments';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-administracion',
   imports: [
@@ -45,6 +46,7 @@ import autoTable from 'jspdf-autotable';
     MatIconModule,
     MatSelectModule,
     MatExpansionModule,
+    MatTooltipModule
   ],
   templateUrl: './administracion.component.html',
   styleUrl: './administracion.component.css'

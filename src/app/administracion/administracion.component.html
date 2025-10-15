@@ -42,8 +42,9 @@
   <mat-divider></mat-divider>
 
   <!-- Campo de búsqueda -->
-  <div style="margin: 1rem 0; text-align: right;">
-    <mat-form-field appearance="outline" style="width: 300px;">
+  <div >
+    <br>
+    <mat-form-field appearance="outline" style="width: 100%;">
       <mat-label>Buscar docente</mat-label>
       <input matInput (keyup)="applyGlobalFilter($event)" placeholder="Escribe un nombre o número">
       <mat-icon matSuffix>search</mat-icon>
@@ -82,11 +83,11 @@
       <ng-container matColumnDef="Opciones">
         <th mat-header-cell *matHeaderCellDef> Opciones </th>
         <td mat-cell *matCellDef="let profesor">
-          <button mat-stroked-button color="primary" (click)="abrirModalGrado(profesor)" matTooltip="Asignar director de grupo">
+          <button type="button" class="btn btn-success" (click)="abrirModalGrado(profesor)" matTooltip="Asignar director de grupo">
             <mat-icon style="margin-right: 5px;">groups</mat-icon> Asignar grupo
           </button>
           &nbsp;
-          <button mat-stroked-button color="accent" (click)="abrirModalAsignaturas(profesor)" matTooltip="Distribuir asignaturas">
+          <button type="button" class="btn btn-success"(click)="abrirModalAsignaturas(profesor)" matTooltip="Distribuir asignaturas">
             <mat-icon style="margin-right: 5px;">menu_book</mat-icon> Distribuir
           </button>
         </td>
@@ -124,7 +125,7 @@
           <td>{{ grupo.nombre }}</td>
           <td>{{ grupo.tipo_grado }}</td>
           <td>
-            <button class="btn btn-outline-primary btn-sm" (click)="abrirModalEstudiantes(grupo)">
+            <button class="btn btn-outline-primary btn-sm" (click)="abrirModalEstudiantes(grupo)" matTooltip="Mostrar estudiantes disponibles para asignar al grado">
               <i class="fa fa-eye"></i>
             </button>
           </td>
@@ -249,7 +250,7 @@
 
     <!-- Botones -->
     <div style="display:flex; gap:10px; justify-content:center;">
-      <button mat-raised-button color="primary" (click)="cargarReporte()">Cargar datos</button>
+      <button type="button" class="btn btn-success" (click)="cargarReporte()">Cargar datos</button>
     </div>
 
     <!-- Loading -->
