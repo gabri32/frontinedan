@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-administracion',
   imports: [
@@ -41,7 +41,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatIconModule,
     MatSelectModule,
     MatExpansionModule,
-    MatDialogContent
+    MatDialogContent,
+    MatTooltipModule
 ],
   templateUrl: './admin-academica.component.html',
   styleUrls: ['./admin-academica.component.css']
