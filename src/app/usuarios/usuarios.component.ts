@@ -68,10 +68,10 @@ export class UsuariosComponent implements OnInit {
   constructor(private backendService: BackendService) {}
 
   ngOnInit(): void {
-      this.dataSource.data = this.usuarios;
     this.getroles();
     this.getSedes();
     this.traerUsuarios();
+    
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -106,6 +106,8 @@ export class UsuariosComponent implements OnInit {
     try {
       const response = await this.backendService.getusers();
       this.usuarios = response;
+      this.dataSource.data = this.usuarios;
+
     } catch (error) {
       console.error('Error al traer usuarios:', error);
     }

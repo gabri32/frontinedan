@@ -1,0 +1,23 @@
+.btn-editar {
+  background-color: #2196f3; /* azul Material */
+  color: white;
+  font-weight: 500;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-editar:hover {
+  background-color: #1976d2;
+  transform: scale(1.03);
+}
+
+.btn-eliminar {
+  background-color: #f44336;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s ease-in-out;
+}
+
+.btn-eliminar:hover {
+  background-color: #d32f2f;
+  transform: scale(1.03);
+}
