@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
@@ -16,7 +16,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
-
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-usuarios',
   imports: [
@@ -40,6 +42,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
   styleUrl: './usuarios.component.css'
 })
 export class UsuariosComponent implements OnInit {
+    displayedColumns: string[] = ['nombre', 'correo', 'num_identificacion', 'rol', 'acciones'];
+  dataSource = new MatTableDataSource<any>();
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   nombre: string = '';
   contrasena: string = '';
   correo: string = '';
@@ -58,14 +64,19 @@ export class UsuariosComponent implements OnInit {
   editando: boolean = false;
   usuarioEditandoId: number | null = null;
 
+
   constructor(private backendService: BackendService) {}
 
   ngOnInit(): void {
+      this.dataSource.data = this.usuarios;
     this.getroles();
     this.getSedes();
     this.traerUsuarios();
   }
-
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
   async getroles() {
     try {
       const response: any = await this.backendService.getroles();
@@ -76,7 +87,10 @@ export class UsuariosComponent implements OnInit {
       console.error('Error al obtener los roles:', error);
     }
   }
-
+ applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   async getSedes() {
     try {
       const response: any = await this.backendService.getsedes();
