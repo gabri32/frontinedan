@@ -5,7 +5,8 @@
   </div>
 
   <div class="col-md-4" *ngFor="let asignatura of listaAsing.asignaturas" >
-    <mat-card class="h-100 text-truncate" style="cursor: pointer;" style="padding:2rem;">
+    <mat-card class="btn btn-success h-100 text-truncate d-flex align-items-left "
+style="cursor: pointer;" style="padding:2rem;">
       <mat-card-title class="d-flex align-items-center gap-2">
         <i [ngClass]="iconoAsignatura(asignatura.descripcion)" class="bi fs-4"></i>
         <span class="text-truncate" style="max-width: 85%;">{{ asignatura.descripcion }}</span>
@@ -19,14 +20,14 @@
       </mat-card-content>
 
       <mat-card-actions class="mt-2">
-            <button mat-icon-button
+            <button mat-icon-button 
                 matTooltip="Ver nota"
                 (click)="verNota(asignatura)"
-                class="ms-auto">
+                class="btn btn-light">
           <i class="bi bi-eye-fill"></i>Ver listado de notas
         </button>
         &nbsp;
-        <button mat-button color="primary" (click)="abrirModuloAsignatura(asignatura)">
+        <button mat-button color="primary" (click)="abrirModuloAsignatura(asignatura)" class="btn btn-light">
           <i class="bi bi-eye"></i> Ver Talleres
         </button>
       </mat-card-actions>

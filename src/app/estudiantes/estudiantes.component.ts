@@ -119,7 +119,7 @@ iconoAsignatura(nombre: string): string {
   if (nombreMin.includes('química')) return 'bi-beaker';
   if (nombreMin.includes('sociales')) return 'bi-globe';
   if (nombreMin.includes('ética') || nombreMin.includes('religión')) return 'bi-heart-fill';
-  if (nombreMin.includes('educación física')) return 'bi-activity';
+  if (nombreMin.includes('educación física')|| nombreMin.includes('recreación')) return 'bi bi-dribbble';
   if (nombreMin.includes('filosofía')) return 'bi-book';
   if (nombreMin.includes('castellano')) return 'bi-journal-text';
   if (nombreMin.includes('inglés')) return 'bi-translate';
