@@ -415,7 +415,11 @@ if (this.eventosForm.valid && this.previewImage) {
 }
 async deleteImagen(imagen: any): Promise<void> {
   try {
-    const borrar = await this.backendService.deleteSliderImage(imagen);
+    console.log(imagen)
+    const data ={
+      id:imagen.id
+    }
+    const borrar = await this.backendService.deleteSliderImage(data);
 
     swal.fire({
       title: 'Imagen eliminada',
