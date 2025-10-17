@@ -34,7 +34,7 @@
                             <i class="fa fa-save"></i>
                         </a> &nbsp;
 
-                        <a mat-button class="btn btn-danger btn-sm" (click)="deleteImagen(student)"
+                        <a *ngIf="student.id!='N/A'" mat-button class="btn btn-danger btn-sm" (click)="deleteImagen(student)"
                             matTooltip="Eliminar">
                             <i class="fa fa-trash"></i>
                         </a>
@@ -92,7 +92,7 @@
                             
                             <i class="fa fa-save"></i>
                         </a> &nbsp;
-                        <a mat-button class="btn btn-danger btn-sm" (click)="deleteImagen(student)"  matTooltip="Eliminar ">
+                        <a *ngIf="student.id!='N/A'" mat-button class="btn btn-danger btn-sm" (click)="deleteImagen(student)"  matTooltip="Eliminar ">
                             <i class="fa fa-trash"></i>
                         </a>
                         <!-- Mostrar la imagen subida -->
