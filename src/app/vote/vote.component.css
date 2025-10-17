@@ -4,14 +4,7 @@
 
   }
   
-  .button-save {
-    margin: 5px;
-    padding: 8px;
-    background: #69ba00f3;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
+  
   .center-button {
     display: flex;
     justify-content: center;
@@ -25,9 +18,7 @@
     margin: 0 auto; /* Centrar la imagen */
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
   }
-  button:hover {
-    background: #517300;
-  }
+
   .loading-overlay {
     position: fixed;
     top: 0;

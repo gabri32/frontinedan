@@ -24,7 +24,7 @@
               <i type="label" ><strong>{{0}}-{{candidate.numero}}</strong></i>
             </mat-card-content>
             <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
-              <button class="btn btn-success btn-circle" mat-button (click)="vote(candidate)"> <h6 style="font-family: Arial, Helvetica, sans-serif; color: white;">Votar</h6></button>
+              <button type="button" class="btn btn-success"(click)="vote(candidate)"> <h6 style="font-family: Arial, Helvetica, sans-serif; color: white;">Votar</h6></button>
             </mat-card-actions>
           </mat-card>
 
@@ -40,7 +40,7 @@
               <p>Si no deseas elegir a ningún candidato.</p>
             </mat-card-content>
             <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
-              <button mat-button class="btn btn-success btn-circle" (click)="voteBlank('personero/a')">Votar</button>
+              <button type="button" class="btn btn-success" (click)="voteBlank('personero/a')">Votar</button>
             </mat-card-actions>
           </mat-card>
         </div>
@@ -64,7 +64,7 @@
               <i type="label"> <strong>{{0}}-{{candidate.numero}}</strong></i>
             </mat-card-content>
             <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
-              <button mat-button class="btn btn-success btn-circle" (click)="vote(candidate)">Votar</button>
+              <button type="button" class="btn btn-success" (click)="vote(candidate)">Votar</button>
             </mat-card-actions>
           </mat-card>
 
@@ -80,7 +80,7 @@
               <p>Si no deseas elegir a ningún candidato.</p>
             </mat-card-content>
             <mat-card-actions class="center-button" *ngIf="mostrarTab2 == true">
-              <button mat-button class="btn btn-success btn-circle" (click)="voteBlank('contralor/a')">votar</button>
+              <button type="button" class="btn btn-success" (click)="voteBlank('contralor/a')">votar</button>
             </mat-card-actions>
           </mat-card>
         </div>
