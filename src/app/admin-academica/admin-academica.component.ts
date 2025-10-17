@@ -166,14 +166,30 @@ previewImage: string | ArrayBuffer | null = null;
     this.dataSource2.filter = filterValue;
     this.dataSource3.filter = filterValue;
   }
-  async getimages() {
-    try {
-      this.images = await this.backendService.getsliderImages();
-      console.log("datos que llegan ",this.images)
-      this.dataSource.data = this.images
-    } catch (error) { console.log(error) }
+ async getimages(): Promise<void> {
+  try {
+    this.images = await this.backendService.getsliderImages();
+    console.log("Datos que llegan:", this.images);
 
+    // Verificar si hay menos de 3 imágenes y rellenar con objetos vacíos
+    const cantidadFaltante = 3 - this.images.length;
+
+    for (let i = 0; i < cantidadFaltante; i++) {
+      this.images.push({
+        id: 'N/A',
+        foto: '',
+        imagen: ''
+      });
+    }
+
+    // Asignar al dataSource para mostrar en la tabla o componente correspondiente
+    this.dataSource.data = this.images;
+
+  } catch (error) {
+    console.log('Error al obtener las imágenes:', error);
   }
+}
+
 
 
   onFileSelected(event: Event, student: any) {
