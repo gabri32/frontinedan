@@ -169,6 +169,7 @@ previewImage: string | ArrayBuffer | null = null;
   async getimages() {
     try {
       this.images = await this.backendService.getsliderImages();
+      console.log("datos que llegan ",this.images)
       this.dataSource.data = this.images
     } catch (error) { console.log(error) }
 
