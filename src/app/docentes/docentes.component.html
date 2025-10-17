@@ -43,11 +43,11 @@
             <th mat-header-cell *matHeaderCellDef>Opciones</th>
             <!-- Botones -->
             <td mat-cell *matCellDef="let element">
-              <button mat-button color="accent" (click)="abrirModal(element.id_asignatura, true)">
+              <button type="button" class="btn btn-success" (click)="abrirModal(element.id_asignatura, true)">
                 Crear
               </button>
               &nbsp;
-              <button mat-button color="accent" (click)="verLista(element.id_asignatura)">
+              <button type="button" class="btn btn-success" (click)="verLista(element.id_asignatura)">
                 Ver talleres
               </button>
 
@@ -73,12 +73,13 @@
         <h4 class="mb-3 text-center">{{'Detalle del Taller' }} - {{now}}</h4>
 
         <form [formGroup]="tallerForm" (ngSubmit)="guardarTaller(tallerForm)">
-      <div class="form-group mb-3">
-  <label for="detalle_taller">Detalle</label>
-  <textarea class="form-control" id="detalle_taller" formControlName="detalle_taller" [readonly]="!modoEdicion"></textarea>
-</div>
+          <div class="form-group mb-3">
+            <label for="detalle_taller">Detalle</label>
+            <textarea class="form-control" id="detalle_taller" formControlName="detalle_taller"
+              [readonly]="!modoEdicion"></textarea>
+          </div>
 
-              <div class="form-group mb-3">
+          <div class="form-group mb-3">
             <label for="competencia">Competencia</label>
             <input type="text" class="form-control" formControlName="competencia" [readonly]="!modoEdicion">
           </div>
@@ -180,19 +181,25 @@
                   </td>
 
                   <!-- Documento 1 -->
-                  <td>
+                  <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <input *ngIf="taller.editando" class="form-control" [(ngModel)]="taller.doc"
                       placeholder="URL Documento 1" />
-                    <a *ngIf="!taller.editando && taller.doc" [href]="taller.doc" target="_blank">{{ taller.doc }}</a>
+
+                    <a *ngIf="!taller.editando && taller.doc" [href]="taller.doc" target="_blank"
+                      style="display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                      {{ taller.doc }}
+                    </a>
+
                     <span *ngIf="!taller.editando && !taller.doc" class="text-muted">No disponible</span>
                   </td>
 
                   <!-- Documento 2 -->
-                  <td>
+                  <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                     <input *ngIf="taller.editando" class="form-control" [(ngModel)]="taller.doc2"
                       placeholder="URL Documento 2" />
-                    <a *ngIf="!taller.editando && taller.doc2" [href]="taller.doc2" target="_blank">{{ taller.doc2
-                      }}</a>
+                    <a *ngIf="!taller.editando && taller.doc2" [href]="taller.doc2" target="_blank"  
+                    style="display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                    {{ taller.doc2}}</a>
                     <span *ngIf="!taller.editando && !taller.doc2" class="text-muted">No disponible</span>
                   </td>
 
@@ -275,7 +282,7 @@
             <!-- Botones -->
             <td mat-cell *matCellDef="let element">
 
-              <button mat-button color="accent" (click)="getInfoNotas(element.id_asignatura,element.id_grado)">
+              <button type="button" class="btn btn-success"(click)="getInfoNotas(element.id_asignatura,element.id_grado)">
                 Ver listado de notas
               </button>
 
