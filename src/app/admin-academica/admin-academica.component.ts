@@ -366,7 +366,6 @@ async eliminarHeader(id: number) {
   }
 
 async crearEvento() {
-
 if (this.eventosForm.valid && this.previewImage) {
     const formData = new FormData();
     formData.append('titulo',this.eventosForm.value.titulo)
@@ -411,6 +410,40 @@ if (this.eventosForm.valid && this.previewImage) {
       text: "Por favor, completa todos los campos y selecciona una imagen.",
       icon: "warning",
       confirmButtonText: "Aceptar"
+    });
+  }
+}
+async deleteImagen(imagen: any): Promise<void> {
+  try {
+    const borrar = await this.backendService.deleteSliderImage(imagen);
+
+    swal.fire({
+      title: 'Imagen eliminada',
+      text: 'La imagen ha sido eliminada correctamente.',
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false
+    });
+
+  } catch (error: any) {
+    console.error('Error al eliminar la imagen:', error);
+
+    let mensaje = 'Ha ocurrido un error inesperado. Inténtalo más tarde.';
+
+    // Manejo específico de errores comunes
+    if (error.status === 404) {
+      mensaje = 'La imagen no existe o ya fue eliminada.';
+    } else if (error.status === 500) {
+      mensaje = 'Error interno del servidor. Contacta con soporte.';
+    } else if (error.status === 403 || error.status === 401) {
+      mensaje = 'No tienes permisos para eliminar esta imagen.';
+    }
+
+    swal.fire({
+      title: 'Error al eliminar',
+      text: mensaje,
+      icon: 'error',
+      confirmButtonText: 'Aceptar'
     });
   }
 }

@@ -103,6 +103,9 @@ async searchVotes(estudiante_id: number): Promise<any> {
   async updatesliderImages(formData:FormData): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/updatesliderImages`, formData));
   }
+  async deleteSliderImage(data:any):Promise<any>{
+    return firstValueFrom(this.http.post(`${this.apiUrl}/deleteSliderImage`,data))
+  }
    async insertHeaders(formData:FormData): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/landing/insertHeader`, formData));
   }
