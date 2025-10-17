@@ -19,7 +19,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
-import { VerNotaDialogComponent } from './../ver-nota-dialog/ver-nota-dialog.component'; 
+import { VerNotaDialogComponent } from './../ver-nota-dialog/ver-nota-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-docentes',
@@ -52,9 +52,9 @@ export class EstudiantesComponent implements OnInit {
   now: any
   modalVisible2 = false
   componenteActivo: 'lista' | 'detalle' = 'lista';
-asignaturaSeleccionada: any = null;
-loadingTalleres = false;
-talleresPorPeriodo: any
+  asignaturaSeleccionada: any = null;
+  loadingTalleres = false;
+  talleresPorPeriodo: any
 
 
   talleres: any[] = [];
@@ -62,8 +62,8 @@ talleresPorPeriodo: any
   dataSource = new MatTableDataSource<any>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-Object: any;
-  constructor(private backendService: BackendService, private fb: FormBuilder,private router: Router,private dialog: MatDialog) { }
+  Object: any;
+  constructor(private backendService: BackendService, private fb: FormBuilder, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     //carga inicial
@@ -105,64 +105,65 @@ Object: any;
 
   }
 
-verDetalleTaller(id: number) {
-  this.router.navigate([`/layout/estudiantes/taller`, id]);
-}
-volverAlListado() {
-  this.componenteActivo = 'lista';
-  this.asignaturaSeleccionada = null;
-}
-iconoAsignatura(nombre: string): string {
-  const nombreMin = nombre.toLowerCase();
-  if (nombreMin.includes('matemática')) return 'bi-calculator';
-  if (nombreMin.includes('física')) return 'bi-lightning-fill';
-  if (nombreMin.includes('química')) return 'bi-beaker';
-  if (nombreMin.includes('sociales')) return 'bi-globe';
-  if (nombreMin.includes('ética') || nombreMin.includes('religión')) return 'bi-heart-fill';
-  if (nombreMin.includes('educación física')|| nombreMin.includes('recreación')) return 'bi bi-dribbble';
-  if (nombreMin.includes('filosofía')) return 'bi-book';
-  if (nombreMin.includes('castellano')) return 'bi-journal-text';
-  if (nombreMin.includes('inglés')) return 'bi-translate';
-  if (nombreMin.includes('artística')) return 'bi-brush';
-  return 'bi-journal'; // Default
-}
-async abrirModuloAsignatura(asignatura: any) {
-  this.asignaturaSeleccionada = asignatura;
-  this.componenteActivo = 'detalle';
-
-  try {
-    const id = asignatura.id_asignatura;
-   this.talleresPorPeriodo =await this.backendService.getTalleresPorAsignatura(id); 
-   console.log(this.talleresPorPeriodo)
-  } catch (error) {
-    console.error('Error al hacer la petición:', error);
+  verDetalleTaller(id: number) {
+    this.router.navigate([`/layout/estudiantes/taller`, id]);
   }
-}
-getEstadoTaller(taller: any): { estado: string, clase: string } {
-  const hoy = new Date();
-  const inicio = new Date(taller.fecha_ini);
-  const fin = new Date(taller.fecha_fin);
-
-  if (hoy < inicio) {
-    return { estado: 'Calificado', clase: 'text-secondary' }; // Gris
-  } else if (hoy >= inicio && hoy <= fin) {
-    return { estado: 'Activo', clase: 'text-success fw-bold' }; // Verde
-  } else {
-    return { estado: 'Finalizado', clase: 'text-danger fw-bold' }; // Rojo
+  volverAlListado() {
+    this.componenteActivo = 'lista';
+    this.asignaturaSeleccionada = null;
   }
-}
-verNota(asignatura: any) {
-  this.dialog.open(VerNotaDialogComponent, {
-    data: asignatura,
-    width: '1400px'
-  });}
-talleresVacios(): boolean {
-  return (
-    this.talleresPorPeriodo?.periodo_1?.length&&
-    !this.talleresPorPeriodo.periodo_2.length &&
-    !this.talleresPorPeriodo.periodo_3.length
-  );
-}
+  iconoAsignatura(nombre: string): string {
+    const nombreMin = nombre.toLowerCase();
+    if (nombreMin.includes('matemática')) return 'bi-calculator';
+    if (nombreMin.includes('física')) return 'bi-lightning-fill';
+    if (nombreMin.includes('química')) return 'bi-beaker';
+    if (nombreMin.includes('sociales')) return 'bi-globe';
+    if (nombreMin.includes('ética') || nombreMin.includes('religión')) return 'bi-heart-fill';
+    if (nombreMin.includes('educación física') || nombreMin.includes('recreación')) return 'bi bi-dribbble';
+    if (nombreMin.includes('filosofía')) return 'bi-book';
+    if (nombreMin.includes('castellano')) return 'bi-journal-text';
+    if (nombreMin.includes('inglés')) return 'bi-translate';
+    if (nombreMin.includes('artística')) return 'bi-brush';
+    return 'bi-journal'; // Default
+  }
+  async abrirModuloAsignatura(asignatura: any) {
+    this.asignaturaSeleccionada = asignatura;
+    this.componenteActivo = 'detalle';
+
+    try {
+      const id = asignatura.id_asignatura;
+      this.talleresPorPeriodo = await this.backendService.getTalleresPorAsignatura(id);
+      console.log(this.talleresPorPeriodo)
+    } catch (error) {
+      console.error('Error al hacer la petición:', error);
+    }
+  }
+  getEstadoTaller(taller: any): { estado: string, clase: string } {
+    const hoy = new Date();
+    const inicio = new Date(taller.fecha_ini);
+    const fin = new Date(taller.fecha_fin);
+
+    if (hoy < inicio) {
+      return { estado: 'Calificado', clase: 'text-secondary' }; // Gris
+    } else if (hoy >= inicio && hoy <= fin) {
+      return { estado: 'Activo', clase: 'text-success fw-bold' }; // Verde
+    } else {
+      return { estado: 'Finalizado', clase: 'text-danger fw-bold' }; // Rojo
+    }
+  }
+  verNota(asignatura: any) {
+    this.dialog.open(VerNotaDialogComponent, {
+      data: asignatura,
+      width: '1400px'
+    });
+  }
+  talleresVacios(): boolean {
+    return (
+      this.talleresPorPeriodo?.periodo_1?.length &&
+      !this.talleresPorPeriodo.periodo_2.length &&
+      !this.talleresPorPeriodo.periodo_3.length
+    );
+  }
 
 
 
