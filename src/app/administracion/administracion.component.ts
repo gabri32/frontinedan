@@ -77,7 +77,7 @@ export class AdministracionComponent implements OnInit {
   url: any
   // Selectores
   sedes: any[] = [];              // si quieres usarlas en el futuro
-  grados: (string|number)[] = ['6','7','8','9','10','11']; // ejemplo
+  grados: (string|number)[] = ['1','2','3','4','5','6','7','8','9','10','11']; // ejemplo
   aniosDisponibles: number[] = [2023, 2024, 2025];
   periodos: number[] = [1,2,3,4];
 
