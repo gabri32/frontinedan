@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef ,ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule, NgForm } from '@angular/forms';
 import { BackendService } from '../backend.service';
 import swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,7 +10,7 @@ import { RegistroDialogComponent } from '../registro-dialog/registro-dialog.comp
   standalone: true,
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   encapsulation: ViewEncapsulation.None
 })
 export class LandingPageComponent implements OnInit {
@@ -179,6 +180,76 @@ prevBanner1() {
 
   ngOnDestroy(): void {
     clearInterval(this.slideInterval);
+  }
+
+  // Propiedad para manejar la sede activa
+  sedeActiva: 'centro' | 'capusigra' = 'centro';
+
+  // Método para cambiar entre sedes
+  cambiarSede(sede: 'centro' | 'capusigra'): void {
+    this.sedeActiva = sede;
+  }
+
+  // Propiedades para el formulario de contacto
+  enviandoFormulario = false;
+
+  // Método para enviar el formulario de contacto
+  async enviarFormularioContacto(form: NgForm): Promise<void> {
+    if (form.invalid) {
+      swal.fire({
+        title: 'Formulario incompleto',
+        text: 'Por favor completa todos los campos obligatorios.',
+        icon: 'warning',
+        confirmButtonText: 'Entendido'
+      });
+      return;
+    }
+
+    this.enviandoFormulario = true;
+
+    try {
+      const formData = {
+        nombre: form.value.nombre,
+        email: form.value.email,
+        telefono: form.value.telefono || '',
+        asunto: form.value.asunto,
+        mensaje: form.value.mensaje,
+        fecha: new Date().toISOString()
+      };
+
+      // Aquí puedes agregar la llamada a tu servicio backend
+      // await this.backendService.enviarContacto(formData);
+
+      // Por ahora, simularemos el envío
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      swal.fire({
+        title: '¡Mensaje enviado!',
+        text: 'Gracias por contactarnos. Te responderemos pronto.',
+        icon: 'success',
+        confirmButtonText: 'Perfecto'
+      });
+
+      form.resetForm();
+    } catch (error) {
+      console.error('Error al enviar formulario:', error);
+      swal.fire({
+        title: 'Error',
+        text: 'Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.',
+        icon: 'error',
+        confirmButtonText: 'Reintentar'
+      });
+    } finally {
+      this.enviandoFormulario = false;
+    }
+  }
+
+  // Método para abrir WhatsApp
+  abrirWhatsApp(): void {
+    const numeroWhatsApp = '573123456789'; // Reemplaza con el número real
+    const mensaje = encodeURIComponent('Hola, me gustaría obtener más información sobre la I.E.M. Antonio Nariño.');
+    const url = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
+    window.open(url, '_blank');
   }
 
 }

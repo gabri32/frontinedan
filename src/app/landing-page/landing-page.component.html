@@ -326,6 +326,220 @@
   </div>
 </section>
 
+<!-- Sección de Ubicación -->
+<section style="margin: 4rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
+  <h2 style="font-size: 2.2rem; margin-bottom: 2rem; font-weight: bold; color: #1e3a5f; font-family: 'Poppins', sans-serif;">
+    Nuestras Sedes
+  </h2>
+  
+  <!-- Botones para alternar sedes -->
+  <div style="margin-bottom: 2rem;">
+    <button 
+      (click)="cambiarSede('centro')"
+      [style.background-color]="sedeActiva === 'centro' ? '#254b9c' : '#e9ecef'"
+      [style.color]="sedeActiva === 'centro' ? 'white' : '#333'"
+      style="border: none; padding: 0.8rem 1.5rem; margin: 0 0.5rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif;">
+      📍 Sede Centro
+    </button>
+    <button 
+      (click)="cambiarSede('capusigra')"
+      [style.background-color]="sedeActiva === 'capusigra' ? '#254b9c' : '#e9ecef'"
+      [style.color]="sedeActiva === 'capusigra' ? 'white' : '#333'"
+      style="border: none; padding: 0.8rem 1.5rem; margin: 0 0.5rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif;">
+      📍 Sede Capusigra
+    </button>
+  </div>
+  
+  <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    
+    <!-- Sede Centro -->
+    <div *ngIf="sedeActiva === 'centro'">
+      <h3 style="color: #254b9c; font-size: 1.4rem; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
+        Sede Centro
+      </h3>
+      <p style="color: #333; font-size: 1rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">
+        Nuestra sede principal ubicada en el centro de Pasto
+      </p>
+      
+      <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d31911.416591100045!2d-77.2942257!3d1.2110667!3m2!1i1024!2i768!4f13.1!2m1!1santonio%20nari%C3%B1o%20pasto%20colegio!5e0!3m2!1ses-419!2sco!4v1761710098114!5m2!1ses-419!2sco" 
+          width="100%" 
+          height="450" 
+          style="border:0; border-radius: 12px;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+      
+      <div style="margin-top: 1.5rem; text-align: left;">
+        <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede Centro:</h4>
+        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+          📍 <strong>Dirección:</strong> Antonio Nariño, Pasto, Nariño, Colombia
+        </p>
+        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+          📞 <strong>Teléfono:</strong> +57 1 234 5678
+        </p>
+        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+          ✉️ <strong>Correo:</strong> info.edu.co
+        </p>
+      </div>
+    </div>
+
+    <!-- Sede Capusigra -->
+    <div *ngIf="sedeActiva === 'capusigra'">
+      <h3 style="color: #254b9c; font-size: 1.4rem; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
+        Sede Capusigra
+      </h3>
+      <p style="color: #333; font-size: 1rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">
+        Nuestra sede en el sector de Capusigra
+      </p>
+      
+      <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.4644452324915!2d-77.28943882111038!3d1.2098318000000026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2ed362c6a50b65%3A0x5be8c792594725cd!2sIEM%20Antonio%20Narino!5e0!3m2!1ses-419!2sco!4v1761710207405!5m2!1ses-419!2sco" 
+          width="100%" 
+          height="450" 
+          style="border:0; border-radius: 12px;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+      
+      <div style="margin-top: 1.5rem; text-align: left;">
+        <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede Capusigra:</h4>
+        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+          📍 <strong>Dirección:</strong> Capusigra, Pasto, Nariño, Colombia
+        </p>
+        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+          📞 <strong>Teléfono:</strong> +57 1 234 5679
+        </p>
+        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+          ✉️ <strong>Correo:</strong> capusigra.edu.co
+        </p>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- Sección de Formulario de Contacto -->
+<section style="margin: 4rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
+  <h2 style="font-size: 2.2rem; margin-bottom: 2rem; font-weight: bold; color: #1e3a5f; font-family: 'Poppins', sans-serif;">
+    Contáctanos
+  </h2>
+  
+  <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <p style="color: #333; font-size: 1rem; margin-bottom: 2rem; font-family: 'Poppins', sans-serif;">
+      ¿Tienes alguna pregunta o necesitas más información? Escríbenos y te responderemos pronto.
+    </p>
+    
+    <form #contactForm="ngForm" (ngSubmit)="enviarFormularioContacto(contactForm)" style="max-width: 600px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+        <div>
+          <input 
+            type="text" 
+            name="nombre"
+            ngModel
+            required
+            placeholder="Nombre completo *"
+            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+            onfocus="this.style.borderColor='#254b9c'"
+            onblur="this.style.borderColor='#e9ecef'">
+        </div>
+        <div>
+          <input 
+            type="email" 
+            name="email"
+            ngModel
+            required
+            placeholder="Correo electrónico *"
+            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+            onfocus="this.style.borderColor='#254b9c'"
+            onblur="this.style.borderColor='#e9ecef'">
+        </div>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+        <div>
+          <input 
+            type="tel" 
+            name="telefono"
+            ngModel
+            placeholder="Teléfono"
+            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+            onfocus="this.style.borderColor='#254b9c'"
+            onblur="this.style.borderColor='#e9ecef'">
+        </div>
+        <div>
+          <select 
+            name="asunto"
+            ngModel
+            required
+            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+            onfocus="this.style.borderColor='#254b9c'"
+            onblur="this.style.borderColor='#e9ecef'">
+            <option value="">Selecciona un tema *</option>
+            <option value="informacion-general">Información General</option>
+            <option value="admisiones">Proceso de Admisiones</option>
+            <option value="costos">Costos Educativos</option>
+            <option value="programas-academicos">Programas Académicos</option>
+            <option value="actividades-extracurriculares">Actividades Extracurriculares</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 1.5rem;">
+        <textarea 
+          name="mensaje"
+          ngModel
+          required
+          rows="5"
+          placeholder="Escribe tu mensaje aquí... *"
+          style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; resize: vertical; transition: border-color 0.3s ease;"
+          onfocus="this.style.borderColor='#254b9c'"
+          onblur="this.style.borderColor='#e9ecef'"></textarea>
+      </div>
+      
+      <button 
+        type="submit"
+        [disabled]="!contactForm.form.valid || enviandoFormulario"
+        [style.background-color]="contactForm.form.valid && !enviandoFormulario ? '#254b9c' : '#ccc'"
+        [style.cursor]="contactForm.form.valid && !enviandoFormulario ? 'pointer' : 'not-allowed'"
+        style="color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1.1rem; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; min-width: 200px;">
+        <span *ngIf="!enviandoFormulario">📧 Enviar Mensaje</span>
+        <span *ngIf="enviandoFormulario">⏳ Enviando...</span>
+      </button>
+      
+      <p style="font-size: 0.85rem; color: #666; margin-top: 1rem; font-style: italic;">
+        * Campos obligatorios
+      </p>
+    </form>
+    
+    <!-- Información de contacto rápido -->
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
+      <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 1rem;">O contáctanos directamente:</h4>
+      <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+        <div style="text-align: center;">
+          <div style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">📞</div>
+          <p style="margin: 0; font-size: 0.9rem; color: #555;">+57 1 234 5678</p>
+        </div>
+        <div style="text-align: center;">
+          <div style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">✉️</div>
+          <p style="margin: 0; font-size: 0.9rem; color: #555;">info.edu.co</p>
+        </div>
+        <div style="text-align: center;">
+          <div style="background-color: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem; cursor: pointer;" (click)="abrirWhatsApp()">💬</div>
+          <p style="margin: 0; font-size: 0.9rem; color: #555;">WhatsApp</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer style="background-color: #cdd4db; padding: 2.5rem 1rem; margin-top: 4rem; border-top: 1px solid #d0e0ef;">
   <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: left;">
 
