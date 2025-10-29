@@ -1,0 +1,53 @@
+<div class="document-viewer-container">
+  <div class="header">
+    <h2>📚 Documentos Institucionales</h2>
+    <p>Accede a todos los documentos importantes de la institución</p>
+  </div>
+
+  <!-- Filtros por categoría -->
+  <div class="category-filters">
+    <button 
+      *ngFor="let category of categories"
+      [class.active]="selectedCategory === category"
+      (click)="filterByCategory(category)"
+      class="category-btn">
+      {{ category }}
+    </button>
+  </div>
+
+  <!-- Lista de documentos -->
+  <div class="documents-grid">
+    <div 
+      *ngFor="let document of filteredDocuments" 
+      class="document-card">
+      
+      <div class="document-icon">
+        📄
+      </div>
+      
+      <div class="document-info">
+        <h3>{{ document.nombre }}</h3>
+        <p>{{ document.descripcion }}</p>
+        <span class="category-tag">{{ document.categoria }}</span>
+      </div>
+      
+      <div class="document-actions">
+        <button 
+          (click)="openDocument(document)"
+          class="btn-primary">
+          👁️ Ver
+        </button>
+        <button 
+          (click)="downloadDocument(document)"
+          class="btn-secondary">
+          📥 Descargar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje si no hay documentos -->
+  <div *ngIf="filteredDocuments.length === 0" class="no-documents">
+    <p>No hay documentos disponibles en esta categoría.</p>
+  </div>
+</div>

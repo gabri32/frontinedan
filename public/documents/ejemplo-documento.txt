@@ -1,0 +1,13 @@
+Este es un archivo de ejemplo.
+
+Reemplaza este archivo con tus PDFs reales.
+
+Estructura sugerida de archivos:
+- manual-estudiante.pdf
+- reglamento-institucional.pdf  
+- proyecto-educativo-institucional.pdf
+- calendario-academico.pdf
+- costos-educativos.pdf
+
+Los archivos serán accesibles desde:
+http://localhost:4200/documents/nombre-archivo.pdf
