@@ -177,8 +177,10 @@ export class LandingPageComponent implements OnInit {
 
 
   ngAfterViewInit(): void {
+    console.log('🔍 ngAfterViewInit - SliderRef:', this.sliderRef);
     // Esperar un poco para que los datos se carguen antes de iniciar el slider
     setTimeout(() => {
+      console.log('⏰ Timeout - EventCards:', this.eventCards?.length, 'SliderRef:', this.sliderRef);
       if (this.eventCards && this.eventCards.length > 0) {
         this.startAutoSlide();
       }
@@ -202,28 +204,54 @@ export class LandingPageComponent implements OnInit {
     if (slider) slider.style.transform = `translateX(${offset}%)`;
   }
   nextSlide(): void {
+    console.log('🔄 NextSlide clicked');
     if (this.eventCards && this.eventCards.length > 0) {
       const totalItems = this.eventCards.length;
-      const maxIndex = totalItems - this.visibleCards;
-      this.currentIndex = (this.currentIndex + 1) > maxIndex ? 0 : this.currentIndex + 1;
+      console.log('📊 Total items:', totalItems, 'Current index:', this.currentIndex);
+      
+      // Lógica simplificada: avanzar de uno en uno
+      this.currentIndex = (this.currentIndex + 1) % totalItems;
+      console.log('➡️ New index:', this.currentIndex);
       this.updateSlider();
+    } else {
+      console.log('❌ No eventCards available');
     }
   }
 
   prevSlide(): void {
+    console.log('🔄 PrevSlide clicked');
     if (this.eventCards && this.eventCards.length > 0) {
       const totalItems = this.eventCards.length;
-      const maxIndex = totalItems - this.visibleCards;
-      this.currentIndex = this.currentIndex === 0 ? maxIndex : this.currentIndex - 1;
+      console.log('📊 Total items:', totalItems, 'Current index:', this.currentIndex);
+      
+      // Lógica simplificada: retroceder de uno en uno
+      this.currentIndex = this.currentIndex === 0 ? totalItems - 1 : this.currentIndex - 1;
+      console.log('⬅️ New index:', this.currentIndex);
       this.updateSlider();
+    } else {
+      console.log('❌ No eventCards available');
     }
   }
 
+  private getVisibleCards(): number {
+    // Calcular cuántas cards son visibles según el ancho de pantalla
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 480) return 1;
+    if (screenWidth < 768) return 2;
+    if (screenWidth < 1024) return 3;
+    return Math.min(5, this.eventCards?.length || 5);
+  }
+
   updateSlider(): void {
+    console.log('🎯 UpdateSlider called');
     if (this.sliderRef && this.sliderRef.nativeElement) {
-      const slideWidth = 160 + 32;
+      const slideWidth = 160 + 32; // ancho del item + margen
       const offset = this.currentIndex * slideWidth;
+      console.log('📏 Slide width:', slideWidth, 'Offset:', offset);
       this.sliderRef.nativeElement.style.transform = `translateX(-${offset}px)`;
+      console.log('✅ Transform applied:', `translateX(-${offset}px)`);
+    } else {
+      console.log('❌ SliderRef not available:', this.sliderRef);
     }
   }
 
@@ -356,6 +384,35 @@ export class LandingPageComponent implements OnInit {
         }
       }
     });
+
+    // Listener para redimensionar ventana y actualizar slider
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 768;
+      // Resetear el índice si es necesario
+      if (this.eventCards && this.eventCards.length > 0) {
+        const visibleItems = this.getVisibleCards();
+        const maxIndex = Math.max(0, this.eventCards.length - visibleItems);
+        if (this.currentIndex > maxIndex) {
+          this.currentIndex = maxIndex;
+          this.updateSlider();
+        }
+      }
+    });
+  }
+
+  // Método de prueba para verificar el slider
+  testSlider(): void {
+    console.log('🧪 Test Slider');
+    console.log('EventCards:', this.eventCards?.length || 'No data');
+    console.log('SliderRef:', this.sliderRef ? 'Available' : 'NOT Available');
+    console.log('Current Index:', this.currentIndex);
+    
+    if (this.sliderRef && this.sliderRef.nativeElement) {
+      console.log('✅ SliderRef element:', this.sliderRef.nativeElement);
+      console.log('Current transform:', this.sliderRef.nativeElement.style.transform);
+    } else {
+      console.log('❌ SliderRef is NOT available');
+    }
   }
 
 }
