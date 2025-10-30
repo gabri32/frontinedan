@@ -364,6 +364,11 @@
     .section-title {
       font-size: 2rem;
     }
+    
+    /* Video responsivo en móviles */
+    .content-section iframe {
+      height: 250px;
+    }
   }
 
   /* Animaciones adicionales */
@@ -550,7 +555,7 @@
   </div>
 
   <section class="content-section section-animated">
-    <h2 class="section-title">🎉 Eventos Académicos</h2>
+    <h2 class="section-title">Eventos Académicos</h2>
     <p class="section-subtitle">
       Mantente informado sobre todas nuestras actividades y eventos especiales
     </p>
@@ -595,7 +600,7 @@
   </section>
   <section class="content-section section-animated">
     <h2 class="section-title">
-      🎯 Misión y Visión
+       Misión y Visión
     </h2>
     <p class="section-subtitle">
       Conoce nuestros principios y objetivos institucionales
@@ -607,7 +612,7 @@
       <div class="card-modern" style="text-align: justify;">
         <h3
           style="color: #059669; font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          🌟 Misión
+           Misión
         </h3>
         <p style="color: #333; font-size: 1rem; line-height: 1.7; font-family: 'Poppins', sans-serif;">
           La I.E.M. Antonio Nariño, es inclusiva; forma y desarrolla integralmente a niños, jóvenes y adultos con
@@ -621,7 +626,7 @@
       <div class="card-modern" style="text-align: justify;">
         <h3
           style="color: var(--azul-rey); font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          🚀 Visión
+           Visión
         </h3>
         <p style="color: #333; font-size: 1rem; line-height: 1.7; font-family: 'Poppins', sans-serif;">
           La Institución Educativa Municipal Antonio Nariño para el periodo 2024-2029, será reconocida por la formación
@@ -633,10 +638,39 @@
     </div>
   </section>
 
+  <!-- Sección de Video Institucional -->
+  <section class="content-section section-animated">
+    <h2 class="section-title">
+      Video Institucional
+    </h2>
+    <p class="section-subtitle">
+      Conoce más sobre nuestra institución educativa
+    </p>
+    
+    <div class="card-modern" style="text-align: center; padding: 2rem;">
+      <div style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: var(--sombra-media);">
+        <iframe 
+          width="100%" 
+          height="450" 
+          src="https://www.youtube.com/embed/cYJ3pPvGh_A?si=Rx_e4JlW4rPcfMyO" 
+          title="Video Institucional I.E.M. Antonio Nariño" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen
+          style="border-radius: 12px;">
+        </iframe>
+      </div>
+      <p style="margin-top: 1.5rem; color: var(--gris-medio); font-size: 0.95rem; font-style: italic;">
+        Descubre la excelencia educativa que nos caracteriza
+      </p>
+    </div>
+  </section>
+
   <!-- Sección de Ubicación -->
   <section class="content-section section-animated">
     <h2 class="section-title">
-      📍 Nuestras Sedes
+       Nuestras Sedes
     </h2>
     <p class="section-subtitle">
       Conoce la ubicación de nuestras instalaciones educativas
@@ -648,14 +682,14 @@
         [style.color]="sedeActiva === 'centro' ? 'white' : 'var(--azul-rey)'"
         [style.border]="sedeActiva === 'centro' ? '2px solid var(--azul-rey)' : '2px solid var(--azul-rey)'"
         class="btn-header" style="border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
-        🏢 Sede Centro
+         Sede Centro
       </button>
       <button (click)="cambiarSede('capusigra')"
         [style.background]="sedeActiva === 'capusigra' ? 'var(--azul-rey)' : 'white'"
         [style.color]="sedeActiva === 'capusigra' ? 'white' : 'var(--azul-rey)'"
         [style.border]="sedeActiva === 'capusigra' ? '2px solid var(--azul-rey)' : '2px solid var(--azul-rey)'"
         class="btn-header" style="border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
-        🌳 Sede Capusigra
+         Sede Capusigra
       </button>
     </div>
 
@@ -682,13 +716,13 @@
           <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede Centro:
           </h4>
           <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-            📍 <strong>Dirección:</strong> Antonio Nariño, Pasto, Nariño, Colombia
+             <strong>Dirección:</strong> Antonio Nariño, Pasto, Nariño, Colombia
           </p>
           <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-            📞 <strong>Teléfono:</strong> +57 1 234 5678
+             <strong>Teléfono:</strong> +57 1 234 5678
           </p>
           <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-            ✉️ <strong>Correo:</strong> info.edu.co
+             <strong>Correo:</strong> info.edu.co
           </p>
         </div>
       </div>
@@ -714,13 +748,13 @@
           <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede
             Capusigra:</h4>
           <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-            📍 <strong>Dirección:</strong> Capusigra, Pasto, Nariño, Colombia
+             <strong>Dirección:</strong> Capusigra, Pasto, Nariño, Colombia
           </p>
           <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-            📞 <strong>Teléfono:</strong> +57 1 234 5679
+             <strong>Teléfono:</strong> +57 1 234 5679
           </p>
           <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-            ✉️ <strong>Correo:</strong> capusigra.edu.co
+             <strong>Correo:</strong> capusigra.edu.co
           </p>
         </div>
       </div>
@@ -731,7 +765,7 @@
   <!-- Sección de Formulario de Contacto -->
   <section class="content-section section-animated">
     <h2 class="section-title">
-      📞 Contáctanos
+      Contáctanos
     </h2>
     <p class="section-subtitle">
       ¿Tienes alguna pregunta? Estamos aquí para ayudarte
@@ -785,8 +819,8 @@
           [style.background-color]="contactForm.form.valid && !enviandoFormulario ? 'var(--azul-rey)' : '#ccc'"
           [style.cursor]="contactForm.form.valid && !enviandoFormulario ? 'pointer' : 'not-allowed'"
           style="color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1.1rem; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; min-width: 200px;">
-          <span *ngIf="!enviandoFormulario">📧 Enviar Mensaje</span>
-          <span *ngIf="enviandoFormulario">⏳ Enviando...</span>
+          <span *ngIf="!enviandoFormulario"> Enviar Mensaje</span>
+          <span *ngIf="enviandoFormulario">Enviando...</span>
         </button>
 
         <p style="font-size: 0.85rem; color: #666; margin-top: 1rem; font-style: italic;">
@@ -801,13 +835,13 @@
           <div style="text-align: center;">
             <div
               style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">
-              📞</div>
+              </div>
             <p style="margin: 0; font-size: 0.9rem; color: #555;">+57 1 234 5678</p>
           </div>
           <div style="text-align: center;">
             <div
               style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">
-              ✉️</div>
+              </div>
             <p style="margin: 0; font-size: 0.9rem; color: #555;">info.edu.co</p>
           </div>
           <div style="text-align: center;">
@@ -834,7 +868,7 @@
       <div>
         <h4
           style="font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          🏫 Sobre Nosotros
+           Sobre Nosotros
         </h4>
         <p style="color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.6;">
           Institución educativa comprometida con la excelencia académica y la formación integral de nuestros
@@ -846,20 +880,20 @@
       <div>
         <h4
           style="font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          🔗 Enlaces Rápidos
+           Enlaces Rápidos
         </h4>
         <ul style="list-style: none; padding: 0; margin: 0;">
           <li style="margin-bottom: 0.5rem;"><a href="#"
               style="text-decoration: none; color: rgba(255,255,255,0.8); font-size: 0.95rem; transition: color 0.3s ease;"
-              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">📚
+              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">
               Documentos</a></li>
           <li style="margin-bottom: 0.5rem;"><a href="#"
               style="text-decoration: none; color: rgba(255,255,255,0.8); font-size: 0.95rem; transition: color 0.3s ease;"
-              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">🎉
+              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">
               Eventos</a></li>
           <li style="margin-bottom: 0.5rem;"><a href="#"
               style="text-decoration: none; color: rgba(255,255,255,0.8); font-size: 0.95rem; transition: color 0.3s ease;"
-              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">📞
+              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">
               Contacto</a></li>
         </ul>
       </div>
@@ -868,17 +902,17 @@
       <div>
         <h4
           style="font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-          📍 Contacto
+         Contacto
         </h4>
         <div style="color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.8;">
           <p style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-            🏢 Antonio Nariño – Pasto, Nariño
+             Antonio Nariño – Pasto, Nariño
           </p>
           <p style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-            ✉️ info.edu.co
+             info.edu.co
           </p>
           <p style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-            📞 +57 1 234 5678
+             +57 1 234 5678
           </p>
         </div>
       </div>
