@@ -1,589 +1,893 @@
 <!-- Header -->
- <style>
-.animated-bg {
-  margin: 0;
-  padding: 0;
-  font-family: Helvetica, Arial, sans-serif;
-  background: linear-gradient(100deg, #fcfa7a86, #4597f5c9, #5db455, #e4c3d8);
-  background-size: 400% 400%;
-  animation: fondoAnimado 10s ease infinite;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
+<style>
+  /* Variables CSS para colores consistentes */
+  :root {
+    --azul-rey: #1e3a8a;
+    --azul-rey-hover: #1e40af;
+    --azul-rey-light: #3b82f6;
+    --gris-claro: #f8fafc;
+    --gris-medio: #64748b;
+    --blanco: #ffffff;
+    --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --sombra-media: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --sombra-fuerte: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
 
-@keyframes fondoAnimado {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+  /* Fondo principal profesional */
+  .professional-bg {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
 
+  /* Patrón sutil de fondo */
+  .professional-bg::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(30, 58, 138, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(30, 58, 138, 0.03) 0%, transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+  }
 
-
-.animated-bg::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-    backdrop-filter: blur(12px);
-  z-index: -1;
-}
-  /* Header */
-  header {
+  /* Header mejorado */
+  .header-professional {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    padding: 1rem 2rem;
-    background: #254b9c;
+    padding: 1.5rem 2rem;
+    background: var(--azul-rey);
+    background: linear-gradient(135deg, var(--azul-rey) 0%, var(--azul-rey-hover) 100%);
     color: white;
-    font-family: Helvetica, Arial, sans-serif;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Inter', sans-serif;
+    box-shadow: var(--sombra-media);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
   }
 
-  header .logo {
+  .header-professional.scrolled {
+    padding: 1rem 2rem;
+    box-shadow: var(--sombra-fuerte);
+  }
+
+  .logo-container {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+    transition: transform 0.3s ease;
   }
 
-  header .logo span {
-    font-size: 1.2rem;
-    font-weight: bold;
+  .logo-container:hover {
+    transform: scale(1.02);
   }
 
-  header h6 {
+  .logo-container img {
+    height: 45px;
+    margin-right: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+
+  .logo-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  .logo-subtitle {
+    font-size: 0.85rem;
+    font-weight: 400;
+    opacity: 0.9;
     margin: 0;
-    font-size: 0.8rem;
-    font-weight: normal;
   }
 
-  header button {
-    margin-top: 0.5rem;
+  /* Botones del header mejorados */
+  .header-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
   }
 
+  .btn-header {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--sombra-suave);
+  }
+
+  .btn-login {
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--azul-rey);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-login:hover {
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: var(--sombra-media);
+  }
+
+  .btn-register {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .btn-register:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+  }
+
+  /* Secciones con animaciones de scroll */
+  .section-animated {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .section-animated.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Banner slider mejorado */
+  .banner-slider {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 4rem;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow: var(--sombra-media);
+  }
+
+  .banner-slide {
+    height: 70vh;
+    position: relative;
+  }
+
+  .banner-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .banner-slide:hover img {
+    transform: scale(1.02);
+  }
+
+  .banner-overlay {
+    position: absolute;
+    bottom: 8%;
+    left: 5%;
+    right: 5%;
+    color: white;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.9) 0%, rgba(30, 64, 175, 0.8) 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--sombra-fuerte);
+    transform: translateY(20px);
+    animation: slideUp 0.8s ease forwards;
+  }
+
+  @keyframes slideUp {
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .banner-title {
+    margin: 0;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .banner-description {
+    margin: 0;
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 400;
+    opacity: 0.95;
+  }
+
+  /* Botones de navegación del banner */
+  .banner-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(30, 58, 138, 0.8);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--sombra-media);
+  }
+
+  .banner-nav-btn:hover {
+    background: var(--azul-rey);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .banner-nav-btn.prev {
+    left: 20px;
+  }
+
+  .banner-nav-btn.next {
+    right: 20px;
+  }
+
+  /* Secciones de contenido */
+  .content-section {
+    margin: 5rem auto;
+    max-width: 1200px;
+    padding: 0 2rem;
+    text-align: center;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--azul-rey);
+    margin-bottom: 1rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--azul-rey), var(--azul-rey-light));
+    border-radius: 2px;
+  }
+
+  .section-subtitle {
+    font-size: 1.1rem;
+    color: var(--gris-medio);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Cards mejoradas */
+  .card-modern {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--sombra-suave);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(30, 58, 138, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--azul-rey), var(--azul-rey-light));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .card-modern:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--sombra-fuerte);
+  }
+
+  .card-modern:hover::before {
+    transform: scaleX(1);
+  }
+
+  /* Responsive design mejorado */
   @media (max-width: 768px) {
-    header {
+    .header-professional {
       flex-direction: column;
-      text-align: center;
+      gap: 1rem;
+      padding: 1rem;
     }
 
-    header .logo {
+    .header-buttons {
+      width: 100%;
       justify-content: center;
     }
 
-    header button {
-      width: 100%;
-      margin: 0.5rem 0;
+    .btn-header {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .banner-slide {
+      height: 50vh;
+    }
+
+    .banner-overlay {
+      bottom: 5%;
+      left: 3%;
+      right: 3%;
+      padding: 1.5rem;
+    }
+
+    .banner-nav-btn {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    .banner-nav-btn.prev {
+      left: 10px;
+    }
+
+    .banner-nav-btn.next {
+      right: 10px;
+    }
+
+    .content-section {
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
     }
   }
-.nav-button:first-of-type { left: 0; }
-  .nav-button:last-of-type { right: 0; }
-  .banner-slide {
-  height: 75vh;
-}
-  @media (max-width: 600px) {
- .banner-slider {
-    max-height: 3%; /* más bajo en tablets y móviles */
+
+  /* Animaciones adicionales */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .banner-slider button {
-    width: 30px;
-    height: 30px;
-    font-size: 1rem;
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
   }
 
-  .banner-slider h2, .banner-slider p {
-    font-size: 1rem;
+  /* Mejoras para accesibilidad */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
-}
 
+  /* Focus states mejorados */
+  .btn-header:focus,
+  .banner-nav-btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+
+  /* Animaciones adicionales */
+  @keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translateY(0);
+    }
+
+    40% {
+      transform: translateY(-10px);
+    }
+
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    50% {
+      opacity: 0.7;
+      transform: scaleX(0.8);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
 </style>
 
-<header style="
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: #254b9c; /* azul bandera */
-  color: white;
-  font-family: Helvetica, Arial, sans-serif;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-">
-
+<header class="header-professional" id="main-header">
   <!-- Logo -->
-  <div class="logo" style="display: flex; align-items: center;">
-    <img src="favicon.ico" alt="Logo" style="height: 40px; margin-right: 0.5rem;">
-    <span style="font-size: 1.2rem; font-weight: bold;">
-      I.E.M. Antonio Nariño<br>
-      <h6>Colombia 2025</h6>
-    </span>
+  <div class="logo-container">
+    <img src="favicon.ico" alt="Logo I.E.M. Antonio Nariño">
+    <div>
+      <div class="logo-text">I.E.M. Antonio Nariño</div>
+      <p class="logo-subtitle">Excelencia Educativa • Colombia 2025</p>
+    </div>
   </div>
 
   <!-- Botones -->
-  <div>
-    <button (click)="goToLogin()"
-            style="background-color: #FFF5BA; color: #0033A0; border: none; padding: 0.5rem 1rem; margin-right: 1rem; border-radius: 8px; font-weight: 600; font-family: Helvetica, Arial, sans-serif; cursor: pointer; transition: 0.3s;">
-      Iniciar sesión
+  <div class="header-buttons">
+    <button (click)="goToLogin()" class="btn-header btn-login">
+      Iniciar Sesión
     </button>
-    <button (click)="abrirRegistro()"
-            style="background-color: #A8D5BA; color: #0033A0; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; font-family: Helvetica, Arial, sans-serif; cursor: pointer; transition: 0.3s;">
+    <button (click)="abrirRegistro()" class="btn-header btn-register">
       Inscripción
     </button>
   </div>
 </header>
 
-<div class="animated-bg" >
-  <!-- Banner Slider -->
-<!-- Banner Slider Responsive -->
-<div class="banner-slider" style="width: 100%; overflow: hidden; position: relative; margin-bottom: 3rem;">
-  <div 
-    #bannerSlider 
-    class="banner-track"
-    style="display: flex; transition: transform 0.5s ease-in-out; will-change: transform;"
-  >
-    <div *ngFor="let banner of bannerImages" 
-         class="banner-slide"
-         style="min-width: 100%;  flex-shrink: 0; position: relative;">
+<div class="professional-bg">
+  <!-- Banner Slider Mejorado -->
+  <div class="banner-slider">
+    <div #bannerSlider class="banner-track"
+      style="display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform;">
+      <div *ngFor="let banner of bannerImages" class="banner-slide"
+        style="min-width: 100%; flex-shrink: 0; position: relative;">
 
-      <img [src]="banner.image" 
-           alt="banner" 
-           style="width: 100%; height: 100%; object-fit: cover;">
-      <div style="position: absolute; bottom: 10%; left: 5%; right: 5%;
-                  color: white; background: rgba(0,0,0,0.4); padding: 1rem;
-                  border-radius: 10px; text-align: left;">
-        <h2 style="margin: 0; font-size: clamp(1.2rem, 3vw, 2rem); font-weight: bold;">{{ banner.titulo }}</h2>
-        <p style="margin: 0.5rem 0 0; font-size: clamp(0.9rem, 2vw, 1.2rem);">{{ banner.descripcion }}</p>
-      </div>
-    </div>
-  </div>
+        <img [src]="banner.image" [alt]="banner.titulo">
 
-  <!-- Botones -->
-  <button 
-    (click)="prevBanner1()"
-    style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-           background: rgba(0,0,0,0.4); border: none; color: white;
-           border-radius: 50%; width: 35px; height: 35px; font-size: 1.3rem; cursor: pointer;">
-    ‹
-  </button>
-  <button 
-    (click)="nextBanner1()"
-    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-           background: rgba(0,0,0,0.4); border: none; color: white;
-           border-radius: 50%; width: 35px; height: 35px; font-size: 1.3rem; cursor: pointer;">
-    ›
-  </button>
-</div>
-
-
-<section
-  *ngIf="eventCards && eventCards.length > 0"
-  style="margin: 3rem auto; max-width: 1200px; text-align: center;"
->
-  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;font-family: Arial, Helvetica, sans-serif;">
-    Documentos institucionales
-  </h2>
-
-  <div style="position: relative; overflow: hidden;">
-    <div
-      #slider
-      class="slider-track"
-      style="
-        display: flex;
-        transition: transform 0.5s ease-in-out;
-        will-change: transform;
-      "
-    >
-      <div
-        *ngFor="let event of eventCards"
-        class="card-item"
-        style="
-          min-width: 160px;
-          margin: 0 1rem;
-          text-align: center;
-          flex-shrink: 0;
-        "
-      >
-        <div     (click)="abrirEnlace(event.url)"
-          style="
-            width: 10vh;
-            height: 10vh;
-            border-radius: 50%;
-            background-color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-          "
-        >
-          <img
-            [src]="event.image"
-            alt="icono"
-            style="width: 50px; height: 50px; object-fit: contain;"
-            
-          />
+        <div class="banner-overlay">
+          <h2 class="banner-title">{{ banner.titulo }}</h2>
+          <p class="banner-description">{{ banner.descripcion }}</p>
         </div>
-        <p style="margin-top: 0.5rem; font-size: 0.95rem;">
-          {{ event.descripcion }}
-        </p>
       </div>
     </div>
 
-    <!-- Flechas -->
-    <button
-      (click)="prevSlide()"
-      class="nav-button"
-      style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.3); border: none; border-radius: 50%; padding: 0.6rem; cursor: pointer; color: white;"
-    >
-      ◀
+    <!-- Botones de navegación mejorados -->
+    <button (click)="prevBanner1()" class="banner-nav-btn prev" aria-label="Banner anterior">
+      ‹
     </button>
-    <button
-      (click)="nextSlide()"
-      class="nav-button"
-      style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.3); border: none; border-radius: 50%; padding: 0.6rem; cursor: pointer; color: white;"
-    >
-      ▶
+    <button (click)="nextBanner1()" class="banner-nav-btn next" aria-label="Banner siguiente">
+      ›
     </button>
   </div>
-</section>
-<!-- Imagen ampliada en modal -->
-<div *ngIf="imagenAmpliada" (click)="cerrarImagen()"
-     style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+
+
+  <section class="content-section section-animated">
+    <h2 class="section-title">
+      Documentos Institucionales
+    </h2>
+    <p class="section-subtitle">
+      Accede a toda la información importante de nuestra institución educativa
+    </p>
+
+    <!-- Estado de carga para documentos -->
+    <div *ngIf="cargandoDatos" class="card-modern" style="text-align: center; padding: 3rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem; animation: bounce 1s infinite;">📚</div>
+      <h3 style="color: var(--azul-rey); margin-bottom: 1rem;">Cargando Documentos</h3>
+      <p style="color: var(--gris-medio);">Obteniendo la información más reciente...</p>
+    </div>
+
+    <!-- Documentos cargados -->
+    <div *ngIf="!cargandoDatos && eventCards && eventCards.length > 0" style="position: relative; overflow: hidden;">
+      <div #slider class="slider-track"
+        style="display: flex; transition: transform 0.5s ease-in-out; will-change: transform;">
+        <div *ngFor="let event of eventCards" class="card-item"
+          style="min-width: 160px; margin: 0 1rem; text-align: center; flex-shrink: 0;">
+          <div (click)="abrirEnlace(event.url)"
+            style="width: 10vh; height: 10vh; border-radius: 50%; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; margin: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.3s ease;"
+            onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            <img [src]="event.image" alt="icono" style="width: 50px; height: 50px; object-fit: contain;" />
+          </div>
+          <p style="margin-top: 0.5rem; font-size: 0.95rem; color: var(--gris-medio);">
+            {{ event.descripcion }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Flechas de navegación -->
+      <button (click)="prevSlide()" class="nav-button"
+        style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); background: rgba(30,58,138,0.8); border: none; border-radius: 50%; padding: 0.6rem; cursor: pointer; color: white; transition: all 0.3s ease;"
+        onmouseover="this.style.background='var(--azul-rey)'" onmouseout="this.style.background='rgba(30,58,138,0.8)'">
+        ◀
+      </button>
+      <button (click)="nextSlide()" class="nav-button"
+        style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); background: rgba(30,58,138,0.8); border: none; border-radius: 50%; padding: 0.6rem; cursor: pointer; color: white; transition: all 0.3s ease;"
+        onmouseover="this.style.background='var(--azul-rey)'" onmouseout="this.style.background='rgba(30,58,138,0.8)'">
+        ▶
+      </button>
+    </div>
+
+    <!-- Sin datos -->
+    <div *ngIf="!cargandoDatos && (!eventCards || eventCards.length === 0)" class="card-modern"
+      style="text-align: center; padding: 3rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+      <h3 style="color: var(--gris-medio); margin-bottom: 1rem;">No hay documentos disponibles</h3>
+      <p style="color: var(--gris-medio);">Los documentos institucionales se mostrarán aquí cuando estén disponibles.
+      </p>
+    </div>
+
+
+  </section>
+  <!-- Imagen ampliada en modal -->
+  <div *ngIf="imagenAmpliada" (click)="cerrarImagen()" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.8); display: flex;
             align-items: center; justify-content: center; z-index: 9999;">
-  <img [src]="imagenAmpliada"
-       alt="imagen ampliada"
-       style="max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 20px #fff;">
-</div>
-
-<section *ngIf="events && events.length > 0"
-         style="margin: 3rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
-  <h2 style="font-size: 2rem; margin-bottom: 2rem; font-weight: bold; color: #333;font-family: Arial, Helvetica, sans-serif;">Eventos</h2>
-
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-
-    <div *ngFor="let event of mostrarTodos ? events : events.slice(0, 10)"
-         style="
-           background-color: #f2f9ff;
-           border-radius: 20px;
-           padding: 1.5rem;
-           display: flex;
-           flex-direction: column;
-           align-items: center;
-           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-           transition: transform 0.3s ease;
-         "
-         (mouseenter)="hovering = true"
-         (mouseleave)="hovering = false"
-         [style.transform]="hovering ? 'translateY(-5px)' : 'none'">
-
-    <img [src]="event.imagen"
-     alt="evento"
-     (click)="ampliarImagen(event.imagen)"
-     style="cursor: zoom-in; width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;">
-
-
-
-      
-<p style="font-size: 1.2rem; color: #000000; margin-bottom: 1rem;font-family: Arial, Helvetica, sans-serif;font-weight: 600;">
-        {{ event.titulo }}
-      </p>
-      <p style="font-size: 0.95rem; color: #555; margin-bottom: 1rem;">
-        {{ event.detalle }}
-      </p>
-<h3 style="font-size: 1rem; font-weight: 500; color: #222; margin-bottom: 0.5rem;">
-        {{ event.fecha }}
-      </h3>
-    </div>
+    <img [src]="imagenAmpliada" alt="imagen ampliada"
+      style="max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 20px #fff;">
   </div>
-</section>
-<section style="margin: 4rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
-  <h2 style="font-size: 2.2rem; margin-bottom: 2rem; font-weight: bold; color: #1e3a5f; font-family: 'Poppins', sans-serif;">
-    Misión y Visión
-  </h2>
 
-  <div style="display: flex; flex-direction: column; gap: 2rem;">
-
-    <!-- Misión -->
-    <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: justify;">
-      <h3 style="color: #388e3c; font-size: 1.5rem; margin-bottom: 1rem;"> - Misión</h3>
-      <p style="color: #333; font-size: 1rem; line-height: 1.7; font-family: 'Poppins', sans-serif;">
-        La I.E.M. Antonio Nariño, es inclusiva; forma y desarrolla integralmente a niños, jóvenes y adultos con capacidad crítica, reflexiva y analítica en los diferentes campos de formación, con fundamentos pedagógicos, sentido ético, moral y humanístico, para que sean autónomos y emprendedores; accedan a otros niveles de educación superior y se sientan responsables de su proyecto de vida individual y social.
-      </p>
-    </div>
-
-    <!-- Visión -->
-    <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: justify;">
-      <h3 style="color: #254b9c; font-size: 1.5rem; margin-bottom: 1rem;"> - Visión</h3>
-      <p style="color: #333; font-size: 1rem; line-height: 1.7; font-family: 'Poppins', sans-serif;">
-        La Institución Educativa Municipal Antonio Nariño para el periodo 2024-2029, será reconocida por la formación personal, cultural y social de niños, jóvenes y adultos, mediante una oferta educativa integral y flexible que responda al derecho de una educación para todos, la participación y la democracia.
-      </p>
-    </div>
-
-  </div>
-</section>
-
-<!-- Sección de Ubicación -->
-<section style="margin: 4rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
-  <h2 style="font-size: 2.2rem; margin-bottom: 2rem; font-weight: bold; color: #1e3a5f; font-family: 'Poppins', sans-serif;">
-    Nuestras Sedes
-  </h2>
-  
-  <!-- Botones para alternar sedes -->
-  <div style="margin-bottom: 2rem;">
-    <button 
-      (click)="cambiarSede('centro')"
-      [style.background-color]="sedeActiva === 'centro' ? '#254b9c' : '#e9ecef'"
-      [style.color]="sedeActiva === 'centro' ? 'white' : '#333'"
-      style="border: none; padding: 0.8rem 1.5rem; margin: 0 0.5rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif;">
-      📍 Sede Centro
-    </button>
-    <button 
-      (click)="cambiarSede('capusigra')"
-      [style.background-color]="sedeActiva === 'capusigra' ? '#254b9c' : '#e9ecef'"
-      [style.color]="sedeActiva === 'capusigra' ? 'white' : '#333'"
-      style="border: none; padding: 0.8rem 1.5rem; margin: 0 0.5rem; border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Poppins', sans-serif;">
-      📍 Sede Capusigra
-    </button>
-  </div>
-  
-  <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-    
-    <!-- Sede Centro -->
-    <div *ngIf="sedeActiva === 'centro'">
-      <h3 style="color: #254b9c; font-size: 1.4rem; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
-        Sede Centro
-      </h3>
-      <p style="color: #333; font-size: 1rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">
-        Nuestra sede principal ubicada en el centro de Pasto
-      </p>
-      
-      <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d31911.416591100045!2d-77.2942257!3d1.2110667!3m2!1i1024!2i768!4f13.1!2m1!1santonio%20nari%C3%B1o%20pasto%20colegio!5e0!3m2!1ses-419!2sco!4v1761710098114!5m2!1ses-419!2sco" 
-          width="100%" 
-          height="450" 
-          style="border:0; border-radius: 12px;" 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-      
-      <div style="margin-top: 1.5rem; text-align: left;">
-        <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede Centro:</h4>
-        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-          📍 <strong>Dirección:</strong> Antonio Nariño, Pasto, Nariño, Colombia
-        </p>
-        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-          📞 <strong>Teléfono:</strong> +57 1 234 5678
-        </p>
-        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-          ✉️ <strong>Correo:</strong> info.edu.co
-        </p>
-      </div>
-    </div>
-
-    <!-- Sede Capusigra -->
-    <div *ngIf="sedeActiva === 'capusigra'">
-      <h3 style="color: #254b9c; font-size: 1.4rem; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
-        Sede Capusigra
-      </h3>
-      <p style="color: #333; font-size: 1rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">
-        Nuestra sede en el sector de Capusigra
-      </p>
-      
-      <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.4644452324915!2d-77.28943882111038!3d1.2098318000000026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2ed362c6a50b65%3A0x5be8c792594725cd!2sIEM%20Antonio%20Narino!5e0!3m2!1ses-419!2sco!4v1761710207405!5m2!1ses-419!2sco" 
-          width="100%" 
-          height="450" 
-          style="border:0; border-radius: 12px;" 
-          allowfullscreen="" 
-          loading="lazy" 
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
-      </div>
-      
-      <div style="margin-top: 1.5rem; text-align: left;">
-        <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede Capusigra:</h4>
-        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-          📍 <strong>Dirección:</strong> Capusigra, Pasto, Nariño, Colombia
-        </p>
-        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-          📞 <strong>Teléfono:</strong> +57 1 234 5679
-        </p>
-        <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
-          ✉️ <strong>Correo:</strong> capusigra.edu.co
-        </p>
-      </div>
-    </div>
-    
-  </div>
-</section>
-
-<!-- Sección de Formulario de Contacto -->
-<section style="margin: 4rem auto; max-width: 1200px; padding: 2rem; text-align: center;">
-  <h2 style="font-size: 2.2rem; margin-bottom: 2rem; font-weight: bold; color: #1e3a5f; font-family: 'Poppins', sans-serif;">
-    Contáctanos
-  </h2>
-  
-  <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-    <p style="color: #333; font-size: 1rem; margin-bottom: 2rem; font-family: 'Poppins', sans-serif;">
-      ¿Tienes alguna pregunta o necesitas más información? Escríbenos y te responderemos pronto.
+  <section class="content-section section-animated">
+    <h2 class="section-title">🎉 Eventos Académicos</h2>
+    <p class="section-subtitle">
+      Mantente informado sobre todas nuestras actividades y eventos especiales
     </p>
-    
-    <form #contactForm="ngForm" (ngSubmit)="enviarFormularioContacto(contactForm)" style="max-width: 600px; margin: 0 auto;">
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-        <div>
-          <input 
-            type="text" 
-            name="nombre"
-            ngModel
-            required
-            placeholder="Nombre completo *"
-            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
-            onfocus="this.style.borderColor='#254b9c'"
-            onblur="this.style.borderColor='#e9ecef'">
-        </div>
-        <div>
-          <input 
-            type="email" 
-            name="email"
-            ngModel
-            required
-            placeholder="Correo electrónico *"
-            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
-            onfocus="this.style.borderColor='#254b9c'"
-            onblur="this.style.borderColor='#e9ecef'">
-        </div>
+
+    <!-- Estado de carga para eventos -->
+    <div *ngIf="cargandoDatos" class="card-modern" style="text-align: center; padding: 3rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem; animation: bounce 1s infinite;">🎉</div>
+      <h3 style="color: var(--azul-rey); margin-bottom: 1rem;">Cargando Eventos</h3>
+      <p style="color: var(--gris-medio);">Obteniendo los eventos más recientes...</p>
+    </div>
+
+    <!-- Eventos cargados -->
+    <div *ngIf="!cargandoDatos && events && events.length > 0"
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+      <div *ngFor="let event of mostrarTodos ? events : events.slice(0, 10)" class="card-modern"
+        style="display: flex; flex-direction: column; align-items: center;" (mouseenter)="hovering = true"
+        (mouseleave)="hovering = false">
+
+        <img [src]="event.imagen" alt="evento" (click)="ampliarImagen(event.imagen)"
+          style="cursor: zoom-in; width: 100%; height: 150px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;">
+
+        <p
+          style="font-size: 1.2rem; color: #000000; margin-bottom: 1rem; font-family: Arial, Helvetica, sans-serif; font-weight: 600;">
+          {{ event.titulo }}
+        </p>
+        <p style="font-size: 0.95rem; color: #555; margin-bottom: 1rem;">
+          {{ event.detalle }}
+        </p>
+        <h3 style="font-size: 1rem; font-weight: 500; color: #222; margin-bottom: 0.5rem;">
+          {{ event.fecha }}
+        </h3>
       </div>
-      
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-        <div>
-          <input 
-            type="tel" 
-            name="telefono"
-            ngModel
-            placeholder="Teléfono"
-            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
-            onfocus="this.style.borderColor='#254b9c'"
-            onblur="this.style.borderColor='#e9ecef'">
-        </div>
-        <div>
-          <select 
-            name="asunto"
-            ngModel
-            required
-            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
-            onfocus="this.style.borderColor='#254b9c'"
-            onblur="this.style.borderColor='#e9ecef'">
-            <option value="">Selecciona un tema *</option>
-            <option value="informacion-general">Información General</option>
-            <option value="admisiones">Proceso de Admisiones</option>
-            <option value="costos">Costos Educativos</option>
-            <option value="programas-academicos">Programas Académicos</option>
-            <option value="actividades-extracurriculares">Actividades Extracurriculares</option>
-            <option value="otro">Otro</option>
-          </select>
-        </div>
+    </div>
+
+    <!-- Sin eventos -->
+    <div *ngIf="!cargandoDatos && (!events || events.length === 0)" class="card-modern"
+      style="text-align: center; padding: 3rem;">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">📅</div>
+      <h3 style="color: var(--gris-medio); margin-bottom: 1rem;">No hay eventos disponibles</h3>
+      <p style="color: var(--gris-medio);">Los próximos eventos se mostrarán aquí cuando estén programados.</p>
+    </div>
+  </section>
+  <section class="content-section section-animated">
+    <h2 class="section-title">
+      🎯 Misión y Visión
+    </h2>
+    <p class="section-subtitle">
+      Conoce nuestros principios y objetivos institucionales
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+
+      <!-- Misión -->
+      <div class="card-modern" style="text-align: justify;">
+        <h3
+          style="color: #059669; font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          🌟 Misión
+        </h3>
+        <p style="color: #333; font-size: 1rem; line-height: 1.7; font-family: 'Poppins', sans-serif;">
+          La I.E.M. Antonio Nariño, es inclusiva; forma y desarrolla integralmente a niños, jóvenes y adultos con
+          capacidad crítica, reflexiva y analítica en los diferentes campos de formación, con fundamentos pedagógicos,
+          sentido ético, moral y humanístico, para que sean autónomos y emprendedores; accedan a otros niveles de
+          educación superior y se sientan responsables de su proyecto de vida individual y social.
+        </p>
       </div>
-      
-      <div style="margin-bottom: 1.5rem;">
-        <textarea 
-          name="mensaje"
-          ngModel
-          required
-          rows="5"
-          placeholder="Escribe tu mensaje aquí... *"
-          style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; resize: vertical; transition: border-color 0.3s ease;"
-          onfocus="this.style.borderColor='#254b9c'"
-          onblur="this.style.borderColor='#e9ecef'"></textarea>
+
+      <!-- Visión -->
+      <div class="card-modern" style="text-align: justify;">
+        <h3
+          style="color: var(--azul-rey); font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          🚀 Visión
+        </h3>
+        <p style="color: #333; font-size: 1rem; line-height: 1.7; font-family: 'Poppins', sans-serif;">
+          La Institución Educativa Municipal Antonio Nariño para el periodo 2024-2029, será reconocida por la formación
+          personal, cultural y social de niños, jóvenes y adultos, mediante una oferta educativa integral y flexible que
+          responda al derecho de una educación para todos, la participación y la democracia.
+        </p>
       </div>
-      
-      <button 
-        type="submit"
-        [disabled]="!contactForm.form.valid || enviandoFormulario"
-        [style.background-color]="contactForm.form.valid && !enviandoFormulario ? '#254b9c' : '#ccc'"
-        [style.cursor]="contactForm.form.valid && !enviandoFormulario ? 'pointer' : 'not-allowed'"
-        style="color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1.1rem; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; min-width: 200px;">
-        <span *ngIf="!enviandoFormulario">📧 Enviar Mensaje</span>
-        <span *ngIf="enviandoFormulario">⏳ Enviando...</span>
+
+    </div>
+  </section>
+
+  <!-- Sección de Ubicación -->
+  <section class="content-section section-animated">
+    <h2 class="section-title">
+      📍 Nuestras Sedes
+    </h2>
+    <p class="section-subtitle">
+      Conoce la ubicación de nuestras instalaciones educativas
+    </p>
+
+    <!-- Botones para alternar sedes -->
+    <div style="margin-bottom: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <button (click)="cambiarSede('centro')" [style.background]="sedeActiva === 'centro' ? 'var(--azul-rey)' : 'white'"
+        [style.color]="sedeActiva === 'centro' ? 'white' : 'var(--azul-rey)'"
+        [style.border]="sedeActiva === 'centro' ? '2px solid var(--azul-rey)' : '2px solid var(--azul-rey)'"
+        class="btn-header" style="border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+        🏢 Sede Centro
       </button>
-      
-      <p style="font-size: 0.85rem; color: #666; margin-top: 1rem; font-style: italic;">
-        * Campos obligatorios
-      </p>
-    </form>
-    
-    <!-- Información de contacto rápido -->
-    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
-      <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 1rem;">O contáctanos directamente:</h4>
-      <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-        <div style="text-align: center;">
-          <div style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">📞</div>
-          <p style="margin: 0; font-size: 0.9rem; color: #555;">+57 1 234 5678</p>
+      <button (click)="cambiarSede('capusigra')"
+        [style.background]="sedeActiva === 'capusigra' ? 'var(--azul-rey)' : 'white'"
+        [style.color]="sedeActiva === 'capusigra' ? 'white' : 'var(--azul-rey)'"
+        [style.border]="sedeActiva === 'capusigra' ? '2px solid var(--azul-rey)' : '2px solid var(--azul-rey)'"
+        class="btn-header" style="border-radius: 25px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+        🌳 Sede Capusigra
+      </button>
+    </div>
+
+    <div style="background-color: #f8f9fa; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+
+      <!-- Sede Centro -->
+      <div *ngIf="sedeActiva === 'centro'">
+        <h3 style="color: #254b9c; font-size: 1.4rem; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
+          Sede Centro
+        </h3>
+        <p style="color: #333; font-size: 1rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">
+          Nuestra sede principal ubicada en el centro de Pasto
+        </p>
+
+        <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m12!1m8!1m3!1d31911.416591100045!2d-77.2942257!3d1.2110667!3m2!1i1024!2i768!4f13.1!2m1!1santonio%20nari%C3%B1o%20pasto%20colegio!5e0!3m2!1ses-419!2sco!4v1761710098114!5m2!1ses-419!2sco"
+            width="100%" height="450" style="border:0; border-radius: 12px;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
         </div>
-        <div style="text-align: center;">
-          <div style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">✉️</div>
-          <p style="margin: 0; font-size: 0.9rem; color: #555;">info.edu.co</p>
+
+        <div style="margin-top: 1.5rem; text-align: left;">
+          <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede Centro:
+          </h4>
+          <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+            📍 <strong>Dirección:</strong> Antonio Nariño, Pasto, Nariño, Colombia
+          </p>
+          <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+            📞 <strong>Teléfono:</strong> +57 1 234 5678
+          </p>
+          <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+            ✉️ <strong>Correo:</strong> info.edu.co
+          </p>
         </div>
-        <div style="text-align: center;">
-          <div style="background-color: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem; cursor: pointer;" (click)="abrirWhatsApp()">💬</div>
-          <p style="margin: 0; font-size: 0.9rem; color: #555;">WhatsApp</p>
+      </div>
+
+      <!-- Sede Capusigra -->
+      <div *ngIf="sedeActiva === 'capusigra'">
+        <h3 style="color: #254b9c; font-size: 1.4rem; margin-bottom: 1rem; font-family: 'Poppins', sans-serif;">
+          Sede Capusigra
+        </h3>
+        <p style="color: #333; font-size: 1rem; margin-bottom: 1.5rem; font-family: 'Poppins', sans-serif;">
+          Nuestra sede en el sector de Capusigra
+        </p>
+
+        <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.4644452324915!2d-77.28943882111038!3d1.2098318000000026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2ed362c6a50b65%3A0x5be8c792594725cd!2sIEM%20Antonio%20Narino!5e0!3m2!1ses-419!2sco!4v1761710207405!5m2!1ses-419!2sco"
+            width="100%" height="450" style="border:0; border-radius: 12px;" allowfullscreen="" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: left;">
+          <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 0.5rem;">Información de Contacto - Sede
+            Capusigra:</h4>
+          <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+            📍 <strong>Dirección:</strong> Capusigra, Pasto, Nariño, Colombia
+          </p>
+          <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+            📞 <strong>Teléfono:</strong> +57 1 234 5679
+          </p>
+          <p style="color: #555; font-size: 0.95rem; margin: 0.3rem 0;">
+            ✉️ <strong>Correo:</strong> capusigra.edu.co
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Sección de Formulario de Contacto -->
+  <section class="content-section section-animated">
+    <h2 class="section-title">
+      📞 Contáctanos
+    </h2>
+    <p class="section-subtitle">
+      ¿Tienes alguna pregunta? Estamos aquí para ayudarte
+    </p>
+
+    <div class="card-modern">
+
+      <form #contactForm="ngForm" (ngSubmit)="enviarFormularioContacto(contactForm)"
+        style="max-width: 600px; margin: 0 auto;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <input type="text" name="nombre" ngModel required placeholder="Nombre completo *"
+              style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#254b9c'" onblur="this.style.borderColor='#e9ecef'">
+          </div>
+          <div>
+            <input type="email" name="email" ngModel required placeholder="Correo electrónico *"
+              style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#254b9c'" onblur="this.style.borderColor='#e9ecef'">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <input type="tel" name="telefono" ngModel placeholder="Teléfono"
+              style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#254b9c'" onblur="this.style.borderColor='#e9ecef'">
+          </div>
+          <div>
+            <select name="asunto" ngModel required
+              style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: border-color 0.3s ease;"
+              onfocus="this.style.borderColor='#254b9c'" onblur="this.style.borderColor='#e9ecef'">
+              <option value="">Selecciona un tema *</option>
+              <option value="informacion-general">Información General</option>
+              <option value="admisiones">Proceso de Admisiones</option>
+              <option value="costos">Costos Educativos</option>
+              <option value="programas-academicos">Programas Académicos</option>
+              <option value="actividades-extracurriculares">Actividades Extracurriculares</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <textarea name="mensaje" ngModel required rows="5" placeholder="Escribe tu mensaje aquí... *"
+            style="width: 100%; padding: 0.8rem; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; resize: vertical; transition: border-color 0.3s ease;"
+            onfocus="this.style.borderColor='#254b9c'" onblur="this.style.borderColor='#e9ecef'"></textarea>
+        </div>
+
+        <button type="submit" [disabled]="!contactForm.form.valid || enviandoFormulario"
+          [style.background-color]="contactForm.form.valid && !enviandoFormulario ? 'var(--azul-rey)' : '#ccc'"
+          [style.cursor]="contactForm.form.valid && !enviandoFormulario ? 'pointer' : 'not-allowed'"
+          style="color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-size: 1.1rem; font-weight: 600; font-family: 'Poppins', sans-serif; transition: all 0.3s ease; min-width: 200px;">
+          <span *ngIf="!enviandoFormulario">📧 Enviar Mensaje</span>
+          <span *ngIf="enviandoFormulario">⏳ Enviando...</span>
+        </button>
+
+        <p style="font-size: 0.85rem; color: #666; margin-top: 1rem; font-style: italic;">
+          * Campos obligatorios
+        </p>
+      </form>
+
+      <!-- Información de contacto rápido -->
+      <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #dee2e6;">
+        <h4 style="color: #1e3a5f; font-size: 1.2rem; margin-bottom: 1rem;">O contáctanos directamente:</h4>
+        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+          <div style="text-align: center;">
+            <div
+              style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">
+              📞</div>
+            <p style="margin: 0; font-size: 0.9rem; color: #555;">+57 1 234 5678</p>
+          </div>
+          <div style="text-align: center;">
+            <div
+              style="background-color: #254b9c; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem;">
+              ✉️</div>
+            <p style="margin: 0; font-size: 0.9rem; color: #555;">info.edu.co</p>
+          </div>
+          <div style="text-align: center;">
+            <div
+              style="background-color: #25D366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; font-size: 1.2rem; cursor: pointer;"
+              (click)="abrirWhatsApp()">💬</div>
+            <p style="margin: 0; font-size: 0.9rem; color: #555;">WhatsApp</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<footer style="background-color: #cdd4db; padding: 2.5rem 1rem; margin-top: 4rem; border-top: 1px solid #d0e0ef;">
-  <div style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: left;">
+  <footer
+    style="background: linear-gradient(135deg, var(--azul-rey) 0%, var(--azul-rey-hover) 100%); color: white; padding: 3rem 1rem 2rem; margin-top: 6rem; position: relative;">
+    <!-- Decoración superior -->
+    <div
+      style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--azul-rey-light), white, var(--azul-rey-light));">
+    </div>
+    <div
+      style="max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: left;">
 
-    <!-- Sección Institucional -->
-    <div>
-      <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 1rem;">Sobre Nosotros</h4>
-      <p style="color: #555; font-size: 0.95rem;">
-        Plataforma académica institucional.
-      </p>
+      <!-- Sección Institucional -->
+      <div>
+        <h4
+          style="font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          🏫 Sobre Nosotros
+        </h4>
+        <p style="color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.6;">
+          Institución educativa comprometida con la excelencia académica y la formación integral de nuestros
+          estudiantes.
+        </p>
+      </div>
+
+      <!-- Sección de Enlaces -->
+      <div>
+        <h4
+          style="font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          🔗 Enlaces Rápidos
+        </h4>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+          <li style="margin-bottom: 0.5rem;"><a href="#"
+              style="text-decoration: none; color: rgba(255,255,255,0.8); font-size: 0.95rem; transition: color 0.3s ease;"
+              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">📚
+              Documentos</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="#"
+              style="text-decoration: none; color: rgba(255,255,255,0.8); font-size: 0.95rem; transition: color 0.3s ease;"
+              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">🎉
+              Eventos</a></li>
+          <li style="margin-bottom: 0.5rem;"><a href="#"
+              style="text-decoration: none; color: rgba(255,255,255,0.8); font-size: 0.95rem; transition: color 0.3s ease;"
+              onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">📞
+              Contacto</a></li>
+        </ul>
+      </div>
+
+      <!-- Sección de Contacto -->
+      <div>
+        <h4
+          style="font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          📍 Contacto
+        </h4>
+        <div style="color: rgba(255,255,255,0.9); font-size: 0.95rem; line-height: 1.8;">
+          <p style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+            🏢 Antonio Nariño – Pasto, Nariño
+          </p>
+          <p style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+            ✉️ info.edu.co
+          </p>
+          <p style="margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+            📞 +57 1 234 5678
+          </p>
+        </div>
+      </div>
     </div>
 
-    <!-- Sección de Enlaces -->
-    <div>
-      <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 1rem;">Enlaces Rápidos</h4>
-      <ul style="list-style: none; padding: 0; margin: 0;">
-        <li><a href="#" style="text-decoration: none; color: #007bff; font-size: 0.95rem;">Inicio</a></li>
-        <li><a href="#" style="text-decoration: none; color: #007bff; font-size: 0.95rem;">Eventos</a></li>
-        <li><a href="#" style="text-decoration: none; color: #007bff; font-size: 0.95rem;">Contacto</a></li>
-      </ul>
+    <div
+      style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.9rem; color: rgba(255,255,255,0.8);">
+      <p style="margin: 0;">© 2025 I.E.M. Antonio Nariño • Todos los derechos reservados</p>
+      <p style="margin: 0.5rem 0 0; font-size: 0.8rem; opacity: 0.7;">Desarrollado para la educación</p>
     </div>
-
-    <!-- Sección de Contacto -->
-    <div>
-      <h4 style="font-size: 1.1rem; font-weight: 700; color: #1e3a5f; margin-bottom: 1rem;">Contacto</h4>
-      <p style="color: #4c4747; font-size: 0.95rem;">
-        Antonio nariño – Pasto<br>
-        Correo: info.edu.co<br>
-        Teléfono: +57 1 234 5678
-      </p>
-    </div>
-  </div>
-
-  <div style="text-align: center; margin-top: 2rem; font-size: 0.85rem; color: #888;">
-    © 2025 Institución educativa antonio nariño· Todos los derechos reservados
-  </div>
-</footer>
+  </footer>
 </div>
-
-
-
-
-
-
-
-
-
-
