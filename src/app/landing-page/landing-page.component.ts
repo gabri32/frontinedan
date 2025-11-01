@@ -23,6 +23,7 @@ export class LandingPageComponent implements OnInit {
   mostrarTodos = false;
   events: any;
   cargandoDatos = true;
+  banner:any;
   constructor(
     private router: Router,
     private backendService: BackendService,
@@ -34,10 +35,11 @@ export class LandingPageComponent implements OnInit {
   visibleCards = 5;
   toggleZoom = false;
   bannerImages = [
-    { image: '/baner1.jpeg', titulo: 'Bienvenidos', descripcion: 'Conoce nuestra institución' },
-    { image: '/banner3.jpeg', titulo: 'Formación de calidad', descripcion: 'Comprometidos con la educación' },
-    { image: '/banner2.jpeg', titulo: 'Eventos académicos', descripcion: 'Participa en nuestras actividades' }
+    { image: '', titulo: 'Bienvenidos', descripcion: 'Conoce nuestra institución' },
+    { image: '', titulo: 'Formación de calidad', descripcion: 'Comprometidos con la educación' },
+    { image: '', titulo: 'Eventos académicos', descripcion: 'Participa en nuestras actividades' }
   ];
+imagenAmpliada: string | null = null;
 
   currentBannerIndex = 0;
 
@@ -58,7 +60,6 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('🚀 Iniciando componente landing...');
     
     // Inicializar funcionalidades básicas
     this.initScrollAnimations();
@@ -76,52 +77,63 @@ export class LandingPageComponent implements OnInit {
   }
 
   private async cargarDatos(): Promise<void> {
-    console.log('📡 Iniciando carga de datos...');
     swal.showLoading();
     
     try {
       // Cargar headers
-      console.log('📚 Cargando headers...');
       await this.getInfoheaders();
       
       // Cargar eventos
-      console.log('🎉 Cargando eventos...');
       await this.getEventos();
-      
-      console.log('✅ Todos los datos cargados exitosamente');
+      await this.getBannerimages();
       this.cargandoDatos = false;
       
     } catch (error) {
-      console.error('❌ Error cargando datos:', error);
       this.cargandoDatos = false;
     } finally {
       swal.close();
     }
   }
+   async getBannerimages(): Promise<void> {
+  try {
+    this.banner = await this.backendService.getLandingImages();
+    console.log(this.banner)
+for (let i = 0; i < this.bannerImages.length; i++) {
+  this.bannerImages[i].image = this.banner[i].foto;
+}
 
+console.log(this.bannerImages)
+    // Verificar si hay menos de 3 imágenes y rellenar con objetos vacíos
+    const cantidadFaltante = 3 - this.banner.length;
+
+    for (let i = 0; i < cantidadFaltante; i++) {
+      this.banner.push({
+        id: 'N/A',
+        foto: '',
+        imagen: ''
+      });
+      
+    }}catch(error){
+      console.log(error)
+    }}
   async getInfoheaders(): Promise<void> {
     try {
-      console.log('📡 Llamando al servicio getheaders...');
       const data = await this.backendService.getheaders();
       
       if (data && Array.isArray(data)) {
         this.eventCards = data;
-        console.log('✅ Headers cargados exitosamente:', this.eventCards.length, 'elementos');
-        console.log('📋 Datos:', this.eventCards);
       } else {
-        console.log('⚠️ No se recibieron datos válidos para headers');
         this.eventCards = [];
       }
 
     } catch (error) {
-      console.error('❌ Error al obtener headers:', error);
+      console.error(' Error al obtener headers:', error);
       this.eventCards = [];
       // No mostrar error al usuario para no interrumpir la experiencia
     }
   }
   async getEventos(): Promise<void> {
     try {
-      console.log('📡 Llamando al servicio getLandingEventos...');
       const data = await this.backendService.getLandingEventos();
       
       if (data && Array.isArray(data)) {
@@ -129,20 +141,18 @@ export class LandingPageComponent implements OnInit {
           ...event,
           fecha: new Date(event.fecha).toLocaleDateString('es-ES')
         }));
-        console.log('✅ Eventos cargados exitosamente:', this.events.length, 'elementos');
-        console.log('📋 Datos:', this.events);
       } else {
-        console.log('⚠️ No se recibieron datos válidos para eventos');
+        console.log(' No se recibieron datos válidos para eventos');
         this.events = [];
       }
 
     } catch (error) {
-      console.error('❌ Error al cargar eventos:', error);
+      console.error(' Error al cargar eventos:', error);
       this.events = [];
       // No mostrar error al usuario para no interrumpir la experiencia
     }
   }
-  imagenAmpliada: string | null = null;
+  
 
   ampliarImagen(src: string): void {
     this.imagenAmpliada = src;
@@ -177,10 +187,7 @@ export class LandingPageComponent implements OnInit {
 
 
   ngAfterViewInit(): void {
-    console.log('🔍 ngAfterViewInit - SliderRef:', this.sliderRef);
-    // Esperar un poco para que los datos se carguen antes de iniciar el slider
     setTimeout(() => {
-      console.log('⏰ Timeout - EventCards:', this.eventCards?.length, 'SliderRef:', this.sliderRef);
       if (this.eventCards && this.eventCards.length > 0) {
         this.startAutoSlide();
       }
@@ -204,32 +211,26 @@ export class LandingPageComponent implements OnInit {
     if (slider) slider.style.transform = `translateX(${offset}%)`;
   }
   nextSlide(): void {
-    console.log('🔄 NextSlide clicked');
     if (this.eventCards && this.eventCards.length > 0) {
       const totalItems = this.eventCards.length;
-      console.log('📊 Total items:', totalItems, 'Current index:', this.currentIndex);
       
       // Lógica simplificada: avanzar de uno en uno
       this.currentIndex = (this.currentIndex + 1) % totalItems;
-      console.log('➡️ New index:', this.currentIndex);
       this.updateSlider();
     } else {
-      console.log('❌ No eventCards available');
+      console.log(' No eventCards available');
     }
   }
 
   prevSlide(): void {
-    console.log('🔄 PrevSlide clicked');
     if (this.eventCards && this.eventCards.length > 0) {
       const totalItems = this.eventCards.length;
-      console.log('📊 Total items:', totalItems, 'Current index:', this.currentIndex);
       
       // Lógica simplificada: retroceder de uno en uno
       this.currentIndex = this.currentIndex === 0 ? totalItems - 1 : this.currentIndex - 1;
-      console.log('⬅️ New index:', this.currentIndex);
       this.updateSlider();
     } else {
-      console.log('❌ No eventCards available');
+      console.log('No eventCards available');
     }
   }
 
@@ -243,15 +244,12 @@ export class LandingPageComponent implements OnInit {
   }
 
   updateSlider(): void {
-    console.log('🎯 UpdateSlider called');
     if (this.sliderRef && this.sliderRef.nativeElement) {
       const slideWidth = 160 + 32; // ancho del item + margen
       const offset = this.currentIndex * slideWidth;
-      console.log('📏 Slide width:', slideWidth, 'Offset:', offset);
       this.sliderRef.nativeElement.style.transform = `translateX(-${offset}px)`;
-      console.log('✅ Transform applied:', `translateX(-${offset}px)`);
     } else {
-      console.log('❌ SliderRef not available:', this.sliderRef);
+      console.log('SliderRef not available:', this.sliderRef);
     }
   }
 
@@ -339,7 +337,7 @@ export class LandingPageComponent implements OnInit {
 
   // Método para abrir WhatsApp
   abrirWhatsApp(): void {
-    const numeroWhatsApp = '573123456789'; // Reemplaza con el número real
+    const numeroWhatsApp = '573123456789'; // 
     const mensaje = encodeURIComponent('Hola, me gustaría obtener más información sobre la I.E.M. Antonio Nariño.');
     const url = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`;
     window.open(url, '_blank');
@@ -408,10 +406,9 @@ export class LandingPageComponent implements OnInit {
     console.log('Current Index:', this.currentIndex);
     
     if (this.sliderRef && this.sliderRef.nativeElement) {
-      console.log('✅ SliderRef element:', this.sliderRef.nativeElement);
       console.log('Current transform:', this.sliderRef.nativeElement.style.transform);
     } else {
-      console.log('❌ SliderRef is NOT available');
+      console.log('SliderRef is NOT available');
     }
   }
 

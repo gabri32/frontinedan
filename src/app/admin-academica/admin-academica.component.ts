@@ -51,6 +51,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class AdminAcademicaComponent implements OnInit {
 
   images: any;
+  banner:any;
   docentes: any;
   headerForm: FormGroup;
   eventosForm: FormGroup;
@@ -61,9 +62,10 @@ export class AdminAcademicaComponent implements OnInit {
     displayedColumns3: string[] = ['Titulo','Detalle del evento', 'imagen', 'Opciones'];
  selectedFile!: File | null;
 previewImage: string | ArrayBuffer | null = null;
-
+cargandoDatos=true;
 
   dataSource = new MatTableDataSource<any>();
+  dataSourceB=new MatTableDataSource<any>();
   dataSource2 = new MatTableDataSource<any>();
   dataSource3 = new MatTableDataSource<any>();
   mostrarTab1 = false;
@@ -80,7 +82,8 @@ previewImage: string | ArrayBuffer | null = null;
     private backendService: BackendService,
     private sanitizer: DomSanitizer,
     private dialog: MatDialog,
-    private fb: FormBuilder) {
+    private fb: FormBuilder
+  ) {
     this.headerForm = this.fb.group({
       descripcion: ['', Validators.required],
       url: ['', Validators.required],
@@ -94,10 +97,25 @@ previewImage: string | ArrayBuffer | null = null;
   grupoEstudiantes: any[] = [];
 
   ngOnInit(): void {
-    this.verificarPermisos()
-    this.getimages()
-    this.getHeaders()
-    this.getEventos()
+  this.cargarDatos()
+  }
+ private async cargarDatos(): Promise<void> {
+    swal.showLoading();
+    
+    try {
+      // Cargar headers
+    await  this.verificarPermisos()
+   await this.getimages()
+  await  this.getBannerimages()
+   await this.getHeaders()
+   await this.getEventos()
+      this.cargandoDatos = false;
+      
+    } catch (error) {
+      this.cargandoDatos = false;
+    } finally {
+      swal.close();
+    }
   }
 
   async getHeaders() {
@@ -117,7 +135,6 @@ previewImage: string | ArrayBuffer | null = null;
   async getEventos() {
     try {
       this.dataSource3.data = await this.backendService.getLandingEventos();
-      console.log(this.dataSource3.data[0].imagen)
     } catch (error) {
       console.error("Error al cargar los eventos:", error);
       swal.fire({
@@ -169,7 +186,6 @@ previewImage: string | ArrayBuffer | null = null;
  async getimages(): Promise<void> {
   try {
     this.images = await this.backendService.getsliderImages();
-    console.log("Datos que llegan:", this.images);
 
     // Verificar si hay menos de 3 imágenes y rellenar con objetos vacíos
     const cantidadFaltante = 3 - this.images.length;
@@ -189,13 +205,35 @@ previewImage: string | ArrayBuffer | null = null;
     console.log('Error al obtener las imágenes:', error);
   }
 }
+ async getBannerimages(): Promise<void> {
+  try {
+    this.banner = await this.backendService.getLandingImages();
 
+    // Verificar si hay menos de 3 imágenes y rellenar con objetos vacíos
+    const cantidadFaltante = 3 - this.banner.length;
+
+    for (let i = 0; i < cantidadFaltante; i++) {
+      this.banner.push({
+        id: 'N/A',
+        foto: '',
+        imagen: ''
+      });
+    }
+
+    // Asignar al dataSource para mostrar en la tabla o componente correspondiente
+    this.dataSourceB.data = this.banner;
+
+  } catch (error) {
+    console.log('Error al obtener las imágenes:', error);
+  }
+}
 
 
   onFileSelected(event: Event, student: any) {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       student.selectedFile = fileInput.files[0];
+      console.log(student)
     }
   }
   async uploadImage(student: any) {
@@ -206,10 +244,9 @@ previewImage: string | ArrayBuffer | null = null;
 
     try {
       const formData = new FormData();
-      formData.append("numero", student.id)
+formData.append("numero", student.id)
       formData.append("image", student.selectedFile);
-
-
+      
       const response = await this.backendService.updatesliderImages(formData);
 
       if (!response.message) {

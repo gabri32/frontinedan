@@ -18,7 +18,6 @@ export class LayoutComponent implements OnInit {
   mostrarTab2 = false;
   mostrarTab3 = false;
   isAdminDropdownOpen = false;
-
 rol_id=0;
   constructor(private router: Router, private renderer: Renderer2) {}
 
@@ -42,7 +41,6 @@ rol_id=0;
     if (this.rol_id === 3) {
       this.mostrarTab3 = true;
     }
-    console.log(this.rol_id)
   }
   navigateTo(route: string) {
     this.router.navigate([`layout/${route}`]); 

@@ -100,6 +100,9 @@ async searchVotes(estudiante_id: number): Promise<any> {
   async getsliderImages():Promise<any>{
     return firstValueFrom(this.http.get(`${this.apiUrl}/getsliderImages`))
   }
+    async getLandingImages():Promise<any>{
+    return firstValueFrom(this.http.get(`${this.apiUrl}/getLandingImages`))
+  }
   async updatesliderImages(formData:FormData): Promise<any> {
     return firstValueFrom(this.http.post(`${this.apiUrl}/updatesliderImages`, formData));
   }
