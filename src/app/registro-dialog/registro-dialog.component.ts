@@ -121,18 +121,15 @@ onArchivoSeleccionado(event: Event, campo: string) {
   }
 
 guardarFormulario() {
-  // if (this.form.invalid) {
-  //   alert('Por favor complete todos los campos requeridos.');
-  //   return;
-  // }
+  if (this.form.invalid) {
+    alert('Por favor complete todos los campos requeridos.');
+    return;
+  }
 
   const datos = {
     ...this.form.value,
-    boletines: this.boletines.value, // asegúrate que este sea un array de archivos
+    boletines: this.boletines.value, 
   };
-
-  console.log("Datos a enviar:", datos);
-
   this.backendService.registrarInscripcion(datos).then(() => {
     alert('Formulario enviado exitosamente');
   }).catch(error => {
