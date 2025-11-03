@@ -384,8 +384,8 @@ async eliminarHeader(id: number) {
       swal.close();
 
         swal.fire({
-          title: "Header eliminado",
-          text: "El header ha sido eliminado correctamente.",
+          title: "Documento actualizado",
+          text: "El header ha sido actualizado correctamente.",
           icon: "success",
           timer: 1500,
           showConfirmButton: false
@@ -416,7 +416,7 @@ async eliminarHeader(id: number) {
       if (response.message) {
         swal.fire({
           title: "Evento eliminado",
-          text: "El evento ha sido eliminado correctamente.",
+          text: "El evento ha sido actualizado correctamente.",
           icon: "success",
           timer: 1500,
           showConfirmButton: false
