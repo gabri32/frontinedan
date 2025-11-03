@@ -34,8 +34,8 @@
                             <i class="fa fa-save"></i>
                         </a> &nbsp;
 
-                        <a *ngIf="student.id!='N/A'" mat-button class="btn btn-danger btn-sm" (click)="deleteImagen(student)"
-                            matTooltip="Eliminar">
+                        <a *ngIf="student.id!='N/A'" mat-button class="btn btn-danger btn-sm"
+                            (click)="deleteImagen(student)" matTooltip="Eliminar">
                             <i class="fa fa-trash"></i>
                         </a>
 
@@ -53,7 +53,7 @@
 
         </div>
     </mat-tab>
-    <mat-tab label="Imagenes slider pagina">
+    <mat-tab label="Carrusel de imagenes">
         <mat-divider></mat-divider>
 
 
@@ -84,11 +84,13 @@
                         <br>
                         <input type="file" (change)="onFileSelected($event, student)" accept="image/*">
                         &nbsp;
-                        <a mat-button class="btn btn-success btn-sm" (click)="uploadImage(student)"  matTooltip="Guardar">
-                            
+                        <a mat-button class="btn btn-success btn-sm" (click)="uploadImage(student)"
+                            matTooltip="Guardar">
+
                             <i class="fa fa-save"></i>
                         </a> &nbsp;
-                        <a *ngIf="student.id!='N/A'" mat-button class="btn btn-danger btn-sm" (click)="deleteImagen(student)"  matTooltip="Eliminar ">
+                        <a *ngIf="student.id!='N/A'" mat-button class="btn btn-danger btn-sm"
+                            (click)="deleteImagen(student)" matTooltip="Eliminar ">
                             <i class="fa fa-trash"></i>
                         </a>
                         <!-- Mostrar la imagen subida -->
@@ -102,7 +104,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
-            
+
 
         </div>
     </mat-tab>
@@ -135,20 +137,28 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Url </th>
                     <td mat-cell *matCellDef="let student"> {{ student.url }} </td>
                 </ng-container>
+                     <ng-container matColumnDef="Estado">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                <td mat-cell *matCellDef="let student">
+                    <span *ngIf="student.enable==true"class='badge bg-success'> Activo
+                    </span>
+                     <span *ngIf="student.enable==false"class='badge bg-info'> Inactivo
+                    </span>
+                </td>
+
+                </ng-container>
                 <ng-container matColumnDef="Opciones">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Opciones
-                        <a class="btn-circle" (click)="openDialog()"   matTooltip="Agregar enlace para documento">
+                        <a class="btn-circle" (click)="openDialog()" matTooltip="Agregar enlace para documento">
                             <i class="fa-solid fa-plus"></i>
                         </a>
-
-
                     </th>
-
-
                     <td mat-cell *matCellDef="let student">
 
-                        <a class="btn-circle btn-danger" (click)="eliminarHeader(student.id_header)"    matTooltip="Eliminar">
-                            <i class="fa-solid fa-trash"></i>
+                        <a class="btn-circle btn-success" (click)="eliminarHeader(student.id_header)"
+                            matTooltip="Inactivar/Activar documento">
+                             <i *ngIf="student.enable==true" class="fa-solid fa-circle-xmark"></i>
+                            <i *ngIf="student.enable==false" class="fa-solid fa-check"></i>
                         </a>
                     </td>
                 </ng-container>
@@ -200,7 +210,7 @@
                     </div>
 
                     <!-- Botón -->
-                    <a class="btn-circle btn-success" (click)="crearCard()"matTooltip="Guardar">
+                    <a class="btn-circle btn-success" (click)="crearCard()" matTooltip="Guardar">
                         <i class="fa-solid fa-check"></i>
                     </a>
                 </mat-dialog-content>
@@ -215,39 +225,43 @@
         <mat-divider></mat-divider>
         <div class="table-container">
             <table mat-table [dataSource]="dataSource3" matSort class="mat-elevation-z8">
-
-
                 <ng-container matColumnDef="Titulo">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Titulo</th>
                     <td mat-cell *matCellDef="let student"> {{ student.titulo }} </td>
                 </ng-container>
                 <ng-container matColumnDef="Detalle del evento">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header> descripción</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción</th>
                     <td mat-cell *matCellDef="let student"> {{ student.detalle }} </td>
                 </ng-container>
-
-
                 <ng-container matColumnDef="imagen">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Imagen </th>
                     <td mat-cell *matCellDef="let student">
                         <img *ngIf="student.imagen" [src]="student.imagen" alt="imagen" width="50">
                     </td>
                 </ng-container>
+                <ng-container matColumnDef="Estado">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+                  <td mat-cell *matCellDef="let student">
+                    <span *ngIf="student.enable==true"class='badge bg-success'> Activo
+                    </span>
+                     <span *ngIf="student.enable==false"class='badge bg-info'> Inactivo
+                    </span>
+                </td>
+                </ng-container>
 
                 <ng-container matColumnDef="Opciones">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header    matTooltip="Agregar nuevo evento institucional"> Opciones
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header
+                        matTooltip="Agregar nuevo evento institucional"> Opciones
                         <a class="btn-circle" (click)="openDialogE()">
                             <i class="fa-solid fa-plus"></i>
                         </a>
-
-
                     </th>
-
-
                     <td mat-cell *matCellDef="let student">
 
-                        <a class="btn-circle btn-danger" (click)="deteleEventos(student.id_evento)" matTooltip="Eliminar">
-                            <i class="fa-solid fa-trash"></i>
+                        <a class="btn-circle btn-success" (click)="deteleEventos(student.id_evento)"
+                            matTooltip="Inactivar/Activar evento">
+                            <i *ngIf="student.enable==true" class="fa-solid fa-circle-xmark"></i>
+                            <i *ngIf="student.enable==false" class="fa-solid fa-check"></i>
                         </a>
                     </td>
                 </ng-container>
@@ -294,7 +308,7 @@
                     </div>
 
                     <!-- Botón -->
-                    <a class="btn-circle btn-success" (click)="crearEvento()"   matTooltip="Guardar">
+                    <a class="btn-circle btn-success" (click)="crearEvento()" matTooltip="Guardar">
                         <i class="fa-solid fa-check"></i>
                     </a>
                 </mat-dialog-content>

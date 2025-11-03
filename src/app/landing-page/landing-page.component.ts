@@ -102,7 +102,6 @@ for (let i = 0; i < this.bannerImages.length; i++) {
   this.bannerImages[i].image = this.banner[i].foto;
 }
 
-console.log(this.bannerImages)
     // Verificar si hay menos de 3 imágenes y rellenar con objetos vacíos
     const cantidadFaltante = 3 - this.banner.length;
 
@@ -121,7 +120,7 @@ console.log(this.bannerImages)
       const data = await this.backendService.getheaders();
       
       if (data && Array.isArray(data)) {
-        this.eventCards = data;
+        this.eventCards = data.filter((info)=>info.enable==true);
       } else {
         this.eventCards = [];
       }
@@ -132,27 +131,27 @@ console.log(this.bannerImages)
       // No mostrar error al usuario para no interrumpir la experiencia
     }
   }
-  async getEventos(): Promise<void> {
-    try {
-      const data = await this.backendService.getLandingEventos();
-      
-      if (data && Array.isArray(data)) {
-        this.events = data.map((event: { fecha: string | number | Date; }) => ({
+async getEventos(): Promise<void> {
+  try {
+    const data = await this.backendService.getLandingEventos();
+    
+    if (data && Array.isArray(data)) {
+      this.events = data
+        .map((event) => ({
           ...event,
           fecha: new Date(event.fecha).toLocaleDateString('es-ES')
-        }));
-      } else {
-        console.log(' No se recibieron datos válidos para eventos');
-        this.events = [];
-      }
-
-    } catch (error) {
-      console.error(' Error al cargar eventos:', error);
+        }))
+        .filter((info) => info.enable === true);
+    } else {
+      console.log(' No se recibieron datos válidos para eventos');
       this.events = [];
-      // No mostrar error al usuario para no interrumpir la experiencia
     }
+  } catch (error) {
+    console.error(' Error al cargar eventos:', error);
+    this.events = [];
   }
-  
+}
+
 
   ampliarImagen(src: string): void {
     this.imagenAmpliada = src;

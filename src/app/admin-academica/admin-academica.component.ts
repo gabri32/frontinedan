@@ -58,8 +58,8 @@ export class AdminAcademicaComponent implements OnInit {
   cursos: any[] = []
   sedes: any[] = []
   displayedColumns: string[] = ['Numero', 'imagen', 'Opciones'];
-  displayedColumns2: string[] = ['Detalle del evento', 'url', 'imagen', 'Opciones'];
-    displayedColumns3: string[] = ['Titulo','Detalle del evento', 'imagen', 'Opciones'];
+  displayedColumns2: string[] = ['Detalle del evento', 'url', 'imagen','Estado','Opciones'];
+    displayedColumns3: string[] = ['Titulo','Detalle del evento', 'imagen','Estado', 'Opciones'];
  selectedFile!: File | null;
 previewImage: string | ArrayBuffer | null = null;
 cargandoDatos=true;
@@ -91,7 +91,6 @@ cargandoDatos=true;
       this.eventosForm = this.fb.group({
       detalle: ['', Validators.required],
       titulo: ['', Validators.required],
-
     });
   }
   grupoEstudiantes: any[] = [];
@@ -103,7 +102,6 @@ cargandoDatos=true;
     swal.showLoading();
     
     try {
-      // Cargar headers
     await  this.verificarPermisos()
    await this.getimages()
   await  this.getBannerimages()
@@ -121,7 +119,12 @@ cargandoDatos=true;
   async getHeaders() {
     try {
       this.dataSource2.data = await this.backendService.getheaders();
-
+        await this.dataSource2.data.forEach(element => {
+          element.activo="Activo"
+element.enable==true?element.activo=="Activo":element.activo=="Deshabilitado"
+        })
+        
+      
     } catch (error) {
       console.error("Error al cargar los headers:", error);
       swal.fire({
@@ -135,6 +138,11 @@ cargandoDatos=true;
   async getEventos() {
     try {
       this.dataSource3.data = await this.backendService.getLandingEventos();
+       await this.dataSource3.data.forEach(element => {
+          element.activo="Activo"
+element.enable==true?element.activo="Activo":element.activo="Deshabilitado"
+        })
+        console.log(this.dataSource3.data)
     } catch (error) {
       console.error("Error al cargar los eventos:", error);
       swal.fire({
@@ -220,7 +228,7 @@ cargandoDatos=true;
       });
     }
 
-    // Asignar al dataSource para mostrar en la tabla o componente correspondiente
+  
     this.dataSourceB.data = this.banner;
 
   } catch (error) {
@@ -244,7 +252,7 @@ cargandoDatos=true;
 
     try {
       const formData = new FormData();
-formData.append("numero", student.id)
+      formData.append("numero", student.id)
       formData.append("image", student.selectedFile);
       
       const response = await this.backendService.updatesliderImages(formData);
@@ -316,8 +324,19 @@ if (this.headerForm.valid && this.previewImage) {
     formData.append('image', this.selectedFile as Blob);
 
     try {
+      swal.fire({
+  title: 'Cargando...',
+  allowOutsideClick: false,
+  didOpen: () => {
+    swal.showLoading();
+  }
+});
+
+
       const response = await this.backendService.insertHeaders(formData);
+      
       if (response.message) {
+        swal.close();
         swal.fire({
           title: "Header creado",
           text: "El header ha sido creado correctamente.",
@@ -358,8 +377,12 @@ if (this.headerForm.valid && this.previewImage) {
 }
 async eliminarHeader(id: number) {
     try {
+      swal.showLoading();
       const response = await this.backendService.deleteHeader(id);
+
       if (response.message) {
+      swal.close();
+
         swal.fire({
           title: "Header eliminado",
           text: "El header ha sido eliminado correctamente.",
@@ -425,10 +448,18 @@ if (this.eventosForm.valid && this.previewImage) {
     formData.append('titulo',this.eventosForm.value.titulo)
     formData.append('detalle', this.eventosForm.value.detalle);
     formData.append('imagen', this.selectedFile as Blob);
+swal.fire({
+  title: 'Cargando...',
+  allowOutsideClick: false,
+  didOpen: () => {
+    swal.showLoading();
+  }
+});
 
     try {
       const response = await this.backendService.registerEventos(formData);
       if (response.message) {
+        swal.close
         swal.fire({
           title: "Header creado",
           text: "El header ha sido creado correctamente.",
