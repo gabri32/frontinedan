@@ -415,7 +415,7 @@ async eliminarHeader(id: number) {
       const response = await this.backendService.deteleEventos(id);
       if (response.message) {
         swal.fire({
-          title: "Evento eliminado",
+          title: "Evento actualizado",
           text: "El evento ha sido actualizado correctamente.",
           icon: "success",
           timer: 1500,
