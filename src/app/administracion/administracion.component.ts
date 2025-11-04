@@ -521,14 +521,59 @@ export class AdministracionComponent implements OnInit {
       return [];
     }
   }
-  async getInscritos() {
-    try {
-      this.inscripciones = await this.backendService.getInscritos()
-    } catch (error) {
-      console.log(error)
-    }
-  }
+async getInscritos() {
+  try {
+    const res: any[] = await this.backendService.getInscritos();
 
+    this.inscripciones = res.map((ins) => {
+      // Convertir blobs base64 en URLs
+      const parseBlob = (base64: string, type: string): string | null => {
+        if (!base64) return null;
+        const byteChars = atob(base64);
+        const byteNumbers = new Array(byteChars.length);
+        for (let i = 0; i < byteChars.length; i++) {
+          byteNumbers[i] = byteChars.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type });
+        return URL.createObjectURL(blob);
+      };
+
+      return {
+        ...ins,
+        fotografia_url: parseBlob(ins.fotografia_blob, ins.fotografia_tipo),
+        registro_civil_url: parseBlob(ins.registro_civil_blob, ins.registro_civil_tipo),
+        eps_url: parseBlob(ins.eps_blob, ins.eps_tipo),
+        carnet_vacunas_url: parseBlob(ins.carnet_vacunas_blob, ins.carnet_vacunas_tipo),
+        doc_acudiente_url: parseBlob(ins.doc_acudiente_blob, ins.doc_acudiente_tipo),
+        boletines_urls: this.parseBoletines(ins.boletines_blob)
+      };
+    });
+
+  } catch (error) {
+    console.error('Error obteniendo inscripciones:', error);
+  }
+}
+
+parseBoletines(jsonStr: string): any[] {
+  if (!jsonStr) return [];
+  try {
+    const arr = JSON.parse(jsonStr);
+    return arr.map((b: any) => {
+      const byteChars = atob(b.buffer);
+      const byteNumbers = new Array(byteChars.length);
+      for (let i = 0; i < byteChars.length; i++) {
+        byteNumbers[i] = byteChars.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: b.mimetype });
+      const url = URL.createObjectURL(blob);
+      return { nombre: b.originalname, url };
+    });
+  } catch {
+    return [];
+  }
+}
 
 valoracionCualitativa(nota: number): string {
     if (nota < 3) return 'Bajo';

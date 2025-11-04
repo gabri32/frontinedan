@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { BackendService } from '../backend.service';
-
+import swal from 'sweetalert2';
 @Component({
   standalone: true,
   selector: 'app-registro-dialog',
@@ -125,14 +125,16 @@ guardarFormulario() {
     alert('Por favor complete todos los campos requeridos.');
     return;
   }
-
+   swal.showLoading();
   const datos = {
     ...this.form.value,
     boletines: this.boletines.value, 
   };
   this.backendService.registrarInscripcion(datos).then(() => {
     alert('Formulario enviado exitosamente');
+    swal.close();
   }).catch(error => {
+    swal.close();
     alert('Ocurrió un error al enviar el formulario');
     console.error(error);
   });

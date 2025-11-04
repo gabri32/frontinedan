@@ -165,20 +165,17 @@
             <td>{{ ins.fecha_nacimiento | date:'dd/MM/yyyy' }}</td>
 
             <!-- Fotografía -->
-            <td>
-              <img [src]="url + limpiarRuta(ins.fotografia)" alt="Foto" width="70" class="rounded">
-            </td>
+           <td>
+  <img *ngIf="ins.fotografia_url" [src]="ins.fotografia_url" alt="Foto" width="70" class="rounded">
+</td>
 
             <!-- Documentos -->
-            <td>
-              <a *ngIf="ins.registro_civil" [href]="url + limpiarRuta(ins.registro_civil)" target="_blank">Registro
-                Civil</a><br>
-              <a *ngIf="ins.eps" [href]="url+ limpiarRuta(ins.eps)" target="_blank">EPS</a><br>
-              <a *ngIf="ins.carnet_vacunas" [href]="url + limpiarRuta(ins.carnet_vacunas)" target="_blank">Carnet
-                Vacunas</a><br>
-              <a *ngIf="ins.doc_acudiente" [href]="url + limpiarRuta(ins.doc_acudiente)" target="_blank">Doc.
-                Acudiente</a>
-            </td>
+        <td>
+  <a *ngIf="ins.registro_civil_url" [href]="ins.registro_civil_url" target="_blank">Registro Civil</a><br>
+  <a *ngIf="ins.eps_url" [href]="ins.eps_url" target="_blank">EPS</a><br>
+  <a *ngIf="ins.carnet_vacunas_url" [href]="ins.carnet_vacunas_url" target="_blank">Vacunas</a><br>
+  <a *ngIf="ins.doc_acudiente_url" [href]="ins.doc_acudiente_url" target="_blank">Acudiente</a>
+</td>
 
             <!-- Acudiente -->
             <td>
@@ -189,16 +186,16 @@
             </td>
 
             <!-- Boletines -->
-            <td>
-              <ng-container *ngIf="boletinesArray(ins.boletines).length > 0; else sinBoletines">
-                <div *ngFor="let b of boletinesArray(ins.boletines); let j = index">
-                  <a [href]="url + limpiarRuta(b)" target="_blank">Boletín {{ j + 1 }}</a><br>
-                </div>
-              </ng-container>
-              <ng-template #sinBoletines>
-                <span class="text-muted">Sin boletines</span>
-              </ng-template>
-            </td>
+       <td>
+  <ng-container *ngIf="ins.boletines_urls?.length > 0; else sinBoletines">
+    <div *ngFor="let b of ins.boletines_urls; let j = index">
+      <a [href]="b.url" target="_blank">{{ b.nombre || ('Boletín ' + (j + 1)) }}</a><br>
+    </div>
+  </ng-container>
+  <ng-template #sinBoletines>
+    <span class="text-muted">Sin boletines</span>
+  </ng-template>
+</td>
           </tr>
         </tbody>
       </table>
