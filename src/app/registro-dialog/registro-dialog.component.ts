@@ -131,8 +131,13 @@ guardarFormulario() {
     boletines: this.boletines.value, 
   };
   this.backendService.registrarInscripcion(datos).then(() => {
-    alert('Formulario enviado exitosamente');
     swal.close();
+
+   swal.fire({
+  title: "Exito",
+  text: "Se registro con exito",
+  icon: "success"
+});
   }).catch(error => {
     swal.close();
     alert('Ocurrió un error al enviar el formulario');

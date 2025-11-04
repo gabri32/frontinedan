@@ -523,7 +523,8 @@ export class AdministracionComponent implements OnInit {
   }
 async getInscritos() {
   try {
-    const res: any[] = await this.backendService.getInscritos();
+  
+    const res: any[] = await this.backendService.getInscritos(); 
 
     this.inscripciones = res.map((ins) => {
       // Convertir blobs base64 en URLs
@@ -538,7 +539,7 @@ async getInscritos() {
         const blob = new Blob([byteArray], { type });
         return URL.createObjectURL(blob);
       };
-
+    
       return {
         ...ins,
         fotografia_url: parseBlob(ins.fotografia_blob, ins.fotografia_tipo),
@@ -548,6 +549,7 @@ async getInscritos() {
         doc_acudiente_url: parseBlob(ins.doc_acudiente_blob, ins.doc_acudiente_tipo),
         boletines_urls: this.parseBoletines(ins.boletines_blob)
       };
+     
     });
 
   } catch (error) {
