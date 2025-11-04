@@ -76,6 +76,7 @@ export class AdministracionComponent implements OnInit {
   inscripciones: any[] = []; // cargada desde tu servicio
   url: any
   // Selectores
+  cargandoDatos=true;
   sedes: any[] = [];              // si quieres usarlas en el futuro
   grados: (string|number)[] = ['1','2','3','4','5','6','7','8','9','10','11']; // ejemplo
   aniosDisponibles: number[] = [2023, 2024, 2025];
@@ -111,25 +112,39 @@ export class AdministracionComponent implements OnInit {
   grupoEstudiantes: any[] = [];
 
   ngOnInit(): void {
+     this.verificarPermisos()
+   
+     this.getasignaturas()
+      this.getimages()
+     this.getprofesores()
+     this.getSedes()
+     this.getcursos()
+     this.cargarDatos();
+   
+  }
+ private async cargarDatos(): Promise<void> {
+    swal.showLoading();
     
+    try {
     this.url = environment.apiAuthUrl + '/'
-    this.verificarPermisos()
-    this.getimages()
-    this.getprofesores()
-    this.getSedes()
-    this.getcursos()
-    this.getasignaturas()
-    this.getInscritos();
-    this.backendService.getNumberStudents().then(data => {
+
+  
+    await this.getInscritos();
+    await this.backendService.getNumberStudents().then(data => {
       this.grupoEstudiantes = data;
     });
-    this.backendService.gettotalcursos().then(data => {
-      console.log(data)
+    await this.backendService.gettotalcursos().then(data => {
       this.cursosCreados = data;
 
     });
+      this.cargandoDatos = false;
+      
+    } catch (error) {
+      this.cargandoDatos = false;
+    } finally {
+      swal.close();
+    }
   }
-
   verificarPermisos() {
 
     const usuarioString = sessionStorage.getItem('usuario');

@@ -121,10 +121,10 @@ onArchivoSeleccionado(event: Event, campo: string) {
   }
 
 guardarFormulario() {
-  if (this.form.invalid) {
-    alert('Por favor complete todos los campos requeridos.');
-    return;
-  }
+  // if (this.form.invalid) {
+  //   alert('Por favor complete todos los campos requeridos.');
+  //   return;
+  // }
    swal.showLoading();
   const datos = {
     ...this.form.value,
